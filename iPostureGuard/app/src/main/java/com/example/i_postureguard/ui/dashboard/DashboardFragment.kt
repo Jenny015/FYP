@@ -1,4 +1,4 @@
-package com.example.i_postureguard.ui.exercise
+package com.example.i_postureguard.ui.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.i_postureguard.databinding.FragmentExerciseBinding
+import com.example.i_postureguard.databinding.FragmentDashboardBinding
 
-class ExerciseFragment : Fragment() {
+class DashboardFragment : Fragment() {
 
-    private var _binding: FragmentExerciseBinding? = null
+    private var _binding: FragmentDashboardBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,14 +22,14 @@ class ExerciseFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val informationViewModel =
-            ViewModelProvider(this).get(ExerciseViewModel::class.java)
+        val dashboardViewModel =
+            ViewModelProvider(this).get(DashboardViewModel::class.java)
 
-        _binding = FragmentExerciseBinding.inflate(inflater, container, false)
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textExercise
-        informationViewModel.text.observe(viewLifecycleOwner) {
+        val textView: TextView = binding.textDashboard
+        dashboardViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root

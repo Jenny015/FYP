@@ -1,13 +1,13 @@
-package com.example.i_postureguard.ui.exercise
+package com.example.i_postureguard.ui.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class ExerciseViewModel : ViewModel() {
+class DashboardViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is exercise Fragment"
+        value = "This is dashboard Fragment"
     }
     val text: LiveData<String> = _text
 }
