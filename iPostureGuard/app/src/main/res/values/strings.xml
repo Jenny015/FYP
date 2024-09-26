@@ -5,4 +5,20 @@
     <string name="title_ranking">Ranking</string>
     <string name="title_exercise">Exercise</string>
     <string name="title_information">Information</string>
+
+    <string name="eyes_exercise">Eyes Exercise</string>
+    <string name="shoulder_exercise">Shoulder Exercise</string>
+    <string name="neck_exercise">Neck Exercise</string>
+
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string-array name="list_items">
+        <item>今日姿勢不良的動作分類(眼睛太近/駝背/睡著看手機)</item>
+        <item>今日姿勢不良次數 </item>
+        <item>[(今日姿勢不良次數 / detection次數)%]</item>
+        <item>過去7日姿勢不良次數 </item>
+        <item>[(過去7日姿勢不良次數 / detection次數)%]</item>
+    </string-array>
+    <string name="today_usage">今日電話使用時數(24hrs)</string>
+    <string name="week_usage">過去7日電話使用時數(days)</string>
 </resources>

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -22,16 +23,30 @@ class ExerciseFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val informationViewModel =
+        val exerciseViewModel =
             ViewModelProvider(this).get(ExerciseViewModel::class.java)
 
         _binding = FragmentExerciseBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textExercise
-        informationViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+
+
+        val eyesExerciseButton: ImageButton = binding.eyesExerciseButton
+        val shoulderExerciseButton: ImageButton = binding.shoulderExerciseButton
+        val neckExerciseButton: ImageButton = binding.neckExerciseButton
+
+        eyesExerciseButton.setOnClickListener {
+            // Handle Eyes Exercise button click
         }
+
+        shoulderExerciseButton.setOnClickListener {
+            // Handle Shoulder Exercise button click
+        }
+
+        neckExerciseButton.setOnClickListener {
+            // Handle Neck Exercise button click
+        }
+
         return root
     }
 
