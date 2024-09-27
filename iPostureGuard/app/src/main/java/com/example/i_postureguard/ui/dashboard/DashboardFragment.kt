@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.fragment.app.Fragment
@@ -27,13 +26,16 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
         val toggleButton: ToggleButton = binding.toggleButton
-        val listView: ListView = binding.listView
 
+        // New TextViews
+        val textViewTodayPosture: TextView = binding.textViewTodayPosture
+        val textViewTodayCount: TextView = binding.textViewTodayCount
+        val textViewTodayPercentage: TextView = binding.textViewTodayPercentage
+        val textViewWeekCount: TextView = binding.textViewWeekCount
+        val textViewWeekPercentage: TextView = binding.textViewWeekPercentage
 
-
-        // Additional setup for toggleButton and listView if needed
+        // Additional setup for toggleButton if needed
 
         return root
     }

@@ -12,13 +12,16 @@
 
     <string name="on">On</string>
     <string name="off">Off</string>
-    <string-array name="list_items">
-        <item>今日姿勢不良的動作分類(眼睛太近/駝背/睡著看手機)</item>
-        <item>今日姿勢不良次數 </item>
-        <item>[(今日姿勢不良次數 / detection次數)%]</item>
-        <item>過去7日姿勢不良次數 </item>
-        <item>[(過去7日姿勢不良次數 / detection次數)%]</item>
-    </string-array>
+
+    <string name="today_posture">今日姿勢不良的動作分類(眼睛太近/駝背/睡著看手機)</string>
+
+    <string name="today_count">今日姿勢不良次數</string>
+    <string name="today_percentage">(今日姿勢不良次數 / detection次數)%</string>
+
+    <string name="Week_Count">過去7日姿勢不良次數</string>
+    <string name="Week_Percentage">(過去7日姿勢不良次數 / detection次數)%</string>
+
+
     <string name="today_usage">今日電話使用時數(24hrs)</string>
     <string name="week_usage">過去7日電話使用時數(days)</string>
 </resources>

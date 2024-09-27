@@ -12,12 +12,55 @@
         android:textOn="@string/on"
         android:textOff="@string/off" />
 
-    <ListView
-        android:id="@+id/list_view"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/text_view_today_posture"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:entries="@array/list_items" />
+        android:padding="16dp"
+        android:layout_margin="10dp"
+        android:text="@string/today_posture" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_view_today_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/today_count" />
+
+        <TextView
+            android:id="@+id/text_view_today_percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/today_percentage" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_View_Week_Count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/Week_Count" />
+
+        <TextView
+            android:id="@+id/text_View_Week_Percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/Week_Percentage" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/image_view_today_usage"
