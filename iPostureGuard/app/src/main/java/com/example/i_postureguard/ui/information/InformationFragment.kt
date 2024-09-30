@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.i_postureguard.databinding.FragmentInformationBinding
 
 class InformationFragment : Fragment() {
@@ -22,8 +20,6 @@ class InformationFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val informationViewModel =
-            ViewModelProvider(this).get(InformationViewModel::class.java)
 
         _binding = FragmentInformationBinding.inflate(inflater, container, false)
         val root: View = binding.root
