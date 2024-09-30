@@ -28,10 +28,10 @@ class RankingFragment : Fragment() {
         _binding = FragmentRankingBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textRanking
-        exerciseViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+//        val textView: TextView = binding.textRanking
+//        exerciseViewModel.text.observe(viewLifecycleOwner) {
+//            textView.text = it
+//        }
         return root
     }
 

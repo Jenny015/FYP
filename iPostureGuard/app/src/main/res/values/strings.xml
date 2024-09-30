@@ -5,4 +5,60 @@
     <string name="title_ranking">Ranking</string>
     <string name="title_exercise">Exercise</string>
     <string name="title_information">Information</string>
+
+    <string name="eyes_exercise">Eyes Exercise</string>
+    <string name="shoulder_exercise">Shoulder Exercise</string>
+    <string name="neck_exercise">Neck Exercise</string>
+
+    <string name="on">On</string>
+    <string name="off">Off</string>
+
+    <string name="today_posture">今日姿勢不良的動作分類(眼睛太近/駝背/睡著看手機)</string>
+
+    <string name="today_count">今日姿勢不良次數</string>
+    <string name="today_percentage">(今日姿勢不良次數 / detection次數)%</string>
+
+    <string name="Week_Count">過去7日姿勢不良次數</string>
+    <string name="Week_Percentage">(過去7日姿勢不良次數 / detection次數)%</string>
+
+
+    <string name="today_usage">今日電話使用時數(24hrs)</string>
+    <string name="week_usage">過去7日電話使用時數(days)</string>
+
+    <!-- Login -->
+
+    <string name="logo_description">Logo</string>
+    <string name="account_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="forget_password">Forget password</string>
+
+    <!-- Ranking -->
+
+    <string name="award_1">1</string>
+    <string name="award_2">2</string>
+    <string name="award_3">3</string>
+    <string name="award_4">4</string>
+    <string name="award_5">5</string>
+    <string name="award_6">6</string>
+    <string name="award_7">7</string>
+    <string name="award_8">8</string>
+
+    <!-- news -->
+    <string name="news_1">1</string>
+    <string name="news_2">2</string>
+    <string name="news_3">3</string>
+    <string name="news_4">4</string>
+    <string name="news_5">5</string>
+
+    <!-- register -->
+    <string name="register_name">User name</string>
+    <string name="register_male">Male</string>
+    <string name="register_Female">Female</string>
+    <string name="register_email">Email</string>
+    <string name="register_password">Password</string>
+    <string name="register_confirmpassword">Confirm Password</string>
+    <string name="register_register">Confirm</string>
+
 </resources>

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.ToggleButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.i_postureguard.databinding.FragmentDashboardBinding
@@ -12,9 +13,6 @@ import com.example.i_postureguard.databinding.FragmentDashboardBinding
 class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -28,10 +26,17 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+        val toggleButton: ToggleButton = binding.toggleButton
+
+        // New TextViews
+        val textViewTodayPosture: TextView = binding.textViewTodayPosture
+        val textViewTodayCount: TextView = binding.textViewTodayCount
+        val textViewTodayPercentage: TextView = binding.textViewTodayPercentage
+        val textViewWeekCount: TextView = binding.textViewWeekCount
+        val textViewWeekPercentage: TextView = binding.textViewWeekPercentage
+
+        // Additional setup for toggleButton if needed
+
         return root
     }
 
