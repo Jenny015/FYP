@@ -10,7 +10,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textOn="@string/on"
-        android:textOff="@string/off" />
+        android:textOff="@string/off"
+        android:checked="false"
+        android:layout_gravity="center" />
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/cameraPreview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/cameraData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp" />
+
 
     <TextView
         android:id="@+id/text_view_today_posture"
