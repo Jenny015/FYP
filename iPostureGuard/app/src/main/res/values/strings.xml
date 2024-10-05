@@ -28,7 +28,7 @@
     <!-- Login -->
 
     <string name="logo_description">Logo</string>
-    <string name="account_hint">Email</string>
+    <string name="account_hint">Phone</string>
     <string name="password_hint">Password</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
@@ -36,29 +36,73 @@
 
     <!-- Ranking -->
 
-    <string name="award_1">1</string>
-    <string name="award_2">2</string>
-    <string name="award_3">3</string>
-    <string name="award_4">4</string>
-    <string name="award_5">5</string>
-    <string name="award_6">6</string>
-    <string name="award_7">7</string>
-    <string name="award_8">8</string>
+    <string name="award_1">7 days login</string>
+    <string name="award_2">30 days login</string>
+    <string name="award_3">90 days login</string>
+    <string name="award_4">365 days login</string>
+    <string name="award_5">No wrong posture on 4 hours</string>
+    <string name="award_6">No wrong posture on 8 hours</string>
+    <string name="award_7">Correct posture 10 times</string>
+    <string name="award_8">Correct posture 50 times</string>
 
     <!-- news -->
-    <string name="news_1">1</string>
-    <string name="news_2">2</string>
-    <string name="news_3">3</string>
-    <string name="news_4">4</string>
-    <string name="news_5">5</string>
+    <string name="news_1">Using a mobile phone with your head down for a long time can cause cervical spine problems. Experts recommend using correct postures, such as raising your head, raising your chest, and retracting your mandible.2024/10/1</string>
+    <string name="news_2">A balanced diet, less oil, less salt and less sugar, drinking more water, regular exercise and adequate sleep can improve physical and mental health.2024/9/15</string>
+    <string name="news_3">Exercise helps lose weight, improve mood, improve sleep quality, enhance physical strength and immunity, prevent chronic diseases, and maintain bone and muscle health.2024/8/16</string>
+    <string name="news_4">System updates improve device performance, fix bugs, and introduce new features. Regular updates ensure security and stability and provide a better user experience.2024/6/1</string>
+    <string name="news_5">Experts recommend using mobile phones no more than 6 hours a day and avoiding use before bed to reduce the impact on sleep and vision.2024/5/16</string>
 
     <!-- register -->
     <string name="register_name">User name</string>
     <string name="register_male">Male</string>
-    <string name="register_Female">Female</string>
-    <string name="register_email">Email</string>
+    <string name="register_female">Female</string>
+    <string name="register_phone">Phone Number</string>
     <string name="register_password">Password</string>
     <string name="register_confirmpassword">Confirm Password</string>
     <string name="register_register">Confirm</string>
+
+    <!-- portfolio -->
+
+    <string name="label_name">Name:</string>
+    <string name="label_sex">Sex:</string>
+    <string name="label_age">Age:</string>
+    <string name="label_email">Phone:</string>
+    <string name="label_language">Language:</string>
+    <string name="logout">Logout</string>
+    <string-array name="language_options">
+        <item>Chinese</item>
+        <item>English</item>
+    </string-array>
+
+    <!-- portfolio -->
+    <string name="user_1">Tom LAM</string>
+    <string name="mark_1">630</string>
+
+    <string name="user_2">Alice Wong</string>
+    <string name="mark_2">620</string>
+
+    <string name="user_3">Michael Chan</string>
+    <string name="mark_3">610</string>
+
+    <string name="user_4">Emily Lau</string>
+    <string name="mark_4">600</string>
+
+    <string name="user_5">James Ho</string>
+    <string name="mark_5">590</string>
+
+    <string name="user_6">Sophia Ng</string>
+    <string name="mark_6">580</string>
+
+    <string name="user_7">Benjamin Lee</string>
+    <string name="mark_7">570</string>
+
+    <string name="user_8">Olivia Chan</string>
+    <string name="mark_8">560</string>
+
+    <string name="user_9">Lucas Wong</string>
+    <string name="mark_9">550</string>
+
+    <string name="user_10">Grace Ho</string>
+    <string name="mark_10">540</string>
 
 </resources>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,8 +8,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,105 +20,104 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/news_image_1"
-                    android:layout_marginEnd="16dp" />
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/news_image_1" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/news_1"
-                    android:gravity="center_vertical" />
+                    android:gravity="center_vertical"
+                    android:text="@string/news_1" />
             </LinearLayout>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/news_image_1"
-                    android:layout_marginEnd="16dp" />
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/news_image_2" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/news_2"
-                    android:gravity="center_vertical" />
+                    android:gravity="center_vertical"
+                    android:text="@string/news_2" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/news_image_1"
-                    android:layout_marginEnd="16dp" />
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/news_image_3" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/news_3"
-                    android:gravity="center_vertical" />
+                    android:gravity="center_vertical"
+                    android:text="@string/news_3" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/news_image_1"
-                    android:layout_marginEnd="16dp" />
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/news_image_4" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/news_4"
-                    android:gravity="center_vertical" />
+                    android:gravity="center_vertical"
+                    android:text="@string/news_4" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/news_image_1"
-                    android:layout_marginEnd="16dp" />
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/news_image_5" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/news_5"
-                    android:gravity="center_vertical" />
+                    android:gravity="center_vertical"
+                    android:text="@string/news_5" />
             </LinearLayout>
-
 
         </LinearLayout>
     </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
