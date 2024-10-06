@@ -42,15 +42,15 @@
                         android:layout_weight="1" />
 
                     <TextView
-                        android:layout_width="10dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="1"
                         android:padding="8dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="0.8" />
 
                     <TextView
                         android:id="@+id/user1_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/user_1"
                         android:padding="8dp"
@@ -58,7 +58,7 @@
 
                     <TextView
                         android:id="@+id/user1_mark"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/mark_1"
                         android:padding="8dp"
@@ -76,31 +76,36 @@
 
                     <ImageView
                         android:id="@+id/top2_image"
-                        android:layout_width="40dp"
+                        android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:src="@drawable/top2"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="2"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="0.8" />
 
                     <TextView
                         android:id="@+id/user2_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/user_2"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/user2_mark"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/mark_2"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
                 </LinearLayout>
+
 
                 <!-- Continue for rankings 3-20 -->
                 <LinearLayout
@@ -112,30 +117,34 @@
 
                     <ImageView
                         android:id="@+id/top3_image"
-                        android:layout_width="40dp"
+                        android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:src="@drawable/top3"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="3"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="0.8" />
 
                     <TextView
                         android:id="@+id/user3_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/user_3"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/user3_mark"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/mark_3"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -147,30 +156,34 @@
 
                     <ImageView
                         android:id="@+id/top4_image"
-                        android:layout_width="40dp"
+                        android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:src="@drawable/empty"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="4"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="0.8" />
 
                     <TextView
                         android:id="@+id/user4_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/user_4"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/user4_mark"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/mark_4"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
                 </LinearLayout>
 
                 <!-- Ranking 5 -->
@@ -183,31 +196,36 @@
 
                     <ImageView
                         android:id="@+id/top5_image"
-                        android:layout_width="40dp"
+                        android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:src="@drawable/empty"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="5"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="0.8" />
 
                     <TextView
                         android:id="@+id/user5_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/user_5"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/user5_mark"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/mark_5"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
                 </LinearLayout>
+
 
                 <!-- Ranking 6 -->
                 <LinearLayout
@@ -219,30 +237,34 @@
 
                     <ImageView
                         android:id="@+id/top6_image"
-                        android:layout_width="40dp"
+                        android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:src="@drawable/empty"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="6"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="0.8" />
 
                     <TextView
                         android:id="@+id/user6_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/user_6"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/user6_mark"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/mark_6"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
                 </LinearLayout>
 
                 <!-- Ranking 7 -->
@@ -255,30 +277,34 @@
 
                     <ImageView
                         android:id="@+id/top7_image"
-                        android:layout_width="40dp"
+                        android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:src="@drawable/empty"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="7"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="0.8" />
 
                     <TextView
                         android:id="@+id/user7_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/user_7"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/user7_mark"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/mark_7"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
                 </LinearLayout>
 
                 <!-- Ranking 8 -->
@@ -291,31 +317,36 @@
 
                     <ImageView
                         android:id="@+id/top8_image"
-                        android:layout_width="40dp"
+                        android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:src="@drawable/empty"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="8"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="0.8" />
 
                     <TextView
                         android:id="@+id/user8_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/user_8"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/user8_mark"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/mark_8"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
                 </LinearLayout>
+
 
                 <!-- Ranking 9 -->
                 <LinearLayout
@@ -327,30 +358,34 @@
 
                     <ImageView
                         android:id="@+id/top9_image"
-                        android:layout_width="40dp"
+                        android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:src="@drawable/empty"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="9"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="0.8" />
 
                     <TextView
                         android:id="@+id/user9_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/user_9"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/user9_mark"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/mark_9"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
                 </LinearLayout>
 
                 <!-- Ranking 10 -->
@@ -363,31 +398,36 @@
 
                     <ImageView
                         android:id="@+id/top10_image"
-                        android:layout_width="40dp"
+                        android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:src="@drawable/empty"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="10"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="0.8" />
 
                     <TextView
                         android:id="@+id/user10_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/user_10"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/user10_mark"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/mark_10"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_weight="1" />
                 </LinearLayout>
+
 
 
             </LinearLayout>

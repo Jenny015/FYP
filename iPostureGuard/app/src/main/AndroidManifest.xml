@@ -19,6 +19,9 @@
         android:theme="@style/Theme.IPostureGuard"
         tools:targetApi="31">
         <activity
+            android:name=".FragmentLoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".FragmentAchievementActivity"
             android:exported="false" />
         <activity
