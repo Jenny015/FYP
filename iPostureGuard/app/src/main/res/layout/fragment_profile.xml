@@ -22,49 +22,57 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_name"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/name_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:textSize="30sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_sex"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/sex_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:textSize="30sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_age"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/age_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:textSize="30sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_email"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:textSize="30sp" />
 
         <TextView
-            android:id="@+id/email_display"
+            android:id="@+id/phone_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:textSize="30sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,29 +84,38 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_language"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:textSize="30sp" />
 
             <Spinner
                 android:id="@+id/language_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:entries="@array/language_options"
-                android:padding="8dp" />
+                android:padding="10dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Font Size"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:textSize="30sp" />
 
             <Spinner
                 android:id="@+id/font_size_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_fontsize"
-                android:padding="8dp" />
+                android:padding="10dp" />
         </LinearLayout>
-
 
         <Button
             android:id="@+id/logout_button"
@@ -106,7 +123,8 @@
             android:layout_height="wrap_content"
             android:text="@string/logout"
             android:padding="16dp"
-            android:layout_marginBottom="58px" />
+            android:layout_marginBottom="58px"
+            android:textSize="30sp" />
 
     </LinearLayout>
 </ScrollView>
