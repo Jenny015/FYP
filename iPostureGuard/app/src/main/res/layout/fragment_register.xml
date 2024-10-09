@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/register_name"
             android:inputType="textPersonName"
-            android:padding="16dp" />
+            android:padding="16dp"
+            android:textSize="30sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,14 +39,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/register_male"
-                android:padding="16dp" />
+                android:padding="16dp"
+                android:textSize="30sp"/>
 
             <RadioButton
                 android:id="@+id/female_radio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/register_female"
-                android:padding="16dp" />
+                android:padding="16dp"
+                android:textSize="30sp"/>
         </LinearLayout>
 
         <EditText
@@ -54,7 +57,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/register_phone"
             android:inputType="textEmailAddress"
-            android:padding="16dp" />
+            android:padding="16dp"
+            android:textSize="30sp"/>
 
         <EditText
             android:id="@+id/password_input"
@@ -62,7 +66,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/register_password"
             android:inputType="textPassword"
-            android:padding="16dp" />
+            android:padding="16dp"
+            android:textSize="30sp"/>
 
         <EditText
             android:id="@+id/confirm_password_input"
@@ -70,7 +75,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/register_confirmpassword"
             android:inputType="textPassword"
-            android:padding="16dp" />
+            android:padding="16dp"
+            android:textSize="30sp"/>
 
         <DatePicker
             android:id="@+id/birthday_picker"
@@ -80,14 +86,16 @@
             android:datePickerMode="spinner"
             android:padding="16dp"
             android:scaleX="0.8"
-            android:scaleY="0.8" />
+            android:scaleY="0.8"
+            />
 
         <Button
             android:id="@+id/register_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/register_register"
-            android:padding="16dp" />
+            android:padding="16dp"
+            android:textSize="30sp"/>
     </LinearLayout>
 </LinearLayout>
 

@@ -42,7 +42,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/award_1"
                         android:gravity="center"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginTop="5dp"
+                        android:textSize="30sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -62,7 +63,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/award_2"
                         android:gravity="center"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginTop="5dp"
+                        android:textSize="30sp"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -91,7 +93,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/award_3"
                         android:gravity="center"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginTop="5dp"
+                        android:textSize="30sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -111,7 +114,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/award_4"
                         android:gravity="center"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginTop="5dp"
+                        android:textSize="30sp"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -137,7 +141,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/award_5"
                         android:gravity="center"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginTop="5dp"
+                        android:textSize="30sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -155,9 +160,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/award_6"
+                        android:layout_marginTop="5dp"
                         android:gravity="center"
-                        android:layout_marginTop="8dp" />
+                        android:text="@string/award_6"
+                        android:textSize="30sp"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -184,7 +190,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/award_7"
                         android:gravity="center"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginTop="5dp"
+                        android:textSize="30sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -204,7 +211,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/award_8"
                         android:gravity="center"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginTop="5dp"
+                        android:textSize="30sp"/>
                 </LinearLayout>
             </LinearLayout>
 
