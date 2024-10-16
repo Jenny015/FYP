@@ -41,7 +41,7 @@ class DashboardFragment : Fragment() {
 
     //for testing
     private lateinit var textViewCameraData: TextView
-    lateinit var accelerometer: GetAccelerometer//initialize GetAccelerometer activity
+    private var accelerometer: GetAccelerometer? = null//initialize GetAccelerometer activity
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,10 +56,11 @@ class DashboardFragment : Fragment() {
             if (isChecked) {
                 checkCameraPermission(requireActivity())
                 cameraOn()
-                accelerometer=GetAccelerometer.getInstance(requireContext())
-                accelerometer.startListening();
+                accelerometer = GetAccelerometer.getInstance(requireContext())
+                accelerometer?.startListening() // Use safe call
             } else {
                 cameraOff()
+                accelerometer?.stopListening() // Stop listening if toggled off
             }
         }
 
@@ -77,7 +78,7 @@ class DashboardFragment : Fragment() {
         super.onDestroyView()
         cameraOff()
         _binding = null
-        accelerometer.stopListening()
+        accelerometer?.stopListening()
     }
 
     @OptIn(ExperimentalGetImage::class)
@@ -115,22 +116,24 @@ class DashboardFragment : Fragment() {
                                         calculateDistance(this, face) { distance ->
                                             msg += "Distance: ${distance * 1000} cm\n"
 
-                                        val rotX = face.headEulerAngleX
-                                        val rotY =
-                                            face.headEulerAngleY // Head is rotated to the right rotY degrees
-                                        val rotZ =
-                                            face.headEulerAngleZ // Head is tilted sideways rotZ degrees
+                                            val rotX = face.headEulerAngleX
+                                            val rotY =
+                                                face.headEulerAngleY // Head is rotated to the right rotY degrees
+                                            val rotZ =
+                                                face.headEulerAngleZ // Head is tilted sideways rotZ degrees
                                             msg += "X: $rotX\nY: $rotY\nZ: $rotZ\n\n"
 
-                                        if (face.rightEyeOpenProbability != null) {
-                                            val rightEyeOpenProb = face.rightEyeOpenProbability
-                                            msg += "\nRight eye open: $rightEyeOpenProb"
-                                        }
-                                        if (face.leftEyeOpenProbability != null) {
-                                            val leftEyeOpenProb = face.leftEyeOpenProbability
-                                            msg += "\nLeft eye open: $leftEyeOpenProb"
-                                        }
-                                        textViewCameraData.text = msg+"\n"+accelerometer.getData()
+                                            if (face.rightEyeOpenProbability != null) {
+                                                val rightEyeOpenProb = face.rightEyeOpenProbability
+                                                msg += "\nRight eye open: $rightEyeOpenProb"
+                                            }
+                                            if (face.leftEyeOpenProbability != null) {
+                                                msg += "\nLeft eye open: ${face.leftEyeOpenProbability}"
+                                            }
+
+                                            // Safely access accelerometer data
+                                            msg += "\n${accelerometer?.getData() ?: "No accelerometer data"}"
+                                            textViewCameraData.text = msg
                                         }
                                     }
                                 }
