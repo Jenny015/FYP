@@ -41,7 +41,7 @@ class DashboardFragment : Fragment() {
 
     //for testing
     private lateinit var textViewCameraData: TextView
-
+    lateinit var accelerometer: GetAccelerometer//initialize GetAccelerometer activity
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,6 +56,8 @@ class DashboardFragment : Fragment() {
             if (isChecked) {
                 checkCameraPermission(requireActivity())
                 cameraOn()
+                accelerometer=GetAccelerometer.getInstance(requireContext())
+                accelerometer.startListening();
             } else {
                 cameraOff()
             }
@@ -75,6 +77,7 @@ class DashboardFragment : Fragment() {
         super.onDestroyView()
         cameraOff()
         _binding = null
+        accelerometer.stopListening()
     }
 
     @OptIn(ExperimentalGetImage::class)
@@ -127,7 +130,7 @@ class DashboardFragment : Fragment() {
                                             val leftEyeOpenProb = face.leftEyeOpenProbability
                                             msg += "\nLeft eye open: $leftEyeOpenProb"
                                         }
-                                        textViewCameraData.text = msg
+                                        textViewCameraData.text = msg+"\n"+accelerometer.getData()
                                         }
                                     }
                                 }
