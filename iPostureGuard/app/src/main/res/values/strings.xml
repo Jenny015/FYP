@@ -6,10 +6,13 @@
     <string name="title_exercise">Exercise</string>
     <string name="title_information">Information</string>
 
+    <!-- Exercise -->
     <string name="eyes_exercise">Eyes Exercise</string>
     <string name="shoulder_exercise">Shoulder Exercise</string>
     <string name="neck_exercise">Neck Exercise</string>
+    <string name="back">Back</string>
 
+    <!-- Dashboard -->
     <string name="on">On</string>
     <string name="off">Off</string>
 
