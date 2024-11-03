@@ -1,5 +1,6 @@
 package com.example.i_postureguard.ui.exercise
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,14 +34,20 @@ class ExerciseFragment : Fragment() {
 
         eyesExerciseButton.setOnClickListener {
             // Handle Eyes Exercise button click
+            val intent = Intent(activity, FragmentExerciseEyesActivity::class.java)
+            startActivity(intent)
         }
 
         shoulderExerciseButton.setOnClickListener {
             // Handle Shoulder Exercise button click
+            val intent = Intent(activity, fragment_exercise_shoulder::class.java)
+            startActivity(intent)
         }
 
         neckExerciseButton.setOnClickListener {
             // Handle Neck Exercise button click
+            val intent = Intent(activity, fragment_exercise_neck::class.java)
+            startActivity(intent)
         }
 
         return root

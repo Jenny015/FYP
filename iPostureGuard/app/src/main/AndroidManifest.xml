@@ -19,6 +19,15 @@
         android:theme="@style/Theme.IPostureGuard"
         tools:targetApi="31">
         <activity
+            android:name=".ui.exercise.fragment_exercise_neck"
+            android:exported="false" />
+        <activity
+            android:name=".ui.exercise.fragment_exercise_shoulder"
+            android:exported="false" />
+        <activity
+            android:name=".ui.exercise.FragmentExerciseEyesActivity"
+            android:exported="false" />
+        <activity
             android:name=".FragmentLoginActivity"
             android:exported="false" />
         <activity
