@@ -9,7 +9,7 @@
         android:id="@+id/navigation_profile"
         android:name="com.example.i_postureguard.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_login1" />
+        tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -31,5 +31,5 @@
         android:id="@+id/navigation_information"
         android:name="com.example.i_postureguard.ui.information.InformationFragment"
         android:label="@string/title_ranking"
-        tools:layout="@layout/fragment_exercise" />
+        tools:layout="@layout/fragment_information" />
 </navigation>

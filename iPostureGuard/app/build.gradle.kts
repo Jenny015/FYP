@@ -60,4 +60,6 @@ dependencies {
     implementation(libs.androidx.camera.view)
     //ML Kit
     implementation(libs.face.detection)
+    //Pop-up notification window
+    implementation(libs.androidx.appcompat)
 }
