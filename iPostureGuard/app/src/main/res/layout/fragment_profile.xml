@@ -123,7 +123,7 @@
             android:layout_height="wrap_content"
             android:text="@string/logout"
             android:padding="16dp"
-            android:layout_marginBottom="58px"
+            android:layout_marginBottom="20dp"
             android:textSize="30sp" />
 
     </LinearLayout>
