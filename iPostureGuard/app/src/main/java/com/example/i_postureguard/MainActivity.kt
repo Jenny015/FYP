@@ -1,6 +1,7 @@
 package com.example.i_postureguard
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -8,6 +9,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.i_postureguard.databinding.ActivityMainBinding
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,5 +35,14 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        val database = Firebase.database
+        val myRef = database.getReference("/Login/Count")
+        myRef.get().addOnSuccessListener {
+            Log.i("firebase", "Got value ${it.value}")
+            val newCount = (it.value as Long).toInt() + 1
+            myRef.setValue(newCount)
+        }.addOnFailureListener{
+            Log.e("firebase", "Error getting data",it)
+            }
     }
 }
