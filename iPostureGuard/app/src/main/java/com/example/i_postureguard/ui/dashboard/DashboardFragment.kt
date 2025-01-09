@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.PointF
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
@@ -154,7 +155,7 @@ class DashboardFragment : Fragment() {
                                                 textViewCameraData.text = msg
 
                                                 checkPosture(
-                                                    listOf(rotX, rotY, rotZ),
+                                                    listOf(rotX, rotY, rotZ,distance * 1000),
                                                     listOf(
                                                         face.leftEyeOpenProbability,
                                                         face.rightEyeOpenProbability
@@ -235,7 +236,7 @@ class DashboardFragment : Fragment() {
                     val knownEyeDistance = 6.2f
 
                     // Calculate the distance using the formula
-                    val distance = (focalLength * knownEyeDistance) / (eyeDistance * sensorWidth)
+                    val distance = (focalLength * knownEyeDistance) / (eyeDistance * sensorWidth)/2
 
                     // Return the calculated distance
                     onDistanceCalculated(distance)
@@ -330,10 +331,18 @@ class DashboardFragment : Fragment() {
         //Phone position: Phone horizontal & Head horizontal (Sleep on side with phone), Phone face down with face detected (Sleep on back with phone)
         // TODO: Set threshold for different kinds of bad posture
         var msg = ""
-        if (head[2] > -20 && head[2] < 20 && (accelData[0] > 7 || accelData[0] < -7)) {
-            playAudio(R.raw.sleep)
-            msg += "Sleep on side while using mobile phone\n"
-        } else if (accelData[2] < -7) {
+        if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if(head[2] > -20 && head[2] < 20 && (accelData[0] > 7 || accelData[0] < -7)){
+                playAudio(R.raw.sleep)
+                msg += "Sleep on side while using mobile phone\n"
+            }
+
+        } else if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            if(head[2] > -20 && head[2] < 20 && (accelData[1] > 7 || accelData[1] < -7)){
+                playAudio(R.raw.sleep)
+                msg += "Sleep on side while using mobile phone\n"
+            }
+        }else if (accelData[2] < -7) {
             playAudio(R.raw.sleep)
             msg += "Sleep on back while using mobile phone\n"
         } else {
@@ -348,6 +357,10 @@ class DashboardFragment : Fragment() {
             if (head[2] > (10 + buffer)) {
                 playAudio(R.raw.tilt_right)
                 msg += "Head tilting right (Scoliosis)\n"
+            }
+            if(head[3]<30){
+                playAudio(R.raw.too_close)
+                msg ="Unsafety distance\nToo close, please keep the distance\n"
             }
         }
         if(msg.isNotEmpty()){
