@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomBottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="itemTextAppearanceActive">@style/BottomNavigationStyle</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavigationStyle</item>
+    </style>
+
+    <style name="BottomNavigationStyle">
+        <item name="android:textSize">21sp</item>
+    </style>
+</resources>

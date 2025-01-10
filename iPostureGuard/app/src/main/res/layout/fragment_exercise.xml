@@ -5,76 +5,71 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:layout_gravity="center"
+    android:orientation="vertical"
     tools:context=".ui.exercise.ExerciseFragment">
-
-
-    <LinearLayout
-        android:layout_width="201dp"
-        android:layout_height="633dp"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="111dp"
-        tools:layout_editor_absoluteY="164dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_gravity="center"
             android:orientation="vertical"
             android:padding="16dp">
-
             <ImageButton
                 android:id="@+id/eyes_exercise_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/eyes_exercise"
-                android:src="@drawable/eyes_exercise" />
+                android:src="@drawable/eyes_exercise"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/eyes_exercise" />
+                android:text="@string/eyes_exercise"
+                android:textSize="25sp"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_gravity="center"
             android:orientation="vertical"
             android:padding="16dp">
-
             <ImageButton
                 android:id="@+id/shoulder_exercise_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/shoulder_exercise"
                 android:src="@drawable/shoulder_exercise" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/shoulder_exercise" />
+                android:text="@string/shoulder_exercise"
+                android:textSize="25sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_gravity="center"
             android:orientation="vertical"
             android:padding="16dp">
-
             <ImageButton
                 android:id="@+id/neck_exercise_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/neck_exercise"
                 android:src="@drawable/neck_exercise" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/neck_exercise" />
+                android:text="@string/neck_exercise"
+                android:textSize="25sp" />
         </LinearLayout>
-    </LinearLayout>
+
 </LinearLayout>
 
 
