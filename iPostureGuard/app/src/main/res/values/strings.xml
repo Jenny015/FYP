@@ -27,18 +27,17 @@
     <string name="Week_Count">本周姿勢不良次數</string>
     <string name="Week_Percentage">10</string>
 
-
     <string name="today_usage">今日電話使用時數(24hrs)</string>
     <string name="week_usage">本周電話使用時數(days)</string>
 
     <!-- Login -->
-
     <string name="logo_description">Logo</string>
     <string name="account_hint">Phone</string>
     <string name="password_hint">Password</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="forget_password">Forget password</string>
+    <string name="skip">Skip</string>
 
     <!-- Ranking -->
 

@@ -345,7 +345,7 @@ class DashboardFragment : Fragment() {
             playAudio(R.raw.sleep)
             msg += "Sleep on back while using mobile phone\n"
         } else {
-            if (accelData[2] < 5 && head[0] < (3 - buffer) || (accelData[2] > 5 && head[0] < (12 - buffer))) {
+            if (accelData[2] < 5 && head[0] < (0 - buffer) || (accelData[2] > 5 && head[0] < (12 - buffer))) {
                 playAudio(R.raw.text_neck)
                 msg += "Text-neck posture\n"
             }

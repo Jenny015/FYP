@@ -25,11 +25,6 @@
     <fragment
         android:id="@+id/navigation_exercise"
         android:name="com.example.i_postureguard.ui.exercise.ExerciseFragment"
-        android:label="@string/title_ranking"
+        android:label="@string/title_exercise"
         tools:layout="@layout/fragment_exercise" />
-    <fragment
-        android:id="@+id/navigation_information"
-        android:name="com.example.i_postureguard.ui.information.InformationFragment"
-        android:label="@string/title_ranking"
-        tools:layout="@layout/fragment_information" />
 </navigation>
