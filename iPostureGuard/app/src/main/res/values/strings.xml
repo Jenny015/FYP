@@ -40,7 +40,6 @@
     <string name="skip">Skip</string>
 
     <!-- Ranking -->
-
     <string name="award_1">7 days login</string>
     <string name="award_2">30 days login</string>
     <string name="award_3">90 days login</string>
@@ -49,13 +48,6 @@
     <string name="award_6">No wrong posture on 8 hours</string>
     <string name="award_7">Correct posture 10 times</string>
     <string name="award_8">Correct posture 50 times</string>
-
-    <!-- news -->
-    <string name="news_1">Using a mobile phone with your head down for a long time can cause cervical spine problems. Experts recommend using correct postures, such as raising your head, raising your chest, and retracting your mandible.2024/10/1</string>
-    <string name="news_2">A balanced diet, less oil, less salt and less sugar, drinking more water, regular exercise and adequate sleep can improve physical and mental health.2024/9/15</string>
-    <string name="news_3">Exercise helps lose weight, improve mood, improve sleep quality, enhance physical strength and immunity, prevent chronic diseases, and maintain bone and muscle health.2024/8/16</string>
-    <string name="news_4">System updates improve device performance, fix bugs, and introduce new features. Regular updates ensure security and stability and provide a better user experience.2024/6/1</string>
-    <string name="news_5">Experts recommend using mobile phones no more than 6 hours a day and avoiding use before bed to reduce the impact on sleep and vision.2024/5/16</string>
 
     <!-- register -->
     <string name="register_name">User name</string>
@@ -67,7 +59,8 @@
     <string name="register_register">Confirm</string>
 
     <!-- portfolio -->
-
+    <string name="label_carer">Carer:</string>
+    <string name="btn_connect_carer">Connect to Carer</string>
     <string name="label_name">Name:</string>
     <string name="label_sex">Sex:</string>
     <string name="label_age">Age:</string>
@@ -76,15 +69,15 @@
     <string name="label_fontsize">Font size:</string>
     <string name="logout">Logout</string>
     <string-array name="language_options">
-        <item>Chinese</item>
         <item>English</item>
+        <item>Chinese</item>
     </string-array>
     <string-array name="font_size_options">
         <item>Normal</item>
         <item>Big</item>
     </string-array>
 
-    <!-- portfolio -->
+    <!-- Ranking -->
     <string name="user_1">Tom LAM</string>
     <string name="mark_1">630</string>
 
