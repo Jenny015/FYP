@@ -16,16 +16,19 @@
     <string name="on">On</string>
     <string name="off">Off</string>
 
-    <string name="today_posture">今日姿勢不良的動作分類(眼睛太近/駝背/睡著看手機)</string>
+    <string name="today_posture">今日姿勢不良的動作</string>
+    <string name="eye">Eyes too close</string>
+    <string name="hunchback">Hunchback</string>
+    hunchback
 
     <string name="today_count">今日姿勢不良次數</string>
-    <string name="today_percentage">(今日姿勢不良次數 / detection次數)%</string>
+    <string name="today_percentage">5</string>
 
-    <string name="Week_Count">過去7日姿勢不良次數</string>
-    <string name="Week_Percentage">(過去7日姿勢不良次數 / detection次數)%</string>
+    <string name="Week_Count">本周姿勢不良次數</string>
+    <string name="Week_Percentage">10</string>
 
     <string name="today_usage">今日電話使用時數(24hrs)</string>
-    <string name="week_usage">過去7日電話使用時數(days)</string>
+    <string name="week_usage">本周電話使用時數(days)</string>
 
     <!-- Login -->
     <string name="logo_description">Logo</string>
@@ -111,5 +114,7 @@
 
     <string name="user_10">Grace Ho</string>
     <string name="mark_10">540</string>
+
+    <string name="confirm">confirm</string>
 
 </resources>

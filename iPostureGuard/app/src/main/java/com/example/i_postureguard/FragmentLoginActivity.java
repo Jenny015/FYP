@@ -1,5 +1,4 @@
 package com.example.i_postureguard;
-import com.example. i_postureguard.R.id.*;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +13,7 @@ public class FragmentLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_login);
-
+      
         ImageButton btn_skip = findViewById(R.id.btn_skip);
         TextView tv_skip = findViewById(R.id.tv_skip);
         Button btn_login = findViewById(R.id.btn_login);

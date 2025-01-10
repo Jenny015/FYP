@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "205918814079",
+    "firebase_url": "https://datastorage-fyp-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "datastorage-fyp",
+    "storage_bucket": "datastorage-fyp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:205918814079:android:dcfa7fae0e99468d14644a",
+        "android_client_info": {
+          "package_name": "com.example.i_postureguard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0SeSMtzXVrAELl6nLG_HNTVpxzuAg620"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
