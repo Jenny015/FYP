@@ -1,14 +1,17 @@
 package com.example.i_postureguard
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.i_postureguard.databinding.ActivityMainBinding
+import com.example.i_postureguard.ui.dashboard.MyForegroundService
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
 
@@ -43,6 +46,11 @@ class MainActivity : AppCompatActivity() {
             myRef.setValue(newCount)
         }.addOnFailureListener{
             Log.e("firebase", "Error getting data",it)
-            }
+        }
+        val serviceIntent= Intent(
+            this,
+            MyForegroundService::class.java
+        )
+        ContextCompat.startForegroundService(this,serviceIntent)
     }
 }
