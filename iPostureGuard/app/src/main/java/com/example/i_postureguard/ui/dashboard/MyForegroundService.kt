@@ -3,50 +3,55 @@ package com.example.i_postureguard.ui.dashboard
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.Service
 import android.content.Intent
 import android.os.Build
-import android.os.IBinder
 import android.util.Log
+import androidx.annotation.OptIn
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleService
 import com.example.i_postureguard.R
-import kotlin.concurrent.thread
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.Face
+import com.google.mlkit.vision.face.FaceDetection
+import com.google.mlkit.vision.face.FaceDetectorOptions
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
-class MyForegroundService : Service() {
+class MyForegroundService : LifecycleService() {
 
     private val CHANNEL_ID = "MyForegroundServiceChannel"
+    private lateinit var cameraExecutor: ExecutorService
+    private var lastUpdateTime = 0L
+    private val detectionDelay = 1000// For adjust the frequency of detection
 
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        cameraExecutor = Executors.newSingleThreadExecutor()
+        startCameraAnalysis()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Create a notification for the foreground service
+        super.onStartCommand(intent, flags, startId)
+        // Create and display a notification for the foreground service
         val notification: Notification = Notification.Builder(this, CHANNEL_ID)
             .setContentTitle("Posture Correction Service")
-            .setContentText("Service is running...")
+            .setContentText("Analyzing posture...")
             .setSmallIcon(R.drawable.logo) // Replace with your app's icon
             .build()
 
-        // Start the service in the foreground
         startForeground(1, notification)
 
-        thread {
-            while (true) {
-                Log.e("Service", "Service is running...")
-                try {
-                    Thread.sleep(2000)
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
-            }
-        }
-
-        return START_STICKY // Use START_STICKY to restart if the service gets terminated
+        return START_STICKY
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
     }
 
     private fun createNotificationChannel() {
@@ -60,4 +65,92 @@ class MyForegroundService : Service() {
             manager.createNotificationChannel(serviceChannel)
         }
     }
+
+    @OptIn(ExperimentalGetImage::class)
+    private fun startCameraAnalysis() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+
+        cameraProviderFuture.addListener({
+            val cameraProvider = cameraProviderFuture.get()
+
+            // Configure face detector
+            val faceDetectorOptions = FaceDetectorOptions.Builder()
+                .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+                .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
+                .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+                .build()
+            val faceDetector = FaceDetection.getClient(faceDetectorOptions)
+
+            // Set up ImageAnalysis
+            val imageAnalysis = ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+                .also {
+                    it.setAnalyzer(cameraExecutor) { imageProxy ->
+                        val mediaImage = imageProxy.image
+                        val currentTime = System.currentTimeMillis()
+                        if (mediaImage != null && currentTime - lastUpdateTime >= detectionDelay){
+                            lastUpdateTime = currentTime
+                            val image = InputImage.fromMediaImage(
+                                mediaImage,
+                                imageProxy.imageInfo.rotationDegrees
+                            )
+
+                            faceDetector.process(image)
+                                .addOnSuccessListener { faces ->
+                                    var msg = ""
+                                    for (face in faces) {
+
+                                        val bounds = face.boundingBox
+
+
+                                            val rotX = face.headEulerAngleX
+                                            val rotY =
+                                                face.headEulerAngleY // Head is rotated to the right rotY degrees
+                                            val rotZ =
+                                                face.headEulerAngleZ // Head is tilted sideways rotZ degrees
+                                            msg += "X: $rotX\nY: $rotY\nZ: $rotZ\n\n"
+
+                                            if (face.rightEyeOpenProbability != null) {
+                                                msg += "\nRight eye open: ${face.rightEyeOpenProbability}"
+                                            }
+                                            if (face.leftEyeOpenProbability != null) {
+                                                msg += "\nLeft eye open: ${face.leftEyeOpenProbability}"
+                                            }
+                                    }
+                                    Log.e("hi","I am still running")
+                                    Log.e("update",msg)
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.e("MyForegroundService", "Face detection failed: $e")
+                                }
+                                .addOnCompleteListener {
+                                    imageProxy.close()
+                                }
+                        } else {
+                            imageProxy.close()
+                        }
+                    }
+                }
+
+            // Select front camera
+            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+
+            try {
+                // Unbind all use cases before rebinding
+                cameraProvider.unbindAll()
+                // Bind ImageAnalysis use case to the lifecycle of this service
+                cameraProvider.bindToLifecycle(
+                    this, // Now this works because LifecycleService is a LifecycleOwner
+                    cameraSelector,
+                    imageAnalysis
+                )
+
+            } catch (exc: Exception) {
+                Log.e("MyForegroundService", "Camera binding failed: $exc")
+            }
+        }, ContextCompat.getMainExecutor(this))
+    }
+
+
 }

@@ -11,6 +11,7 @@ import android.hardware.camera2.CameraManager
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,10 +56,13 @@ class DashboardFragment : Fragment() {
     private var lastUpdateTime = 0L
 
     override fun onCreateView(
+
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.e("DashboardFragment", "is Created")
+
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
