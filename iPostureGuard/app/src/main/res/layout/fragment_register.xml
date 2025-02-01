@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -85,8 +84,8 @@
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
             android:padding="16dp"
-            android:scaleX="0.8"
-            android:scaleY="0.8"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
             />
 
         <Button
@@ -97,5 +96,4 @@
             android:padding="16dp"
             android:textSize="30sp"/>
     </LinearLayout>
-</LinearLayout>
-
+</ScrollView>

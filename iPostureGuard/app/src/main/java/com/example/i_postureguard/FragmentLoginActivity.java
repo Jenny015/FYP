@@ -1,4 +1,5 @@
 package com.example.i_postureguard;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,12 +14,12 @@ public class FragmentLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_login);
-      
+
         ImageButton btn_skip = findViewById(R.id.btn_skip);
         TextView tv_skip = findViewById(R.id.tv_skip);
         Button btn_login = findViewById(R.id.btn_login);
         Button btn_reg = findViewById(R.id.btn_reg);
-        Button btn_forget_pwd = findViewById(R.id.btn_reg);
+        Button btn_forget_pwd = findViewById(R.id.btn_forget_pwd); // 修正 id
 
         View.OnClickListener listener = new View.OnClickListener(){
             @Override
@@ -45,17 +46,13 @@ public class FragmentLoginActivity extends AppCompatActivity {
     public boolean checkLogin(){
         EditText et_phone = findViewById(R.id.et_phone);
         EditText et_pwd = findViewById(R.id.et_pwd);
-        //TODO: login logic
-        String phone = et_phone.toString();
-        String pwd = et_pwd.toString();
-        if (!phone.isEmpty() && !pwd.isEmpty()){
-            return true;
-        } else {
-            return false;
-        }
+        // TODO: login logic
+        String phone = et_phone.getText().toString();
+        String pwd = et_pwd.getText().toString();
+        return !phone.isEmpty() && !pwd.isEmpty();
     }
 
-    public void intent(Class page){
+    public void intent(Class<?> page){
         Intent intent = new Intent(FragmentLoginActivity.this, page);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
