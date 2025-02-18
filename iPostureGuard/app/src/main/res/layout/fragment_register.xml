@@ -1,6 +1,4 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,9 +7,28 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp">
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_back"
+                android:layout_gravity="center"/>
+            <TextView
+                android:id="@+id/tv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/back"
+                android:textSize="30sp"
+                android:layout_gravity="center"/>
+        </LinearLayout>
         <ImageView
-            android:id="@+id/logo_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/logo"
@@ -19,22 +36,30 @@
             android:padding="16dp" />
 
         <EditText
-            android:id="@+id/name_input"
+            android:id="@+id/lname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/register_name"
+            android:hint="@string/register_lname"
             android:inputType="textPersonName"
             android:padding="16dp"
             android:textSize="30sp"/>
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/fname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/register_fname"
+            android:inputType="textPersonName"
+            android:padding="16dp"
+            android:textSize="30sp"/>
+
+        <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="16dp">
-
             <RadioButton
-                android:id="@+id/male_radio"
+                android:id="@+id/male"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/register_male"
@@ -42,25 +67,44 @@
                 android:textSize="30sp"/>
 
             <RadioButton
-                android:id="@+id/female_radio"
+                android:id="@+id/female"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/register_female"
                 android:padding="16dp"
                 android:textSize="30sp"/>
-        </LinearLayout>
+        </RadioGroup>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register_dob"
+            android:layout_marginTop="10dp"
+            android:paddingStart="16dp"
+            android:textSize="30sp"/>
 
+        <DatePicker
+            android:id="@+id/dob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false"
+            android:scaleX="1.5"
+            android:scaleY="1.5"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
         <EditText
-            android:id="@+id/email_input"
+            android:id="@+id/phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/register_phone"
-            android:inputType="textEmailAddress"
+            android:inputType="phone|number"
             android:padding="16dp"
             android:textSize="30sp"/>
 
         <EditText
-            android:id="@+id/password_input"
+            android:id="@+id/pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/register_password"
@@ -69,31 +113,23 @@
             android:textSize="30sp"/>
 
         <EditText
-            android:id="@+id/confirm_password_input"
+            android:id="@+id/pwd2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/register_confirmpassword"
             android:inputType="textPassword"
             android:padding="16dp"
-            android:textSize="30sp"/>
-
-        <DatePicker
-            android:id="@+id/birthday_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:calendarViewShown="false"
-            android:datePickerMode="spinner"
-            android:padding="16dp"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
+            android:textSize="30sp"
             />
 
         <Button
-            android:id="@+id/register_button"
+            android:id="@+id/btn_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/register_register"
             android:padding="16dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="50dp"
             android:textSize="30sp"/>
     </LinearLayout>
 </ScrollView>

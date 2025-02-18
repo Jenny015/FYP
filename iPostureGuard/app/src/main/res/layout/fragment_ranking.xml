@@ -453,10 +453,10 @@
                         android:layout_weight="1"
                         android:textSize="30sp" />
                 </LinearLayout>
-
-
-
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="75dp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

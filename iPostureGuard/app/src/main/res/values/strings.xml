@@ -50,21 +50,22 @@
     <string name="award_7">Correct posture 10 times</string>
     <string name="award_8">Correct posture 50 times</string>
 
-    <!-- news -->
-    <string name="news_1">Using a mobile phone with your head down for a long time can cause cervical spine problems. Experts recommend using correct postures, such as raising your head, raising your chest, and retracting your mandible.2024/10/1</string>
-    <string name="news_2">A balanced diet, less oil, less salt and less sugar, drinking more water, regular exercise and adequate sleep can improve physical and mental health.2024/9/15</string>
-    <string name="news_3">Exercise helps lose weight, improve mood, improve sleep quality, enhance physical strength and immunity, prevent chronic diseases, and maintain bone and muscle health.2024/8/16</string>
-    <string name="news_4">System updates improve device performance, fix bugs, and introduce new features. Regular updates ensure security and stability and provide a better user experience.2024/6/1</string>
-    <string name="news_5">Experts recommend using mobile phones no more than 6 hours a day and avoiding use before bed to reduce the impact on sleep and vision.2024/5/16</string>
-
     <!-- register -->
-    <string name="register_name">User name</string>
+    <string name="register_lname">Last Name</string>
+    <string name="register_fname">First Name</string>
     <string name="register_male">Male</string>
     <string name="register_female">Female</string>
     <string name="register_phone">Phone Number</string>
     <string name="register_password">Password</string>
     <string name="register_confirmpassword">Confirm Password</string>
     <string name="register_register">Confirm</string>
+    <string name="register_dob">Date of Birth</string>
+
+    <string name="emptyField">Error: This field cannot be empty.</string>
+    <string name="diffPwd">Error: Two passwords should be the same.</string>
+    <string name="longerPwd">Error: Password should be longer than or equal to 8 characters.</string>
+    <string name="incorrPhone">Error: Please enter a correct phone number. (8 characters)</string>
+    <string name="unchecked">Error: Please select an option</string>
 
     <!-- portfolio -->
 
@@ -76,8 +77,8 @@
     <string name="label_fontsize">Font size:</string>
     <string name="logout">Logout</string>
     <string-array name="language_options">
-        <item>Chinese</item>
         <item>English</item>
+        <item>Chinese</item>
     </string-array>
     <string-array name="font_size_options">
         <item>Normal</item>
@@ -117,4 +118,14 @@
 
     <string name="confirm">confirm</string>
 
+    <!-- Pop up window message-->
+    <string name="firebaseDisconnect">Error: Cannot connect to Firebase, please try again later.</string>
+    <!-- Register -->
+    <string name="duplicateRegister">Error: This phone number has been register before.</string>
+    <string name="registerSuccess">Registration Success
+    Redirecting to Login page.</string>
+    <!-- Login -->
+    <string name="wrongPassword">Error: Password Incorrect. Please try again.</string>
+    <string name="userNotExist">Error: This phone number has not register yet.</string>
+    <string name="close">Close</string>
 </resources>

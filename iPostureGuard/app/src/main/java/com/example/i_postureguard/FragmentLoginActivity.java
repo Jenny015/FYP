@@ -2,12 +2,23 @@ package com.example.i_postureguard;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class FragmentLoginActivity extends AppCompatActivity {
     @Override
@@ -27,9 +38,7 @@ public class FragmentLoginActivity extends AppCompatActivity {
                 if (view.getId() == R.id.btn_skip || view.getId() == R.id.tv_skip){
                     intent(MainActivity.class);
                 } else if(view.getId() == R.id.btn_login){
-                    if(checkLogin()){
-                        intent(MainActivity.class);
-                    }
+                    Login();
                 } else if(view.getId() == R.id.btn_reg){
                     intent(FragmentRegisterActivity.class);
                 } else if(view.getId() == R.id.btn_forget_pwd){
@@ -42,20 +51,73 @@ public class FragmentLoginActivity extends AppCompatActivity {
         btn_login.setOnClickListener(listener);
         btn_reg.setOnClickListener(listener);
         btn_forget_pwd.setOnClickListener(listener);
+
+
+
     }
-    public boolean checkLogin(){
+    public void Login(){
         EditText et_phone = findViewById(R.id.et_phone);
         EditText et_pwd = findViewById(R.id.et_pwd);
-        // TODO: login logic
-        String phone = et_phone.getText().toString();
-        String pwd = et_pwd.getText().toString();
-        return !phone.isEmpty() && !pwd.isEmpty();
+
+        Intent intent = getIntent();
+        if (intent.hasExtra("phone")) {
+            String phone = intent.getStringExtra("phone");
+            et_phone.setText(phone);
+        }
+
+        String phone = et_phone.getText().toString().trim();
+        String pwd = et_pwd.getText().toString().trim();
+
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users");
+
+        db.child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String storedPassword = dataSnapshot.child("password").getValue(String.class);
+                    if (storedPassword.equals(pwd)) {
+                        intent(MainActivity.class);
+                    } else {
+                        showPopUp(R.string.wrongPassword);
+                    }
+                } else {
+                    showPopUp(R.string.userNotExist);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                showPopUp(R.string.firebaseDisconnect);
+            }
+        });
     }
 
-    public void intent(Class<?> page){
+    private void intent(Class<?> page){
         Intent intent = new Intent(FragmentLoginActivity.this, page);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
+        if(page == MainActivity.class){
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        } else{
+            startActivity(intent);
+        }
+    }
+
+    private void showPopUp(int textId) {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.popupwindow, null);
+        int width = LinearLayout.LayoutParams.MATCH_PARENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        PopupWindow popup  = new PopupWindow(view, width, height, true);
+        TextView msg = view.findViewById(R.id.tv_display);
+        msg.setText(getString(textId));
+        popup.showAtLocation(view, Gravity.CENTER, 0,0);
+        Button btnClose = view.findViewById(R.id.btn_close);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+            }
+        });
     }
 }

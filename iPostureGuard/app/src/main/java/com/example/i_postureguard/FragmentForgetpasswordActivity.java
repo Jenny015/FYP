@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class FragmentForgetpasswordActivity extends AppCompatActivity {
@@ -13,8 +14,8 @@ public class FragmentForgetpasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_forgetpassword);
 
-        Button confirmButton = findViewById(R.id.confirm_button);
-        confirmButton.setOnClickListener(new View.OnClickListener() {
+        Button btn_confirm = findViewById(R.id.btn_confirm);
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent(FragmentLoginActivity.class);
