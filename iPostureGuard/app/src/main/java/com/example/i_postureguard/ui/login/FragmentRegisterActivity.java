@@ -1,8 +1,8 @@
-package com.example.i_postureguard;
+package com.example.i_postureguard.ui.login;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +17,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.i_postureguard.ui.profile.User;
+import com.example.i_postureguard.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FragmentRegisterActivity extends AppCompatActivity {
     private PopupWindow popup;
@@ -93,7 +96,8 @@ public class FragmentRegisterActivity extends AppCompatActivity {
         return et_pwd.getText().toString();
     }
 
-    private void register(String phone, User user){
+    private void register(String phone, Map<String, String> user){
+
         Query query = db.child("users").child(phone);
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -101,11 +105,9 @@ public class FragmentRegisterActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     // Phone number already exists
-                    Log.d("Register", "Phone number already exists: " + phone);
                     showPopUp(R.string.duplicateRegister, phone);
                 } else {
                     db.child("users").child(phone).setValue(user);
-                    Log.d("Register", "New user registered: " + phone);
                     showPopUp(R.string.registerSuccess, phone);
                 }
             }
@@ -156,9 +158,14 @@ public class FragmentRegisterActivity extends AppCompatActivity {
 
         String name = et_lname.getText().toString().trim()+" "+et_fname.getText().toString().trim();
         String gender = rb_male.isChecked() ? "M" : "F";
-        String dob = String.format("%02d/%02d/%04d", dp_dob.getDayOfMonth(), dp_dob.getMonth()+1, dp_dob.getYear());
+        String dob = String.format("%02d-%02d-%04d", dp_dob.getDayOfMonth(), dp_dob.getMonth()+1, dp_dob.getYear());
 
-        User user = new User(name, password, dob, gender);
+        Map<String, String> user = new HashMap<>();
+        user.put("phone", phone);
+        user.put("name", name);
+        user.put("password", password);
+        user.put("dob", dob);
+        user.put("gender", gender);
         register(phone, user);
     }
 

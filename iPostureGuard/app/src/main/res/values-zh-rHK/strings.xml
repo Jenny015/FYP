@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">i-PostureGuard</string>
+    <string name="title_profile">設定</string>
+    <string name="title_dashboard">首頁</string>
+    <string name="title_ranking">排名</string>
+    <string name="title_exercise">伸展</string>
+    <string name="eyes_exercise">眼部伸展</string>
+    <string name="shoulder_exercise">肩膊伸展</string>
+    <string name="neck_exercise">頸部伸展</string>
+    <string name="back">返回</string>
+    <string name="on">開啟</string>
+    <string name="off">關閉</string>
+    <string name="today_posture">今日姿勢</string>
+    <string name="eye">距離屏幕太近</string>
+    <string name="hunchback">低頭</string>
+    <string name="today_count">今日姿勢不良次數</string>
+    <string name="Week_Count">本周姿勢不良次數</string>
+    <string name="today_usage">今日電話使用時數(24hrs)</string>
+    <string name="week_usage">本周電話使用時數(days)</string>
+    <string name="account_hint">電話號碼</string>
+    <string name="password_hint">密碼</string>
+    <string name="login">登入</string>
+    <string name="register">注冊</string>
+    <string name="forget_password">忘記密碼</string>
+    <string name="skip">跳過</string>
+    <string name="register_lname">姓</string>
+    <string name="register_fname">名</string>
+    <string name="register_male">男</string>
+    <string name="register_female">女</string>
+    <string name="register_phone">電話號碼</string>
+    <string name="register_password">密碼</string>
+    <string name="register_confirmpassword">再輸入密碼</string>
+    <string name="register_register">注冊</string>
+    <string name="register_dob">出生日期</string>
+    <string name="emptyField">錯誤: 這個欄位不能為空</string>
+    <string name="diffPwd">錯誤: 兩次輸入的密碼必須相符</string>
+    <string name="longerPwd">錯誤: 密碼至少需要8字符</string>
+    <string name="incorrPhone">錯誤: 請輸入一個正確的電話號碼(8位)</string>
+    <string name="unchecked">錯誤: 請選擇一個選項</string>
+    <string name="label_carer">"照顧者: "</string>
+    <string name="label_name">姓名:</string>
+    <string name="label_gender">性別:</string>
+    <string name="label_dob">出生日期:</string>
+    <string name="label_age">年齡:</string>
+    <string name="label_phone">電話號碼:</string>
+    <string name="label_language">語言:</string>
+    <string-array name="language_options">
+        <item>English</item>
+        <item>繁體中文</item>
+    </string-array>
+    <string name="label_fontsize">字體大小:</string>
+    <string name="logout">登出</string>
+    <string name="firebaseDisconnect">錯誤: 不能連接至Firebase, 請稍後再試</string>
+    <string name="duplicateRegister">錯誤: 這個電話號碼已被注冊</string>
+    <string name="registerSuccess">注冊成功，返回登錄頁面</string>
+    <string name="wrongPassword">錯誤: 密碼不正確，請重試</string>
+    <string name="userNotExist">錯誤: 這個電話號碼未有記錄，請先注冊</string>
+    <string name="close">關閉</string>
+    <string name="label_addCarer">加入照顧者</string>
+    <string name="label_editCarer">修改照顧者</string>
+    <string name="label_removeCarer">移除照顧者</string>
+    <string name="label_hint_add_carer">輸入照顧者的電郵電址</string>
+    <string name="explain_carer">姿勢報告將於每周一早上九時正傳送至所提供的電郵。</string>
+    <string name="label_confirm">確定</string>
+</resources>

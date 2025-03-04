@@ -68,4 +68,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    //for Serialize User object
+    implementation(libs.gson)
 }

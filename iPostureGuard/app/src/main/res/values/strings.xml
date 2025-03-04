@@ -4,7 +4,6 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_ranking">Ranking</string>
     <string name="title_exercise">Exercise</string>
-    <string name="title_information">Information</string>
 
     <!-- Exercise -->
     <string name="eyes_exercise">Eyes Exercise</string>
@@ -16,22 +15,18 @@
     <string name="on">On</string>
     <string name="off">Off</string>
 
-    <string name="today_posture">今日姿勢不良的動作</string>
+    <string name="today_posture">Today\'s posture</string>
     <string name="eye">Eyes too close</string>
     <string name="hunchback">Hunchback</string>
     hunchback
 
-    <string name="today_count">今日姿勢不良次數</string>
-    <string name="today_percentage">5</string>
+    <string name="today_percentage" translatable="false">5</string>
 
-    <string name="Week_Count">本周姿勢不良次數</string>
-    <string name="Week_Percentage">10</string>
-
-    <string name="today_usage">今日電話使用時數(24hrs)</string>
-    <string name="week_usage">本周電話使用時數(days)</string>
+    <string name="Week_Count">Count of poor posture (weekly)</string>
+    <string name="Week_Percentage" translatable="false">10</string>
 
     <!-- Login -->
-    <string name="logo_description">Logo</string>
+    <string name="logo_description" translatable="false">Logo</string>
     <string name="account_hint">Phone</string>
     <string name="password_hint">Password</string>
     <string name="login">Login</string>
@@ -41,14 +36,14 @@
 
     <!-- Ranking -->
 
-    <string name="award_1">7 days login</string>
-    <string name="award_2">30 days login</string>
-    <string name="award_3">90 days login</string>
-    <string name="award_4">1year login</string>
-    <string name="award_5">No wrong posture on 4 hours</string>
-    <string name="award_6">No wrong posture on 8 hours</string>
-    <string name="award_7">Correct posture 10 times</string>
-    <string name="award_8">Correct posture 50 times</string>
+    <string name="award_1" translatable="false">7 days login</string>
+    <string name="award_2" translatable="false">30 days login</string>
+    <string name="award_3" translatable="false">90 days login</string>
+    <string name="award_4" translatable="false">1year login</string>
+    <string name="award_5" translatable="false">No wrong posture on 4 hours</string>
+    <string name="award_6" translatable="false">No wrong posture on 8 hours</string>
+    <string name="award_7" translatable="false">Correct posture 10 times</string>
+    <string name="award_8" translatable="false">Correct posture 50 times</string>
 
     <!-- register -->
     <string name="register_lname">Last Name</string>
@@ -58,7 +53,7 @@
     <string name="register_phone">Phone Number</string>
     <string name="register_password">Password</string>
     <string name="register_confirmpassword">Confirm Password</string>
-    <string name="register_register">Confirm</string>
+    <string name="register_register">Register</string>
     <string name="register_dob">Date of Birth</string>
 
     <string name="emptyField">Error: This field cannot be empty.</string>
@@ -68,55 +63,61 @@
     <string name="unchecked">Error: Please select an option</string>
 
     <!-- portfolio -->
-
+    <string name="label_carer">Carer:</string>
+    <string name="label_addCarer">Add Carer</string>
+    <string name="label_editCarer">Edit Carer</string>
+    <string name="label_removeCarer">Remove Carer</string>
+    <string name="label_hint_add_carer">Enter Carer\'s email address</string>
+    <string name="explain_carer">The posture report will be sent to this email weekly on Monday 9 am.</string>
+    <string name="label_confirm">Confirm</string>
     <string name="label_name">Name:</string>
-    <string name="label_sex">Sex:</string>
+    <string name="label_gender">Gender:</string>
+    <string name="label_dob">Date of Birth:</string>
     <string name="label_age">Age:</string>
-    <string name="label_email">Phone:</string>
+    <string name="label_phone">Phone:</string>
     <string name="label_language">Language:</string>
-    <string name="label_fontsize">Font size:</string>
-    <string name="logout">Logout</string>
     <string-array name="language_options">
         <item>English</item>
-        <item>Chinese</item>
+        <item>繁體中文</item>
     </string-array>
+    <string name="logout">Logout</string>
+    <string name="label_fontsize">Font size:</string>
     <string-array name="font_size_options">
         <item>Normal</item>
         <item>Big</item>
     </string-array>
 
-    <!-- portfolio -->
-    <string name="user_1">Tom LAM</string>
-    <string name="mark_1">630</string>
+    <!-- Ranking -->
+    <string name="user_1" translatable="false">Tom LAM</string>
+    <string name="mark_1" translatable="false">630</string>
 
-    <string name="user_2">Alice Wong</string>
-    <string name="mark_2">620</string>
+    <string name="user_2" translatable="false">Alice Wong</string>
+    <string name="mark_2" translatable="false">620</string>
 
-    <string name="user_3">Michael Chan</string>
-    <string name="mark_3">610</string>
+    <string name="user_3" translatable="false">Michael Chan</string>
+    <string name="mark_3" translatable="false">610</string>
 
-    <string name="user_4">Emily Lau</string>
-    <string name="mark_4">600</string>
+    <string name="user_4" translatable="false">Emily Lau</string>
+    <string name="mark_4" translatable="false">600</string>
 
-    <string name="user_5">James Ho</string>
-    <string name="mark_5">590</string>
+    <string name="user_5" translatable="false">James Ho</string>
+    <string name="mark_5" translatable="false">590</string>
 
-    <string name="user_6">Sophia Ng</string>
-    <string name="mark_6">580</string>
+    <string name="user_6" translatable="false">Sophia Ng</string>
+    <string name="mark_6" translatable="false">580</string>
 
-    <string name="user_7">Benjamin Lee</string>
-    <string name="mark_7">570</string>
+    <string name="user_7" translatable="false">Benjamin Lee</string>
+    <string name="mark_7" translatable="false">570</string>
 
-    <string name="user_8">Olivia Chan</string>
-    <string name="mark_8">560</string>
+    <string name="user_8" translatable="false">Olivia Chan</string>
+    <string name="mark_8" translatable="false">560</string>
 
-    <string name="user_9">Lucas Wong</string>
-    <string name="mark_9">550</string>
+    <string name="user_9" translatable="false">Lucas Wong</string>
+    <string name="mark_9" translatable="false">550</string>
 
-    <string name="user_10">Grace Ho</string>
-    <string name="mark_10">540</string>
+    <string name="user_10" translatable="false">Grace Ho</string>
+    <string name="mark_10" translatable="false">540</string>
 
-    <string name="confirm">confirm</string>
 
     <!-- Pop up window message-->
     <string name="firebaseDisconnect">Error: Cannot connect to Firebase, please try again later.</string>
@@ -128,4 +129,7 @@
     <string name="wrongPassword">Error: Password Incorrect. Please try again.</string>
     <string name="userNotExist">Error: This phone number has not register yet.</string>
     <string name="close">Close</string>
+    <string name="today_count">Counts of poor posture (daily)</string>
+    <string name="today_usage">Today\'s phone usage(24hrs)</string>
+    <string name="week_usage">Week\'s phone usage(days)</string>
 </resources>

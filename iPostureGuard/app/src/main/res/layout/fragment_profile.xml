@@ -1,98 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
+    android:layout_height="match_parent"
+    android:id="@+id/profileFragment">
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <ImageView
-            android:id="@+id/logo_image"
-            android:layout_width="wrap_content"
-            android:layout_height="300dp"
-            android:src="@drawable/logo"
-            android:contentDescription="@string/logo_description"
-            android:padding="16dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label_name"
-            android:padding="8dp" />
-
-        <TextView
-            android:id="@+id/name_display"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label_sex"
-            android:padding="8dp" />
-
-        <TextView
-            android:id="@+id/sex_display"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label_age"
-            android:padding="8dp" />
-
-        <TextView
-            android:id="@+id/age_display"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label_email"
-            android:padding="8dp" />
-
-        <TextView
-            android:id="@+id/email_display"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+        android:stretchColumns="1">
+        <TableRow
             android:padding="16dp">
-
+            <ImageView
+                android:id="@+id/logo_image"
+                android:layout_width="wrap_content"
+                android:layout_height="300dp"
+                android:src="@drawable/logo"
+                android:padding="16dp"
+                android:layout_span="2"/>
+        </TableRow>
+        <TableRow
+            android:padding="16dp"
+            android:id="@+id/tr_add_carer"
+            android:visibility="gone">
+            <Button
+                android:id="@+id/btn_add_carer"
+                android:text="@string/label_addCarer"
+                android:textSize="25sp"
+                android:padding="16dp"
+                android:layout_span="2"/>
+        </TableRow>
+        <TableRow
+            android:padding="16dp"
+            android:id="@+id/tr_carer"
+            android:visibility="gone">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_language"
-                android:padding="8dp" />
-
-            <Spinner
-                android:id="@+id/language_spinner"
+                android:text="@string/label_carer"
+                android:textSize="25sp"/>
+            <TextView
+                android:id="@+id/tv_carer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:entries="@array/language_options"
-                android:padding="8dp" />
-        </LinearLayout>
-        <Button
-            android:id="@+id/logout_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/confirm"
-            android:padding="16dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="75dp"/>
-    </LinearLayout>
+                android:textSize="25sp"/>
+        </TableRow>
+        <TableRow
+            android:padding="16dp"
+            android:id="@+id/tr_edit_carer"
+            android:visibility="gone">
+            <Button
+                android:id="@+id/btn_edit_carer"
+                android:text="@string/label_editCarer"
+                android:textSize="25sp"
+                android:padding="8dp"/>
+            <Button
+                android:id="@+id/btn_remove_carer"
+                android:text="@string/label_removeCarer"
+                android:textSize="25sp"
+                android:padding="8dp"/>
+        </TableRow>
+        <TableRow
+            android:padding="16dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/label_name"
+                android:textSize="25sp"/>
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"/>
+        </TableRow>
+        <TableRow
+            android:padding="16dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/label_gender"
+                android:textSize="25sp"/>
+            <TextView
+                android:id="@+id/tv_gender"
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"/>
+        </TableRow>
+        <TableRow
+            android:padding="16dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/label_dob"
+                android:textSize="25sp"/>
+            <TextView
+                android:id="@+id/tv_dob"
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"/>
+        </TableRow>
+        <TableRow
+            android:padding="16dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/label_age"
+                android:textSize="25sp"/>
+            <TextView
+                android:id="@+id/tv_age"
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"/>
+        </TableRow>
+        <TableRow
+            android:padding="16dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/label_language"
+                android:textSize="25sp"/>
+            <Spinner
+                android:id="@+id/language_spinner"
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:layout_height="wrap_content"
+                android:entries="@array/language_options"/>
+        </TableRow>
+        <TableRow
+            android:padding="16dp">
+            <Button
+                android:id="@+id/btn_login_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/logout"
+                android:padding="8dp"
+                android:layout_span="2"
+                android:textSize="25sp"
+                android:backgroundTint="@color/gray_70"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_span="2"/>
+        </TableRow>
+    </TableLayout>
 </ScrollView>

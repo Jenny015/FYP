@@ -29,7 +29,7 @@
             android:name=".ui.exercise.FragmentExerciseEyesActivity"
             android:exported="false" />
         <activity
-            android:name=".FragmentLoginActivity"
+            android:name=".ui.login.FragmentLoginActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,13 +38,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FragmentAchievementActivity"
+            android:name=".ui.profile.FragmentAchievementActivity"
             android:exported="false" />
         <activity
-            android:name=".FragmentForgetpasswordActivity"
+            android:name=".ui.login.FragmentForgetpasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".FragmentRegisterActivity"
+            android:name=".ui.login.FragmentRegisterActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

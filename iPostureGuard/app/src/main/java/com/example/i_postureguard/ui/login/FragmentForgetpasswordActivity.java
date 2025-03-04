@@ -1,4 +1,4 @@
-package com.example.i_postureguard;
+package com.example.i_postureguard.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.i_postureguard.R;
 
 public class FragmentForgetpasswordActivity extends AppCompatActivity {
 

@@ -1,6 +1,8 @@
-package com.example.i_postureguard;
+package com.example.i_postureguard.ui.login;
+
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,6 +16,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.i_postureguard.MainActivity;
+import com.example.i_postureguard.R;
+import com.example.i_postureguard.User;
+import com.example.i_postureguard.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +32,10 @@ public class FragmentLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_login);
 
+        if(Utils.isLogin(this)){
+            intent(MainActivity.class);
+        }
+
         ImageButton btn_skip = findViewById(R.id.btn_skip);
         TextView tv_skip = findViewById(R.id.tv_skip);
         Button btn_login = findViewById(R.id.btn_login);
@@ -36,6 +46,7 @@ public class FragmentLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (view.getId() == R.id.btn_skip || view.getId() == R.id.tv_skip){
+                    Utils.setUser(getApplicationContext(), new User(""));
                     intent(MainActivity.class);
                 } else if(view.getId() == R.id.btn_login){
                     Login();
@@ -52,10 +63,9 @@ public class FragmentLoginActivity extends AppCompatActivity {
         btn_reg.setOnClickListener(listener);
         btn_forget_pwd.setOnClickListener(listener);
 
-
-
     }
-    public void Login(){
+
+    private void Login(){
         EditText et_phone = findViewById(R.id.et_phone);
         EditText et_pwd = findViewById(R.id.et_pwd);
 
@@ -76,6 +86,8 @@ public class FragmentLoginActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     String storedPassword = dataSnapshot.child("password").getValue(String.class);
                     if (storedPassword.equals(pwd)) {
+                        writePrefsFile(phone);
+                        Utils.setUser(getApplicationContext(), dataSnapshot.getValue(User.class));
                         intent(MainActivity.class);
                     } else {
                         showPopUp(R.string.wrongPassword);
@@ -119,5 +131,14 @@ public class FragmentLoginActivity extends AppCompatActivity {
                 popup.dismiss();
             }
         });
+    }
+
+    private void writePrefsFile(String phone) {
+        SharedPreferences settings = getSharedPreferences(Utils.PREF_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("phone", phone);
+        editor.putBoolean("login", true);
+        editor.apply();
+        Utils.changeAppLanguage(this, settings.getString("lang", "en"));
     }
 }
