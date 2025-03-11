@@ -33,6 +33,9 @@
     <string name="register">Register</string>
     <string name="forget_password">Forget password</string>
     <string name="skip">Skip</string>
+    <string name="skip_button_description">Skip Button</string>
+
+
 
     <!-- Ranking -->
 

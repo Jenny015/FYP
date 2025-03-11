@@ -35,10 +35,11 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="250dp"
-                android:layout_marginBottom="1dp"
+                android:layout_height="220dp"
+                android:layout_margin="5dp"
                 android:contentDescription="@string/logo_description"
-                android:src="@drawable/logo" />
+                android:src="@drawable/logo"
+                />
 
             <EditText
                 android:id="@+id/et_phone"
@@ -46,9 +47,13 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/account_hint"
                 android:inputType="phone"
-                android:padding="16dp"
-                android:textSize="25sp"
-                android:autofillHints="phone"/>
+                android:padding="10dp"
+                android:textSize="30sp"
+                android:autofillHints="phone"
+                android:fontFamily="@font/textfont"
+                android:background="@drawable/button_border"
+                android:layout_margin="10dp"
+/>
 
             <EditText
                 android:id="@+id/et_pwd"
@@ -56,16 +61,23 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/password_hint"
                 android:inputType="textPassword"
-                android:padding="16dp"
-                android:textSize="25sp"
-                android:autofillHints="password"/>
+                android:padding="10dp"
+                android:textSize="30sp"
+                android:fontFamily="@font/textfont"
+                android:background="@drawable/button_border"
+                android:autofillHints="password"
+                android:layout_margin="10dp"
+                />
             <Button
                 android:id="@+id/btn_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/login"
-                android:padding="16dp"
-                android:textSize="25sp" />
+                android:padding="10dp"
+                android:fontFamily="@font/textfont"
+                android:background="@drawable/button_border"
+                android:textSize="25sp"
+                android:layout_marginBottom="10dp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -79,9 +91,11 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/register"
-                android:padding="16dp"
+                android:padding="10dp"
                 android:textSize="25sp"
                 android:layout_gravity="center"
+                android:fontFamily="@font/textfont"
+                android:background="@drawable/button_border"
                 android:layout_marginHorizontal="8dp"/>
 
             <Button
@@ -93,7 +107,9 @@
                 android:padding="10dp"
                 android:textSize="25sp"
                 android:layout_gravity="center"
+                android:fontFamily="@font/textfont"
+                android:background="@drawable/button_border"
                 android:layout_marginHorizontal="8dp"/>
         </LinearLayout>
     </LinearLayout>
-    </ScrollView>
+</ScrollView>
