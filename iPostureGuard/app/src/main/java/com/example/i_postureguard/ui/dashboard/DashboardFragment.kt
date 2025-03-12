@@ -3,6 +3,7 @@ package com.example.i_postureguard.ui.dashboard
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.PointF
@@ -100,112 +101,22 @@ class DashboardFragment : Fragment() {
     @OptIn(ExperimentalGetImage::class)
     private fun cameraOn() {
         textViewCameraData.text = "Camera On"
-        val previewView: PreviewView = binding.cameraPreview
-        previewView.visibility = View.VISIBLE
-
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-        cameraProviderFuture.addListener({
-            val cameraProvider = cameraProviderFuture.get()
-
-            val faceDetectorOptions = FaceDetectorOptions.Builder()
-                .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
-                .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
-                .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
-                .build()
-            val faceDetector = FaceDetection.getClient(faceDetectorOptions)
-
-            val imageAnalysis = ImageAnalysis.Builder()
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build()
-                .also {
-                    it.setAnalyzer(ContextCompat.getMainExecutor(requireContext())) { imageProxy ->
-                        val currentTime = System.currentTimeMillis()
-                        if (currentTime - lastUpdateTime >= detectionDelay) {
-                            lastUpdateTime = currentTime
-
-                            val mediaImage = imageProxy.image
-                            if (mediaImage != null) {
-                                val image = InputImage.fromMediaImage(
-                                    mediaImage,
-                                    imageProxy.imageInfo.rotationDegrees
-                                )
-
-                                faceDetector.process(image)
-                                    .addOnSuccessListener { faces ->
-                                        for (face in faces) {
-                                            var msg = ""
-                                            val bounds = face.boundingBox
-
-                                            calculateDistance(this, face) { distance ->
-                                                msg += "Distance: $distance cm\n"
-
-                                                val rotX = face.headEulerAngleX
-                                                val rotY =
-                                                    face.headEulerAngleY // Head is rotated to the right rotY degrees
-                                                val rotZ =
-                                                    face.headEulerAngleZ // Head is tilted sideways rotZ degrees
-                                                msg += "X: $rotX\nY: $rotY\nZ: $rotZ\n\n"
-
-                                                if (face.rightEyeOpenProbability != null) {
-                                                    msg += "\nRight eye open: ${face.rightEyeOpenProbability}"
-                                                }
-                                                if (face.leftEyeOpenProbability != null) {
-                                                    msg += "\nLeft eye open: ${face.leftEyeOpenProbability}"
-                                                }
-
-                                                // Safely access accelerometer data
-                                                val accelData = getAccelerometerData()
-                                                msg += "\n${accelData}"
-                                                textViewCameraData.text = msg
-
-                                                checkPosture(
-                                                    listOf(rotX, rotY, rotZ,distance%1000),
-                                                    listOf(
-                                                        face.leftEyeOpenProbability,
-                                                        face.rightEyeOpenProbability
-                                                    ), accelData
-                                                )
-                                            }
-                                        }
-                                    }
-                                    .addOnFailureListener { e ->
-                                        textViewCameraData.text = "Face detection failed: $e"
-                                    }
-                                    .addOnCompleteListener {
-                                        imageProxy.close()
-                                    }
-                            }
-                        } else {
-                            imageProxy.close()
-                        }
-                    }
-
-                }
-
-            val preview = Preview.Builder().build().also {
-                it.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
-            }
-
-            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-
-            try {
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis)
-            } catch (exc: Exception) {
-                textViewCameraData.text = "Camera binding failed: $exc"
-            }
-        }, ContextCompat.getMainExecutor(requireContext()))
+        var serviceIntent= Intent(
+            requireContext(),
+            MyForegroundService::class.java
+        )
+        ContextCompat.startForegroundService(requireContext(),serviceIntent)
+        Log.i("Hi","Camera Opened")
     }
 
     private fun cameraOff() {
         textViewCameraData.text = "Camera Off"
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-        cameraProviderFuture.addListener({
-            val cameraProvider = cameraProviderFuture.get()
-            cameraProvider.unbindAll()
-        }, ContextCompat.getMainExecutor(requireContext()))
-        val previewView: PreviewView = binding.cameraPreview
-        previewView.visibility = View.GONE
+        var serviceIntent= Intent(
+            requireContext(),
+            MyForegroundService::class.java
+        )
+        requireContext().stopService(serviceIntent)
+        Log.i("Hi","Camera Closed ")
     }
 
     private fun checkCameraPermission(activity: Activity) {
