@@ -106,7 +106,6 @@ class DashboardFragment : Fragment() {
             MyForegroundService::class.java
         )
         ContextCompat.startForegroundService(requireContext(),serviceIntent)
-        Log.i("Hi","Camera Opened")
     }
 
     private fun cameraOff() {
@@ -116,7 +115,6 @@ class DashboardFragment : Fragment() {
             MyForegroundService::class.java
         )
         requireContext().stopService(serviceIntent)
-        Log.i("Hi","Camera Closed ")
     }
 
     private fun checkCameraPermission(activity: Activity) {

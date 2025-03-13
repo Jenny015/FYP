@@ -1,9 +1,9 @@
 package com.example.i_postureguard.ui.dashboard
-
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import android.util.Log
 import androidx.annotation.OptIn
@@ -26,12 +26,13 @@ class MyForegroundService : LifecycleService() {
     private val CHANNEL_ID = "MyForegroundServiceChannel"
     private lateinit var cameraExecutor: ExecutorService
     private var lastUpdateTime = 0L
-    private val detectionDelay = 1000// For adjust the frequency of detection
-
+    private val detectionDelay = 5000// For adjust the frequency of detection
+    private var mediaPlayer: MediaPlayer? = null
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
         cameraExecutor = Executors.newSingleThreadExecutor()
+
         startCameraAnalysis()
     }
 
@@ -45,13 +46,14 @@ class MyForegroundService : LifecycleService() {
             .build()
 
         startForeground(1, notification)
-
+        Log.i("ForegroundService","Camera ForegroundService Activated")
         return START_STICKY
     }
 
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
+        Log.i("ForegroundService","Camera ForegroundService Shutdown")
     }
 
     private fun createNotificationChannel() {
@@ -120,6 +122,8 @@ class MyForegroundService : LifecycleService() {
                                     }
                                     Log.e("hi","I am still running")
                                     Log.e("update",msg)
+                                    playMp3(R.raw.warning)
+
                                 }
                                 .addOnFailureListener { e ->
                                     Log.e("MyForegroundService", "Face detection failed: $e")
@@ -150,6 +154,12 @@ class MyForegroundService : LifecycleService() {
                 Log.e("MyForegroundService", "Camera binding failed: $exc")
             }
         }, ContextCompat.getMainExecutor(this))
+    }
+    fun playMp3(resourceId: Int) {
+        mediaPlayer?.release()
+        mediaPlayer = MediaPlayer.create(this, resourceId).apply {
+            start()
+        }
     }
 
 
