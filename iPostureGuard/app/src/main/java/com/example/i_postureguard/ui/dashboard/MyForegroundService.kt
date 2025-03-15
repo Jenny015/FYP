@@ -3,6 +3,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
+import android.content.res.Configuration
 import android.media.MediaPlayer
 import android.os.Build
 import android.util.Log
@@ -94,6 +95,7 @@ class MyForegroundService : LifecycleService() {
                     it.setAnalyzer(cameraExecutor) { imageProxy ->
                         val mediaImage = imageProxy.image
                         val currentTime = System.currentTimeMillis()
+
                         if (mediaImage != null && currentTime - lastUpdateTime >= detectionDelay){
                             lastUpdateTime = currentTime
                             val image = InputImage.fromMediaImage(
@@ -107,6 +109,7 @@ class MyForegroundService : LifecycleService() {
                                     var rotX=0.0f
                                     var rotY=0.0f
                                     var rotZ=0.0f
+
 
                                     for (face in faces) {
 
@@ -141,6 +144,7 @@ class MyForegroundService : LifecycleService() {
                         } else {
                             imageProxy.close()
                         }
+                        GetFrontCameraInfo.getCameraInfo(this)
                     }
                 }
 
@@ -189,6 +193,39 @@ class MyForegroundService : LifecycleService() {
             playMp3(R.raw.tilt_right)
             msg += "Head tilting right (Scoliosis)\n"
         }
+
+        if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT&&
+            rotZ > -20 && rotZ < 20 && (accelData[0] > 7 || accelData[0] < -7)) {
+            playMp3(R.raw.sleep)
+            msg += "Sleep on side while using mobile phone\n"
+
+        } else if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE&&
+            rotZ > -20 && rotZ < 20 && (accelData[1] > 7 || accelData[1] < -7)){
+
+            playMp3(R.raw.sleep)
+            msg += "Sleep on side while using mobile phone\n"
+        } else if (accelData[2] < -7) {
+            playMp3(R.raw.sleep)
+            msg += "Sleep on back while using mobile phone\n"
+        } else {
+            if (accelData[2] < 5 && rotX < (0 - buffer) || (accelData[2] > 5 && rotX < (12 - buffer))) {
+                playMp3(R.raw.text_neck)
+                msg += "Text-neck posture\n"
+            }
+            if (rotZ < (-10 - buffer)) {
+                playMp3(R.raw.tilt_left)
+                msg += "Head tilting left (Scoliosis)\n"
+            }
+            if (rotZ > (10 + buffer)) {
+                playMp3(R.raw.tilt_right)
+                msg += "Head tilting right (Scoliosis)\n"
+            }
+            /*if(head[3]<30){
+                playMp3(R.raw.close)
+                msg ="Unsafety distance\nToo close, please keep the distance\n"
+            }*/
+        }
+
         Log.e("update",msg)
     }
 
