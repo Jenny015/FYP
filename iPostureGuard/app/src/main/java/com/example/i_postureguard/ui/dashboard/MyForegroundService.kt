@@ -15,19 +15,19 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import com.example.i_postureguard.R
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class MyForegroundService : LifecycleService() {
-
+    val buffer = 0 //TODO: Access from user profile
     private val CHANNEL_ID = "MyForegroundServiceChannel"
     private lateinit var cameraExecutor: ExecutorService
     private var lastUpdateTime = 0L
-    private val detectionDelay = 5000// For adjust the frequency of detection
+    private val detectionDelay = 8000// For adjust the frequency of detection
     private var mediaPlayer: MediaPlayer? = null
+    private var accelerometer: GetAccelerometer? = null//initialize GetAccelerometer activity
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
@@ -47,12 +47,15 @@ class MyForegroundService : LifecycleService() {
 
         startForeground(1, notification)
         Log.i("ForegroundService","Camera ForegroundService Activated")
+        accelerometer = GetAccelerometer.getInstance(this)
+        accelerometer?.startListening()
         return START_STICKY
     }
 
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
+        accelerometer?.stopListening()
         Log.i("ForegroundService","Camera ForegroundService Shutdown")
     }
 
@@ -101,15 +104,19 @@ class MyForegroundService : LifecycleService() {
                             faceDetector.process(image)
                                 .addOnSuccessListener { faces ->
                                     var msg = ""
+                                    var rotX=0.0f
+                                    var rotY=0.0f
+                                    var rotZ=0.0f
+
                                     for (face in faces) {
 
                                         val bounds = face.boundingBox
 
 
-                                            val rotX = face.headEulerAngleX
-                                            val rotY =
+                                            rotX = face.headEulerAngleX
+                                            rotY =
                                                 face.headEulerAngleY // Head is rotated to the right rotY degrees
-                                            val rotZ =
+                                            rotZ =
                                                 face.headEulerAngleZ // Head is tilted sideways rotZ degrees
                                             msg += "X: $rotX\nY: $rotY\nZ: $rotZ\n\n"
 
@@ -120,9 +127,9 @@ class MyForegroundService : LifecycleService() {
                                                 msg += "\nLeft eye open: ${face.leftEyeOpenProbability}"
                                             }
                                     }
+                                    checkPosture(rotX,rotY,rotZ,getAccelerometerData())
                                     Log.e("hi","I am still running")
-                                    Log.e("update",msg)
-                                    playMp3(R.raw.warning)
+                                    //Log.e("update",msg)
 
                                 }
                                 .addOnFailureListener { e ->
@@ -160,6 +167,29 @@ class MyForegroundService : LifecycleService() {
         mediaPlayer = MediaPlayer.create(this, resourceId).apply {
             start()
         }
+    }
+    private fun getAccelerometerData(): String {
+        return accelerometer?.getData() ?: "No accelerometer data"
+    }
+    fun checkPosture(rotX:Float, rotY: Float, rotZ:Float,accelerometerData: String){
+        var msg = ""
+        val regex = """[-\d]+\.\d+""".toRegex()
+        val accelData =
+            regex.findAll(accelerometerData).map { it.value.trim() }.mapNotNull { it.toFloatOrNull() }
+                .toMutableList()
+
+        if (accelData[2] < 5 && rotX < (0 - buffer) || (accelData[2] > 5 && rotX < (12 - buffer))) { //text neck
+            playMp3(R.raw.text_neck)
+            msg += "Text-neck posture\n"
+        }else if (rotZ < (-10 - buffer)) {  //左傾
+
+            playMp3(R.raw.tilt_left)
+            msg += "Head tilting left (Scoliosis)\n"
+        }else if (rotZ > (10 + buffer)) { //右傾
+            playMp3(R.raw.tilt_right)
+            msg += "Head tilting right (Scoliosis)\n"
+        }
+        Log.e("update",msg)
     }
 
 
