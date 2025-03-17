@@ -40,7 +40,7 @@ public class FragmentLoginActivity extends AppCompatActivity {
         TextView tv_skip = findViewById(R.id.tv_skip);
         Button btn_login = findViewById(R.id.btn_login);
         Button btn_reg = findViewById(R.id.btn_reg);
-        Button btn_forget_pwd = findViewById(R.id.btn_forget_pwd); // 修正 id
+        Button btn_forget_pwd = findViewById(R.id.btn_forget_pwd);
 
         View.OnClickListener listener = new View.OnClickListener(){
             @Override

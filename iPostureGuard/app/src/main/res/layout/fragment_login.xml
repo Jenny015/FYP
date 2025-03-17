@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroud">
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingRight="24dp"
+        android:paddingLeft="24dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,21 +30,24 @@
                 android:layout_height="wrap_content"
                 android:text="@string/skip"
                 android:textSize="30sp"
+                android:fontFamily="@font/font"
                 android:layout_gravity="center"/>
         </LinearLayout>
+
+        <!-- Main Content -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:paddingTop="3dp">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="220dp"
-                android:layout_margin="5dp"
+                android:layout_margin="10dp"
                 android:contentDescription="@string/logo_description"
-                android:src="@drawable/logo"
-                />
+                android:src="@drawable/loginlo"/>
 
             <EditText
                 android:id="@+id/et_phone"
@@ -47,13 +55,12 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/account_hint"
                 android:inputType="phone"
-                android:padding="10dp"
-                android:textSize="30sp"
-                android:autofillHints="phone"
-                android:fontFamily="@font/textfont"
-                android:background="@drawable/button_border"
-                android:layout_margin="10dp"
-/>
+                android:padding="12dp"
+                android:textSize="24sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/font3"
+                android:background="@drawable/button_white"
+                android:layout_marginVertical="12dp"/>
 
             <EditText
                 android:id="@+id/et_pwd"
@@ -61,42 +68,48 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/password_hint"
                 android:inputType="textPassword"
-                android:padding="10dp"
-                android:textSize="30sp"
-                android:fontFamily="@font/textfont"
-                android:background="@drawable/button_border"
-                android:autofillHints="password"
-                android:layout_margin="10dp"
-                />
+                android:padding="12dp"
+                android:textSize="24sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/font3"
+                android:background="@drawable/button_white"
+                android:layout_marginVertical="12dp"/>
+
             <Button
                 android:id="@+id/btn_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/login"
-                android:padding="10dp"
-                android:fontFamily="@font/textfont"
-                android:background="@drawable/button_border"
-                android:textSize="25sp"
-                android:layout_marginBottom="10dp"/>
+                android:paddingRight="62dp"
+                android:paddingLeft="62dp"
+                android:textSize="28sp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/button_blue"
+                android:fontFamily="@font/font"
+                android:textColor="@color/white"/>
         </LinearLayout>
+
+        <!-- Register/Forget Password Section -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="50dp">
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center">
+
             <Button
                 android:id="@+id/btn_reg"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/register"
-                android:padding="10dp"
-                android:textSize="25sp"
-                android:layout_gravity="center"
-                android:fontFamily="@font/textfont"
-                android:background="@drawable/button_border"
-                android:layout_marginHorizontal="8dp"/>
+                android:padding="12dp"
+                android:textSize="24sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/font"
+                android:background="@drawable/button_blue"
+                android:layout_marginEnd="8dp"/>
 
             <Button
                 android:id="@+id/btn_forget_pwd"
@@ -104,12 +117,12 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/forget_password"
-                android:padding="10dp"
-                android:textSize="25sp"
-                android:layout_gravity="center"
-                android:fontFamily="@font/textfont"
-                android:background="@drawable/button_border"
-                android:layout_marginHorizontal="8dp"/>
+                android:padding="12dp"
+                android:textSize="24sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/font"
+                android:background="@drawable/button_blue"
+                android:layout_marginStart="8dp"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
