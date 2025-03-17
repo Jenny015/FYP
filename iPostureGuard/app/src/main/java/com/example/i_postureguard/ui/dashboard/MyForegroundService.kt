@@ -4,6 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.PointF
 import android.media.MediaPlayer
 import android.os.Build
 import android.util.Log
@@ -16,8 +17,10 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import com.example.i_postureguard.R
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
+import com.google.mlkit.vision.face.FaceLandmark
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -29,6 +32,8 @@ class MyForegroundService : LifecycleService() {
     private val detectionDelay = 8000// For adjust the frequency of detection
     private var mediaPlayer: MediaPlayer? = null
     private var accelerometer: GetAccelerometer? = null//initialize GetAccelerometer activity
+    var focalLength = 0f
+    var sensorWidth = 0f
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
@@ -109,7 +114,7 @@ class MyForegroundService : LifecycleService() {
                                     var rotX=0.0f
                                     var rotY=0.0f
                                     var rotZ=0.0f
-
+                                    var face1: Face? =null
 
                                     for (face in faces) {
 
@@ -129,8 +134,11 @@ class MyForegroundService : LifecycleService() {
                                             if (face.leftEyeOpenProbability != null) {
                                                 msg += "\nLeft eye open: ${face.leftEyeOpenProbability}"
                                             }
+                                        face1=face
                                     }
-                                    checkPosture(rotX,rotY,rotZ,getAccelerometerData())
+                                    if (face1 != null) {
+                                        checkPosture(rotX,rotY,rotZ,getAccelerometerData(),face1)
+                                    }
                                     Log.e("hi","I am still running")
                                     //Log.e("update",msg)
 
@@ -144,7 +152,9 @@ class MyForegroundService : LifecycleService() {
                         } else {
                             imageProxy.close()
                         }
-                        GetFrontCameraInfo.getCameraInfo(this)
+                        var cameraInfo=GetFrontCameraInfo.getCameraInfo(this)
+                        focalLength=cameraInfo[0]
+                        sensorWidth=cameraInfo[1]
                     }
                 }
 
@@ -175,13 +185,14 @@ class MyForegroundService : LifecycleService() {
     private fun getAccelerometerData(): String {
         return accelerometer?.getData() ?: "No accelerometer data"
     }
-    fun checkPosture(rotX:Float, rotY: Float, rotZ:Float,accelerometerData: String){
+    fun checkPosture(rotX:Float, rotY: Float, rotZ:Float,accelerometerData: String,face:Face){
         var msg = ""
         val regex = """[-\d]+\.\d+""".toRegex()
         val accelData =
             regex.findAll(accelerometerData).map { it.value.trim() }.mapNotNull { it.toFloatOrNull() }
                 .toMutableList()
-
+        var distance:Float=getDistance(focalLength, sensorWidth, face)
+        Log.i("Distance: ",distance.toString()+" cm")
         if (accelData[2] < 5 && rotX < (0 - buffer) || (accelData[2] > 5 && rotX < (12 - buffer))) { //text neck
             playMp3(R.raw.text_neck)
             msg += "Text-neck posture\n"
@@ -208,25 +219,53 @@ class MyForegroundService : LifecycleService() {
             playMp3(R.raw.sleep)
             msg += "Sleep on back while using mobile phone\n"
         } else {
+
             if (accelData[2] < 5 && rotX < (0 - buffer) || (accelData[2] > 5 && rotX < (12 - buffer))) {
                 playMp3(R.raw.text_neck)
                 msg += "Text-neck posture\n"
             }
-            if (rotZ < (-10 - buffer)) {
+            else if (rotZ < (-10 - buffer)) {
                 playMp3(R.raw.tilt_left)
                 msg += "Head tilting left (Scoliosis)\n"
             }
-            if (rotZ > (10 + buffer)) {
+            else if (rotZ > (10 + buffer)) {
                 playMp3(R.raw.tilt_right)
                 msg += "Head tilting right (Scoliosis)\n"
             }
-            /*if(head[3]<30){
+            else if(distance<30){
                 playMp3(R.raw.close)
                 msg ="Unsafety distance\nToo close, please keep the distance\n"
-            }*/
+
+            }
         }
 
         Log.e("update",msg)
+    }
+
+    fun  getDistance(focalLength:Float, sensorWidth: Float, face: Face):Float{
+        val leftEye = face.getLandmark(FaceLandmark.LEFT_EYE)?.position
+        val rightEye = face.getLandmark(FaceLandmark.RIGHT_EYE)?.position
+
+
+        if (leftEye != null && rightEye != null) {
+
+            val eyeDistance = distanceBetweenPoints(leftEye, rightEye)
+            // Known average eye distance in real life (e.g., 6.2 cm)
+            val knownEyeDistance = 6.2f
+
+            // Calculate the distance using the formula
+            val distance = (focalLength * knownEyeDistance) / (eyeDistance * sensorWidth)*0.75f*1000
+            Log.i("eyeDistance",eyeDistance.toString())
+            Log.i("focalLength",focalLength.toString())
+            Log.i("sensorWidth",sensorWidth.toString())
+            return distance
+        }
+        return 0f
+
+    }
+    private fun distanceBetweenPoints(p1: PointF, p2: PointF): Float {
+        return Math.sqrt(((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y)).toDouble())
+            .toFloat()
     }
 
 

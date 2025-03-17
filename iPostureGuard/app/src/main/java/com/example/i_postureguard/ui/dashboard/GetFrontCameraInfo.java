@@ -9,7 +9,7 @@ import android.util.Log;
 public class GetFrontCameraInfo {
     private static final String TAG = "CameraInfo";
 
-    public static void getCameraInfo(Context context) {
+    public static Float[] getCameraInfo(Context context) {
         CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
         try {
             // Get the list of available cameras
@@ -22,18 +22,19 @@ public class GetFrontCameraInfo {
                 if (lensFacing != null && lensFacing == CameraCharacteristics.LENS_FACING_FRONT) {
                     // Get the focal length
                     Float focalLength = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS)[0];
-                    Log.d(TAG, "Front Camera Focal Length: " + focalLength + " mm");
+                    //Log.d(TAG, "Front Camera Focal Length: " + focalLength + " mm");
 
                     // Get the sensor width
                     Float sensorWidth = characteristics.get(CameraCharacteristics.SENSOR_INFO_PHYSICAL_SIZE).getWidth();
-                    Log.d(TAG, "Front Camera Sensor Width: " + sensorWidth + " mm");
+                    //Log.d(TAG, "Front Camera Sensor Width: " + sensorWidth + " mm");
 
                     // Exit after finding the front camera
-                    break;
+                    return new Float[]{focalLength, sensorWidth};
                 }
             }
         } catch (CameraAccessException e) {
             Log.e(TAG, "Error accessing camera: " + e.getMessage());
         }
+        return null;
     }
 }
