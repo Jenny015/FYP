@@ -3,7 +3,7 @@ package com.example.i_postureguard;
 import java.util.List;
 
 public class DailyData{
-    public String date; // "dd/mm/yyyy" format
+    public String date; // "dd-mm-yyyy" format
     public int duration;
     public List<Integer> exercise;
     public List<Integer>posture;

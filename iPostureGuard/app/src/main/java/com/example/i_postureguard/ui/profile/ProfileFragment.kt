@@ -148,7 +148,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun fillUserInfo(name: TextView, gender: TextView, dob: TextView, age: TextView){
-        val user = Utils.getUser(requireContext())
+        val user = Utils.getUserFromFirebase(requireContext(), Utils.getString(requireContext(), "phone", ""))
         refresh()
         name.text = user.name;
         gender.text = user.gender;
@@ -180,10 +180,9 @@ class ProfileFragment : Fragment() {
         addButton.setOnClickListener {
             val email = emailEditText.text.toString().trim()
             if (email.isNotEmpty() && isValidEmail(email)) {
-                val user = Utils.getUser(requireContext())
-                user.carer = email
-                Utils.setUser(requireContext(), user)
-                Utils.updateToFirebase(user, "carer", email)
+                val updates: MutableMap<String, Any> = HashMap()
+                updates["carer"] = email
+                Utils.updateToFirebase(requireContext(), updates)
                 refresh()
                 dialog.dismiss()
             } else {
@@ -205,7 +204,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun refresh() {
-        val user = Utils.getUser(requireContext())
+        val user = Utils.getLocalUser(requireContext())
         Toast.makeText(requireContext(), user.carer, Toast.LENGTH_SHORT).show()
         if(user.carer == null || user.carer == ""){
             tr_add_carer.visibility = View.VISIBLE
@@ -229,10 +228,9 @@ class ProfileFragment : Fragment() {
     }
 
     private fun removeCarer(){
-        var user = Utils.getUser(requireContext())
-        user.carer = ""
-        Utils.setUser(requireContext(), user)
-        Utils.updateToFirebase(user, "carer", "")
+        val updates: MutableMap<String, Any> = HashMap()
+        updates["carer"] = ""
+        Utils.updateToFirebase(requireContext(), updates)
         refresh()
     }
 }

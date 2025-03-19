@@ -46,7 +46,7 @@ public class FragmentLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (view.getId() == R.id.btn_skip || view.getId() == R.id.tv_skip){
-                    Utils.setUser(getApplicationContext(), new User(""));
+                    Utils.createLocalUser(getApplicationContext(), new User(""));
                     intent(MainActivity.class);
                 } else if(view.getId() == R.id.btn_login){
                     Login();
@@ -86,8 +86,11 @@ public class FragmentLoginActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     String storedPassword = dataSnapshot.child("password").getValue(String.class);
                     if (storedPassword.equals(pwd)) {
+                        // Upload Daily data to firebase from local, if any
+
                         writePrefsFile(phone);
-                        Utils.setUser(getApplicationContext(), dataSnapshot.getValue(User.class));
+                        // Pull firebase data to local
+                        Utils.createLocalUser(getApplicationContext(), dataSnapshot.getValue(User.class));
                         intent(MainActivity.class);
                     } else {
                         showPopUp(R.string.wrongPassword);

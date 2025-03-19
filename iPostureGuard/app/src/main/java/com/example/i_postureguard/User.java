@@ -21,6 +21,14 @@ public class User {
         data = new HashMap<String, DailyData>();
     }
 
+    public User(String name, String dob, String gender, String carer, Map<String, DailyData> data){
+        this.name = name;
+        this.dob = dob;
+        this.gender = gender;
+        this.carer = carer;
+        this.data = data;
+    }
+
     public String toString(){
         return phone+", "+name+", "+dob+", "+gender+", "+carer+", "+data;
     }

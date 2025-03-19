@@ -10,11 +10,16 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Utils {
     public static final String PREF_NAME = "prefsFile";
@@ -61,10 +66,52 @@ public class Utils {
         editor.apply();
     }
 
-    public static void updateToFirebase(Context c){
-        User user = getUser(c);
+    // Get User from Firebase to Local preference
+    public static void setLocalUserFromFirebase(Context c, String phone){
         DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users");
-        db.child(user.phone).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+        db.child(phone).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    Map<String, DailyData> dailyDataMap = new HashMap<>();
+                    for (DataSnapshot snapshot1 : snapshot.child("data").getChildren()){
+                        dailyDataMap.put(snapshot1.getKey(), snapshot1.getValue(DailyData.class));
+                    }
+
+                    // Check if local has daily data
+                    User local = getLocalUser(c);
+                    if(!local.data.isEmpty()){
+                        //Update local daily record to firebase
+                        dailyDataMap.putAll(local.data);
+                        Map<String, Object> updates = new HashMap<>();
+                        updates.put("data", dailyDataMap);
+                        updateToFirebase(c, updates);
+                    }
+                    // Pull firebase data to local
+                    createLocalUser(c, new User(
+                            snapshot.child("name").getValue(String.class),
+                            snapshot.child("dob").getValue(String.class),
+                            snapshot.child("gender").getValue(String.class),
+                            snapshot.child("carer").getValue(String.class),
+                            dailyDataMap
+                    ));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public static User getUserFromFirebase(Context c, String phone){
+        setLocalUserFromFirebase(c, phone);
+        return getLocalUser(c);
+    }
+
+    public static void updateToFirebase(Context c, Map<String, Object> update){
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users");
+        db.child(getLocalUser(c).phone).updateChildren(update).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -78,34 +125,19 @@ public class Utils {
         });
     }
 
-    public static void updateToFirebase(User user, String field, String value){
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users");
-        db.child(user.phone).child(field).setValue(value).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    // Update successful
-                    Log.d("Firebase", "User data updated successfully.");
-                } else {
-                    // Update failed
-                    Log.d("Firebase", "Failed to update user data.");
-                }
-            }
-        });
-    }
-
-    public static User getUser(Context c){
+    // Get local user
+    public static User getLocalUser(Context c){
         SharedPreferences prefs = c.getSharedPreferences(PREF_NAME, 0);
-        SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();
-        String userJson = getString(c, "user", "");
+        String userJson = prefs.getString("user", "");
         if (userJson == null || userJson.isEmpty()) {
             return new User("");
         }
-            return gson.fromJson(userJson, User.class);
+        return gson.fromJson(userJson, User.class);
     }
 
-    public static void setUser(Context c, User user){
+    //Create local user entity
+    public static void createLocalUser(Context c, User user){
         SharedPreferences prefs = c.getSharedPreferences(PREF_NAME, 0);
         SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();
