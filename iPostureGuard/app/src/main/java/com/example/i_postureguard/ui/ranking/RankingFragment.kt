@@ -63,13 +63,13 @@ class RankingFragment : Fragment() {
     }
 
     private fun addRankingViewsForPosture() {
-        addRankingItem("User 1", "Good", R.drawable.top1)
-        addRankingItem("User 2", "Average", R.drawable.top2)
+        addRankingItem("User 1", "1 time", R.drawable.top1)
+        addRankingItem("User 2", "2time", R.drawable.top2)
     }
 
     private fun addRankingViewsForSports() {
-        addRankingItem("User 1", "3 Goals", R.drawable.top1)
-        addRankingItem("User 2", "2 Goals", R.drawable.top2)
+        addRankingItem("User 1", "500s", R.drawable.top1)
+        addRankingItem("User 2", "330s", R.drawable.top2)
     }
 
     private fun addRankingItem(userName: String, userMark: String, imageResId: Int) {

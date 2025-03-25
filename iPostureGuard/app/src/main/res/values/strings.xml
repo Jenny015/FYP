@@ -75,7 +75,7 @@
     <string name="label_confirm">Confirm</string>
     <string name="label_name">Name:</string>
     <string name="label_gender">Gender:</string>
-    <string name="label_dob">Date of Birth:</string>
+    <string name="label_dob">Birth:</string>
     <string name="label_age">Age:</string>
     <string name="label_phone">Phone:</string>
     <string name="label_language">Language:</string>
@@ -91,35 +91,9 @@
     </string-array>
 
     <!-- Ranking -->
-    <string name="user_1" translatable="false">Tom LAM</string>
-    <string name="mark_1" translatable="false">630</string>
-
-    <string name="user_2" translatable="false">Alice Wong</string>
-    <string name="mark_2" translatable="false">620</string>
-
-    <string name="user_3" translatable="false">Michael Chan</string>
-    <string name="mark_3" translatable="false">610</string>
-
-    <string name="user_4" translatable="false">Emily Lau</string>
-    <string name="mark_4" translatable="false">600</string>
-
-    <string name="user_5" translatable="false">James Ho</string>
-    <string name="mark_5" translatable="false">590</string>
-
-    <string name="user_6" translatable="false">Sophia Ng</string>
-    <string name="mark_6" translatable="false">580</string>
-
-    <string name="user_7" translatable="false">Benjamin Lee</string>
-    <string name="mark_7" translatable="false">570</string>
-
-    <string name="user_8" translatable="false">Olivia Chan</string>
-    <string name="mark_8" translatable="false">560</string>
-
-    <string name="user_9" translatable="false">Lucas Wong</string>
-    <string name="mark_9" translatable="false">550</string>
-
-    <string name="user_10" translatable="false">Grace Ho</string>
-    <string name="mark_10" translatable="false">540</string>
+    <string name="time">time</string>
+    <string name="posture">posture</string>
+    <string name="exercise">exercise</string>
 
 
     <!-- Pop up window message-->

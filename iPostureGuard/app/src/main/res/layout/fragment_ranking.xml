@@ -3,47 +3,72 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/rankingsLayout">
+    android:id="@+id/rankingsLayout"
+    android:background="@drawable/backgroud"
+    android:padding="16dp">
 
+    <!-- Horizontal Button Group -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
-        android:gravity="center">
+        android:gravity="center"
+       >
 
         <Button
             android:id="@+id/button_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Time" />
+            android:text="@string/time"
+            android:textSize="20sp"
+            android:fontFamily="@font/font"
+            android:background="@drawable/button_border"
+            android:textColor="@color/white"
+            android:padding="12dp"
+  />
 
         <Button
             android:id="@+id/button_posture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Posture"
+            android:text="@string/posture"
+            android:textSize="20sp"
+            android:fontFamily="@font/font"
+            android:background="@drawable/button_pink"
+            android:textColor="@color/white"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
+            android:layout_marginEnd="16dp"
+            android:padding="12dp"
+ />
 
         <Button
             android:id="@+id/button_sports"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sports" />
+            android:text="@string/exercise"
+            android:textSize="20sp"
+            android:fontFamily="@font/font"
+            android:background="@drawable/button_purple"
+            android:textColor="@color/white"
+            android:padding="12dp"
+/>
     </LinearLayout>
 
+    <!-- Scrollable Ranking Container -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp"
-            android:id="@+id/rankingContainer">
+            android:id="@+id/rankingContainer"
+            android:background="@drawable/button_yellow">
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

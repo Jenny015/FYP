@@ -1,22 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/profileFragment">
+    android:id="@+id/profileFragment"
+    android:background="@drawable/backgroud">
+
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:stretchColumns="1">
-        <TableRow
-            android:padding="16dp">
-            <ImageView
-                android:id="@+id/logo_image"
-                android:layout_width="wrap_content"
-                android:layout_height="300dp"
-                android:src="@drawable/logo"
-                android:padding="16dp"
-                android:layout_span="2"/>
-        </TableRow>
+        android:stretchColumns="1"
+        android:paddingRight="24dp"
+        android:paddingLeft="24dp">
+
+
+
+
+        <ImageView
+            android:id="@+id/logo_image"
+            android:layout_width="wrap_content"
+            android:layout_height="220dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/logo_description"
+            android:paddingBottom="10dp"
+            android:paddingTop="25dp"
+            android:src="@drawable/logo" />
+
+
+
+
         <TableRow
             android:padding="16dp"
             android:id="@+id/tr_add_carer"
@@ -25,9 +36,13 @@
                 android:id="@+id/btn_add_carer"
                 android:text="@string/label_addCarer"
                 android:textSize="25sp"
-                android:padding="16dp"
-                android:layout_span="2"/>
+                android:fontFamily="@font/font"
+                android:background="@drawable/button_blue"
+                android:textColor="@color/white"
+                android:padding="16dp" />
         </TableRow>
+
+
         <TableRow
             android:padding="16dp"
             android:id="@+id/tr_carer"
@@ -36,13 +51,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/label_carer"
-                android:textSize="25sp"/>
+                android:textSize="24sp"
+                android:fontFamily="@font/font" />
             <TextView
                 android:id="@+id/tv_carer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"/>
+                android:textSize="24sp"
+                android:fontFamily="@font/font3" />
         </TableRow>
+
+
         <TableRow
             android:padding="16dp"
             android:id="@+id/tr_edit_carer"
@@ -51,13 +70,21 @@
                 android:id="@+id/btn_edit_carer"
                 android:text="@string/label_editCarer"
                 android:textSize="25sp"
-                android:padding="8dp"/>
+                android:fontFamily="@font/font"
+                android:background="@drawable/button_blue"
+                android:textColor="@color/white"
+                android:padding="8dp" />
             <Button
                 android:id="@+id/btn_remove_carer"
                 android:text="@string/label_removeCarer"
                 android:textSize="25sp"
-                android:padding="8dp"/>
+                android:fontFamily="@font/font"
+                android:background="@drawable/button_blue"
+                android:textColor="@color/white"
+                android:padding="8dp" />
         </TableRow>
+
+
         <TableRow
             android:padding="16dp">
             <TextView
@@ -65,14 +92,21 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/label_name"
-                android:textSize="25sp"/>
+                android:textSize="24sp"
+                android:fontFamily="@font/font" />
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="0dp"
                 android:layout_weight="1.5"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"/>
+                android:textSize="24sp"
+                android:fontFamily="@font/font3"
+                android:background="@drawable/button_white"
+                android:textColor="@color/black"
+                android:padding="12dp" />
         </TableRow>
+
+
         <TableRow
             android:padding="16dp">
             <TextView
@@ -80,14 +114,21 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/label_gender"
-                android:textSize="25sp"/>
+                android:textSize="24sp"
+                android:fontFamily="@font/font" />
             <TextView
                 android:id="@+id/tv_gender"
                 android:layout_width="0dp"
                 android:layout_weight="1.5"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"/>
+                android:textSize="24sp"
+                android:fontFamily="@font/font3"
+                android:background="@drawable/button_white"
+                android:textColor="@color/black"
+                android:padding="12dp" />
         </TableRow>
+
+
         <TableRow
             android:padding="16dp">
             <TextView
@@ -95,14 +136,21 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/label_dob"
-                android:textSize="25sp"/>
+                android:textSize="24sp"
+                android:fontFamily="@font/font" />
             <TextView
                 android:id="@+id/tv_dob"
                 android:layout_width="0dp"
                 android:layout_weight="1.5"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"/>
+                android:textSize="24sp"
+                android:fontFamily="@font/font3"
+                android:background="@drawable/button_white"
+                android:textColor="@color/black"
+                android:padding="12dp" />
         </TableRow>
+
+
         <TableRow
             android:padding="16dp">
             <TextView
@@ -110,46 +158,69 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/label_age"
-                android:textSize="25sp"/>
+                android:textSize="24sp"
+                android:fontFamily="@font/font" />
             <TextView
                 android:id="@+id/tv_age"
                 android:layout_width="0dp"
                 android:layout_weight="1.5"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"/>
+                android:textSize="24sp"
+                android:fontFamily="@font/font3"
+                android:background="@drawable/button_white"
+                android:textColor="@color/black"
+                android:padding="12dp" />
         </TableRow>
+
+
         <TableRow
             android:padding="16dp">
+
+
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/font"
                 android:text="@string/label_language"
-                android:textSize="25sp"/>
+                android:textSize="24sp" />
+
+
             <Spinner
                 android:id="@+id/language_spinner"
                 android:layout_width="0dp"
-                android:layout_weight="1.5"
-                android:layout_height="wrap_content"
-                android:entries="@array/language_options"/>
+                android:layout_weight="3"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                android:layout_margin="8dp"
+                android:fontFamily="@font/font"
+                android:entries="@array/language_options" />
         </TableRow>
+
+
         <TableRow
-            android:padding="16dp">
+            android:padding="16dp"
+            android:gravity="center">
+
+
             <Button
                 android:id="@+id/btn_login_out"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/logout"
-                android:padding="8dp"
-                android:layout_span="2"
-                android:textSize="25sp"
-                android:backgroundTint="@color/gray_70"/>
+                android:padding="16dp"
+                android:fontFamily="@font/font"
+                android:textSize="24sp"
+                android:background="@drawable/button_blue"
+                android:textColor="@color/white" />
         </TableRow>
+
+
         <TableRow>
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:layout_span="2"/>
+                android:layout_height="75dp" />
         </TableRow>
     </TableLayout>
 </ScrollView>
+
