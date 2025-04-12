@@ -13,8 +13,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/back"
-        android:onClick="onBackPressed" />
-
+        android:onClick="onBackButtonClicked" />
+    <Button
+        android:id="@+id/neck_exercise_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/off"
+        android:onClick="onExerciseButtonClicked" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
