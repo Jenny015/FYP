@@ -41,6 +41,13 @@ import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import com.google.mlkit.vision.face.FaceLandmark
 import java.io.File
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import com.example.i_postureguard.Utils // Ensure this import is correct for your Utils class
+
 
 
 const val REQUEST_CAMERA_PERMISSION = 1001
@@ -51,6 +58,9 @@ class DashboardFragment : Fragment() {
     private var accelerometer: GetAccelerometer? = null//initialize GetAccelerometer activity
     private val detectionDelay = 10000 // For adjust the frequency of detection
     private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var dailyPostureCount: TextView
+    private lateinit var weeklyPostureCount: TextView
+    private lateinit var database: DatabaseReference
 
     //for testing
     private lateinit var textViewCameraData: TextView
@@ -83,12 +93,51 @@ class DashboardFragment : Fragment() {
 
         // New TextViews
         val textViewTodayPosture: TextView = binding.textViewTodayPosture
-        val textViewTodayCount: TextView = binding.textViewTodayCount
-        val textViewTodayPercentage: TextView = binding.textViewTodayPercentage
-        val textViewWeekCount: TextView = binding.textViewWeekCount
-        val textViewWeekPercentage: TextView = binding.textViewWeekPercentage
+        val textViewTodayCount: TextView = binding.textViewDailyPostureCount
+        val textViewTodayPercentage: TextView = binding.textViewTodayCount
+        val textViewWeekCount: TextView = binding.textViewWeeklyPostureCount
+        val textViewWeekPercentage: TextView = binding.textViewWeekCount
+
+        dailyPostureCount = binding.textViewDailyPostureCount
+        weeklyPostureCount = binding.textViewWeeklyPostureCount
+
+        // Initialize Firebase Database
+        database = FirebaseDatabase.getInstance().reference
+
+        // Load posture data
+        loadPostureData()
 
         return root
+    }
+
+    private fun loadPostureData() {
+        val phoneNumber = Utils.getString(requireContext(), "phone", "") // Retrieve the phone number instead of user ID
+        database.child(phoneNumber).child("data").get().addOnSuccessListener { snapshot ->
+            if (snapshot.exists()) {
+                var dailyCount = 0
+                var weeklyCount = 0
+                val currentDate = LocalDate.now()
+
+                // Loop through the data for the last week
+                snapshot.children.forEach { dateSnapshot ->
+                    val date = LocalDate.parse(dateSnapshot.key, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                    if (date.isEqual(currentDate) || date.isAfter(currentDate.minusDays(7))) {
+                        // Assuming the posture data is a list of integers
+                        val postureData = dateSnapshot.child("posture").children.map { it.value as Int }
+                        dailyCount += postureData.sum() // Sum daily posture values
+                        // Increment based on your logic for weekly count
+                        weeklyCount += postureData.sum()
+                    }
+                }
+
+                dailyPostureCount.text = "Daily Posture Count: $dailyCount"
+                weeklyPostureCount.text = "Weekly Posture Count: $weeklyCount"
+            } else {
+                Toast.makeText(requireContext(), "No data found", Toast.LENGTH_SHORT).show()
+            }
+        }.addOnFailureListener {
+            Toast.makeText(requireContext(), "Error fetching data", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onDestroyView() {

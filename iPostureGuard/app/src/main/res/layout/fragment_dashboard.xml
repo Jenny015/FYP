@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:contentDescription="@string/eye"
-            android:src="@drawable/eye" />
+            android:src="@drawable/p5" />
 
         <ImageView
             android:id="@+id/image_Hunchback"
@@ -73,12 +73,12 @@
             android:text="@string/today_count" />
 
         <TextView
-            android:id="@+id/text_view_today_percentage"
+            android:id="@+id/text_view_daily_posture_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textSize="20sp"
-            android:text="@string/today_percentage" />
+            android:text="Daily Posture Count" /> <!--get system-date daily bad posture by access firebase-->
     </LinearLayout>
 
     <LinearLayout
@@ -96,12 +96,12 @@
             android:text="@string/Week_Count" />
 
         <TextView
-            android:id="@+id/text_View_Week_Percentage"
+            android:id="@+id/text_view_weekly_posture_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textSize="20sp"
-            android:text="@string/Week_Percentage" />
+            android:text="Weekly Posture Count" /><!--get system-date daily bad posture by access firebase-->
     </LinearLayout>
 
     <ImageView
@@ -110,7 +110,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/today_usage"
-        android:src="@drawable/ic_today_usage" />
+        android:src="@drawable/ic_today_usage" /> <!--generate system-date daily bad posture bar chart-->
 
     <ImageView
         android:id="@+id/image_view_week_usage"
@@ -118,7 +118,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/week_usage"
-        android:src="@drawable/ic_week_usage" />
+        android:src="@drawable/ic_week_usage" /> <!--generate weekly bad posture bar chart-->
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="75dp"/>

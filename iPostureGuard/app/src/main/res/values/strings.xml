@@ -15,7 +15,7 @@
     <string name="on">On</string>
     <string name="off">Off</string>
 
-    <string name="today_posture">Today\'s posture</string>
+    <string name="today_posture">Today\'s bad posture</string>
     <string name="eye">Eyes too close</string>
     <string name="hunchback">Hunchback</string>
     hunchback
