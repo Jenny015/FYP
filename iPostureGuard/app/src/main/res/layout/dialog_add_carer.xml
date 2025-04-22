@@ -1,49 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@drawable/backgroud">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="10dp">
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingRight="24dp"
+        android:paddingLeft="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/baseline_back"
-            android:layout_gravity="center"/>
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_back"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/tv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/back"
+                android:textSize="30sp"
+                android:fontFamily="@font/font"
+                android:layout_gravity="center" />
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/tv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/back"
-            android:textSize="30sp"
-            android:layout_gravity="center"/>
+            android:text="@string/label_addCarer"
+            android:textSize="35sp"
+            android:fontFamily="@font/font"
+            android:paddingStart="16dp"
+            android:layout_margin="10dp" />
+
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:maxLines="1"
+            android:inputType="textEmailAddress"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/font3"
+            android:background="@drawable/button_white"
+            android:layout_margin="12dp" />
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_confirm"
+            android:paddingLeft="62dp"
+            android:paddingRight="62dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="50dp"
+            android:fontFamily="@font/font"
+            android:textSize="28sp"
+            android:background="@drawable/button_blue"
+            android:textColor="@color/white"
+            android:layout_gravity="center" />
     </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_addCarer"
-        android:textSize="25sp"/>
-    <EditText
-        android:id="@+id/et_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:maxLines="1"
-        android:inputType="textEmailAddress"/>
-    <Button
-        android:id="@+id/btn_confirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_confirm"
-        android:padding="16dp"
-        android:textSize="25sp"
-        android:backgroundTint="@color/gray_70"
-        android:layout_gravity="center"/>
-</LinearLayout>
+</ScrollView>

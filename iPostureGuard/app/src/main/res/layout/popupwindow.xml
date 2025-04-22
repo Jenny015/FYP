@@ -3,8 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="300dp"
     android:orientation="vertical"
-    android:background="@color/gray_70"
-    android:padding="16dp">
+    android:background="@drawable/backgroud"
+    android:paddingRight="24dp"
+    android:paddingLeft="24dp">
+
     <TextView
         android:id="@+id/tv_display"
         android:layout_width="match_parent"
@@ -13,17 +15,23 @@
         android:text="@string/duplicateRegister"
         android:textSize="35sp"
         android:textColor="@color/white"
+        android:fontFamily="@font/font"
         android:layout_gravity="center"
         android:gravity="center"
-        android:padding="16dp"/>
+        android:padding="16dp" />
+
     <Button
         android:id="@+id/btn_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/close"
-        android:textSize="30sp"
-        android:padding="16dp"
-        android:layout_marginBottom="20dp"
+        android:paddingLeft="62dp"
+        android:paddingRight="62dp"
+        android:layout_marginBottom="50dp"
+        android:fontFamily="@font/font"
+        android:textSize="28sp"
+        android:background="@drawable/button_blue"
+        android:textColor="@color/white"
         android:layout_gravity="center"
-        android:gravity="center"/>
+        android:gravity="center" />
 </LinearLayout>

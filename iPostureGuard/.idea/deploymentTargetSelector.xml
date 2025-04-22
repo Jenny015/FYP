@@ -2,12 +2,12 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="app">
+      <SelectionState runConfigName="Debug i-PostureGuard">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-03-12T07:04:11.762227600Z">
+        <DropdownSelection timestamp="2025-04-22T14:11:05.226068600Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\230268178\.android\avd\Pixel_8a_API_30.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\ok227\.android\avd\Pixel_3a_API_35.avd" />
             </handle>
           </Target>
         </DropdownSelection>

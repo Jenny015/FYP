@@ -68,7 +68,7 @@
             android:orientation="vertical"
             android:padding="16dp"
             android:id="@+id/rankingContainer"
-            android:background="@drawable/button_yellow">
+            android:background="@drawable/button_white">
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
