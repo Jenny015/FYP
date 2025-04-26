@@ -1,7 +1,6 @@
 package com.example.i_postureguard.ui.ranking
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -109,9 +108,7 @@ class RankingFragment : Fragment() {
                 }
 
                 "Posture" -> {
-                    val postureCount = if (dailyData!!.posture != null) dailyData.posture.stream()
-                        .mapToInt { obj: Int -> obj.toInt() }
-                        .sum() else 0
+                    val postureCount = if (dailyData!!.posture != null) { dailyData.posture.sum()} else { 0 }
                     addRankingItem(currentUserName!! + " (" + dailyData.date + ")",
                         "$postureCount times",
                         R.drawable.top1
@@ -119,10 +116,7 @@ class RankingFragment : Fragment() {
                 }
 
                 "Sports" -> {
-                    val exerciseTotal =
-                        if (dailyData!!.exercise != null) dailyData.exercise.stream()
-                            .mapToInt { obj: Int -> obj.toInt() }
-                            .sum() else 0
+                    val exerciseTotal = if (dailyData!!.exercise != null) {dailyData.exercise.sum()} else { 0 }
                     addRankingItem(
                         currentUserName!!+ " (" + dailyData.date + ")",
                         dailyData.sports.toString() + "s (Exercise: " + exerciseTotal + "s)",

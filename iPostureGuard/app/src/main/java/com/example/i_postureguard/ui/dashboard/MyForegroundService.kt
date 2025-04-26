@@ -16,6 +16,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import com.example.i_postureguard.R
+import com.example.i_postureguard.Utils
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
@@ -29,7 +30,7 @@ class MyForegroundService : LifecycleService() {
     private val CHANNEL_ID = "MyForegroundServiceChannel"
     private lateinit var cameraExecutor: ExecutorService
     private var lastUpdateTime = 0L
-    private val detectionDelay = 8000// For adjust the frequency of detection
+    private val detectionDelay = Utils.detectionDelay// For adjust the frequency of detection
     private var mediaPlayer: MediaPlayer? = null
     private var accelerometer: GetAccelerometer? = null//initialize GetAccelerometer activity
     var focalLength = 0f
@@ -192,52 +193,69 @@ class MyForegroundService : LifecycleService() {
             regex.findAll(accelerometerData).map { it.value.trim() }.mapNotNull { it.toFloatOrNull() }
                 .toMutableList()
         var distance:Float=getDistance(focalLength, sensorWidth, face)
+        var type = -1
         Log.i("Distance: ",distance.toString()+" cm")
         if (accelData[2] < 5 && rotX < (0 - buffer) || (accelData[2] > 5 && rotX < (12 - buffer))) { //text neck
             playMp3(R.raw.text_neck)
             msg += "Text-neck posture\n"
+            type = 0
         }else if (rotZ < (-10 - buffer)) {  //左傾
-
             playMp3(R.raw.tilt_left)
             msg += "Head tilting left (Scoliosis)\n"
+            type = 1
         }else if (rotZ > (10 + buffer)) { //右傾
             playMp3(R.raw.tilt_right)
             msg += "Head tilting right (Scoliosis)\n"
+            type = 2
         }
 
         if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT&&
             rotZ > -20 && rotZ < 20 && (accelData[0] > 7 || accelData[0] < -7)) {
-            playMp3(R.raw.sleep)
+            playMp3(R.raw.side_sleep)
             msg += "Sleep on side while using mobile phone\n"
+            type = 4
 
         } else if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE&&
             rotZ > -20 && rotZ < 20 && (accelData[1] > 7 || accelData[1] < -7)){
-
-            playMp3(R.raw.sleep)
+            playMp3(R.raw.side_sleep)
             msg += "Sleep on side while using mobile phone\n"
+            type = 4
         } else if (accelData[2] < -7) {
             playMp3(R.raw.sleep)
             msg += "Sleep on back while using mobile phone\n"
+            type = 3
         } else {
 
             if (accelData[2] < 5 && rotX < (0 - buffer) || (accelData[2] > 5 && rotX < (12 - buffer))) {
                 playMp3(R.raw.text_neck)
                 msg += "Text-neck posture\n"
+                type = 0
             }
             else if (rotZ < (-10 - buffer)) {
                 playMp3(R.raw.tilt_left)
                 msg += "Head tilting left (Scoliosis)\n"
+                type = 1
             }
             else if (rotZ > (10 + buffer)) {
                 playMp3(R.raw.tilt_right)
                 msg += "Head tilting right (Scoliosis)\n"
+                type = 2
             }
             else if(distance<30){
                 playMp3(R.raw.close)
                 msg ="Unsafety distance\nToo close, please keep the distance\n"
+                type = 5
 
             }
         }
+        if(type != -1) {
+            if(Utils.isLogin(applicationContext)){
+                Utils.firebaseAddData(applicationContext, "p", type)
+            } else {
+                Utils.localAddData(applicationContext, "p", type)
+            }
+        }
+
 
         Log.e("update",msg)
     }

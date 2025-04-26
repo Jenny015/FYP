@@ -6,19 +6,19 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -27,6 +27,7 @@ public class Utils {
     public static final String PREF_NAME = "prefsFile";
     public static final DatabaseReference db = FirebaseDatabase.getInstance().getReference("users");
     public static final Gson gson = new Gson();
+    public static final int detectionDelay = 8000;
 
     public static boolean isLogin(Context c) {
         SharedPreferences prefs = c.getSharedPreferences(PREF_NAME, 0);
@@ -68,6 +69,75 @@ public class Utils {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(key, value);
         editor.apply();
+    }
+
+    // Category: e = exercise, p = posture
+    public static void localAddData(Context c, String category, int type){
+        SharedPreferences prefs = c.getSharedPreferences(PREF_NAME, 0);
+        String jsonData = prefs.getString("dailyData", null);
+        Map<String, DailyData> dailyData = new HashMap<String, DailyData>();
+        DailyData data = new DailyData();
+
+        //Find today's data, if any
+        if (jsonData != null) {
+
+            dailyData = gson.fromJson(jsonData, new TypeToken<Map<String, DailyData>>() {}.getType());
+            data = dailyData.get(todayToString());
+        }
+
+        int original = 0;
+        if(category.equals("e")){
+            original = data.exercise[type];
+            data.exercise[type] += 1;
+            Log.d("Adding data", "local, "+type+", "+data.exercise[type]);
+        } else if(category.equals("p")){
+            original = data.posture[type];
+            data.posture[type] += 1;
+            Log.d("Adding data", "local, "+type+", "+data.posture[type]);
+        }
+        data.time += detectionDelay/1000;
+        dailyData.put(todayToString(), data);
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("dailyData", gson.toJson(new HashMap<String, DailyData>()));
+        editor.apply();
+    }
+
+    // category: e = exercise, p = posture
+    public static void firebaseAddData(Context c, String category, int type){
+        DatabaseReference userDataRef = db.child(getString(c, "phone", "")).child("data").child(todayToString());
+        userDataRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                DailyData dailyData = mutableData.getValue(DailyData.class);
+                if (dailyData == null) {
+                    dailyData = new DailyData();
+                }
+                // Increment the value of category_long(index)
+                if (category.equals("e")) {
+                    dailyData.exercise[type] += 1;
+                } else if (category.equals("p")) {
+                    dailyData.posture[type] += 1;
+                }
+                mutableData.setValue(dailyData);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean committed, DataSnapshot dataSnapshot) {
+                if (committed) {
+                    System.out.println("Transaction successful!");
+                } else {
+                    System.err.println("Transaction failed: " + databaseError.getMessage());
+                }
+            }
+        });
+    }
+
+    public static String todayToString(){
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return today.format(formatter);
     }
 
     // Create SharedPreferences only stores DailyData if user not to login

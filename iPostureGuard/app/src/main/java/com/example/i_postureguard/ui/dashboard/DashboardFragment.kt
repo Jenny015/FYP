@@ -11,7 +11,6 @@ import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,29 +24,20 @@ import androidx.camera.camera2.interop.Camera2CameraInfo
 import androidx.camera.camera2.interop.ExperimentalCamera2Interop
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.i_postureguard.R
+import com.example.i_postureguard.Utils
 import com.example.i_postureguard.databinding.FragmentDashboardBinding
 import com.google.common.util.concurrent.ListenableFuture
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.face.Face
-import com.google.mlkit.vision.face.FaceDetection
-import com.google.mlkit.vision.face.FaceDetectorOptions
-import com.google.mlkit.vision.face.FaceLandmark
-import java.io.File
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-
+import com.google.mlkit.vision.face.Face
+import com.google.mlkit.vision.face.FaceLandmark
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import com.example.i_postureguard.Utils // Ensure this import is correct for your Utils class
-import com.example.i_postureguard.ui.login.FragmentLoginActivity
 
 
 const val REQUEST_CAMERA_PERMISSION = 1001
@@ -56,7 +46,6 @@ class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
     private var accelerometer: GetAccelerometer? = null//initialize GetAccelerometer activity
-    private val detectionDelay = 10000 // For adjust the frequency of detection
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var dailyPostureCount: TextView
     private lateinit var weeklyPostureCount: TextView
@@ -117,14 +106,6 @@ class DashboardFragment : Fragment() {
 
         // Check if phone number is valid
         if (phoneNumber.isEmpty()) {
-            Toast.makeText(
-                requireContext(),
-                "Phone number not found. Please log in again.",
-                Toast.LENGTH_LONG
-            ).show()
-            // Redirect to login screen
-            startActivity(Intent(requireContext(), FragmentLoginActivity::class.java))
-            requireActivity().finish()
             return
         }
 
@@ -310,17 +291,6 @@ class DashboardFragment : Fragment() {
         return accelerometer?.getData() ?: "No accelerometer data"
     }
 
-    fun collectData(cameraData: List<Float>, accelData: List<Float>) {
-        var label = -1
-        val combinedData = accelData + cameraData + listOf(label)
-        val dataLine = combinedData.joinToString(separator = ",")
-        val file = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-            "posture_data.csv"
-        )
-        file.appendText("$dataLine\n")
-    }
-
     private fun checkPosture(head: List<Float>, eyeopen: List<Float?>, accelerometer: String) {
         Toast.makeText(this.requireContext(), "For dev: Detect", Toast.LENGTH_SHORT).show() //For Testing
         val buffer = 0 //TODO: Access from user profile
@@ -336,37 +306,53 @@ class DashboardFragment : Fragment() {
         //Phone position: Phone horizontal & Head horizontal (Sleep on side with phone), Phone face down with face detected (Sleep on back with phone)
         // TODO: Set threshold for different kinds of bad posture
         var msg = ""
+        var type = -1
         if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT&&
             head[2] > -20 && head[2] < 20 && (accelData[0] > 7 || accelData[0] < -7)) {
-            playAudio(R.raw.sleep)
+            playAudio(R.raw.side_sleep)
+            type = 4
             msg += "Sleep on side while using mobile phone\n"
 
         } else if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE&&
             head[2] > -20 && head[2] < 20 && (accelData[1] > 7 || accelData[1] < -7)){
-
-            playAudio(R.raw.sleep)
+            type = 4
+            playAudio(R.raw.side_sleep)
             msg += "Sleep on side while using mobile phone\n"
         } else if (accelData[2] < -7) {
+            type = 3
             playAudio(R.raw.sleep)
             msg += "Sleep on back while using mobile phone\n"
         } else {
             if (accelData[2] < 5 && head[0] < (0 - buffer) || (accelData[2] > 5 && head[0] < (12 - buffer))) {
                 playAudio(R.raw.text_neck)
+                type = 0
                 msg += "Text-neck posture\n"
             }
             if (head[2] < (-10 - buffer)) {
                 playAudio(R.raw.tilt_left)
+                type = 1
                 msg += "Head tilting left (Scoliosis)\n"
             }
             if (head[2] > (10 + buffer)) {
                 playAudio(R.raw.tilt_right)
+                type = 2
                 msg += "Head tilting right (Scoliosis)\n"
             }
             if(head[3]<30){
                 playAudio(R.raw.close)
+                type = 5
                 msg ="Unsafety distance\nToo close, please keep the distance\n"
             }
         }
+
+        if(Utils.isLogin(requireContext())){
+            Log.d("Adding data", "firebase, "+type)
+            Utils.firebaseAddData(requireContext(), "p", type)
+        } else {
+            Log.d("Adding data", "local, "+type)
+            Utils.localAddData(requireContext(), "p", type)
+        }
+
         if(msg.isNotEmpty()){
             showDialog(msg)
         }
