@@ -20,7 +20,7 @@ import com.google.firebase.database.ValueEventListener
 class RankingFragment : Fragment() {
     private var rankingContainer: LinearLayout? = null
     private var currentRankingType = "Time"
-    private var currentUserData: User? = null // 儲存當前用戶的數據
+    private var currentUserData: User? = null
     private var databaseReference: DatabaseReference? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,39 +56,32 @@ class RankingFragment : Fragment() {
             updateRankingDisplay()
         }
 
-        // 獲取當前用戶數據
         fetchCurrentUserData()
 
         return root
     }
 
     private fun fetchCurrentUserData() {
-        // 從 SharedPreferences 獲取當前登錄用戶的電話號碼
         val settings = requireActivity().getSharedPreferences("iPostureGuard", 0)
         val phone = settings.getString("phone", null)
 
         if (phone != null) {
-            // 使用電話號碼從 Firebase 獲取用戶數據
             databaseReference!!.child(phone)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         currentUserData = snapshot.getValue(User::class.java)
                         if (currentUserData != null) {
-                            // 數據獲取成功，更新排行榜
                             updateRankingDisplay()
                         } else {
-                            // 數據為空，顯示提示
                             addRankingItem("No Data", "Please add some data", R.drawable.top1)
                         }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        // 錯誤處理
                         addRankingItem("Error", "Failed to load data", R.drawable.top1)
                     }
                 })
         } else {
-            // 未登錄，顯示提示
             addRankingItem("Not Logged In", "Please log in", R.drawable.top1)
         }
     }
@@ -100,12 +93,11 @@ class RankingFragment : Fragment() {
             return
         }
 
-        // 顯示最近一天的數據
         val latestDate = latestDate
         if (latestDate != null && currentUserData!!.data.containsKey(latestDate)) {
             val dailyData = currentUserData!!.data[latestDate]
             when (currentRankingType) {
-                "Time" ->                     // 顯示 time 字段
+                "Time" ->
                     addRankingItem(
                         currentUserData!!.name,
                         dailyData!!.time.toString() + "s",
@@ -113,7 +105,6 @@ class RankingFragment : Fragment() {
                     )
 
                 "Posture" -> {
-                    // 計算 posture 列表的總和
                     val postureCount = if (dailyData!!.posture != null) dailyData.posture.stream()
                         .mapToInt { obj: Int -> obj.toInt() }
                         .sum() else 0
@@ -121,7 +112,6 @@ class RankingFragment : Fragment() {
                 }
 
                 "Sports" -> {
-                    // 顯示 sports 和 exercise 總和
                     val exerciseTotal =
                         if (dailyData!!.exercise != null) dailyData.exercise.stream()
                             .mapToInt { obj: Int -> obj.toInt() }
@@ -143,7 +133,6 @@ class RankingFragment : Fragment() {
             if (currentUserData!!.data == null || currentUserData!!.data.isEmpty()) {
                 return null
             }
-            // 返回最新的日期（格式為 dd-mm-yyyy）
             return currentUserData!!.data.keys.stream()
                 .max { obj: String, anotherString: String? ->
                     obj.compareTo(
