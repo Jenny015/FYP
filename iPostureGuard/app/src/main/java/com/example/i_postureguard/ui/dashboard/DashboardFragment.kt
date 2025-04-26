@@ -47,7 +47,7 @@ import com.google.firebase.database.FirebaseDatabase
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import com.example.i_postureguard.Utils // Ensure this import is correct for your Utils class
-
+import com.example.i_postureguard.ui.login.FragmentLoginActivity
 
 
 const val REQUEST_CAMERA_PERMISSION = 1001
@@ -111,33 +111,76 @@ class DashboardFragment : Fragment() {
     }
 
     private fun loadPostureData() {
-        val phoneNumber = Utils.getString(requireContext(), "phone", "") // Retrieve the phone number instead of user ID
-        database.child(phoneNumber).child("data").get().addOnSuccessListener { snapshot ->
-            if (snapshot.exists()) {
-                var dailyCount = 0
-                var weeklyCount = 0
-                val currentDate = LocalDate.now()
+        // Retrieve phone number from SharedPreferences
+        val phoneNumber = Utils.getString(requireContext(), "phone", "")
+        Log.d("Dashboard", "Phone number: $phoneNumber")
 
-                // Loop through the data for the last week
-                snapshot.children.forEach { dateSnapshot ->
-                    val date = LocalDate.parse(dateSnapshot.key, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-                    if (date.isEqual(currentDate) || date.isAfter(currentDate.minusDays(7))) {
-                        // Assuming the posture data is a list of integers
-                        val postureData = dateSnapshot.child("posture").children.map { it.value as Int }
-                        dailyCount += postureData.sum() // Sum daily posture values
-                        // Increment based on your logic for weekly count
-                        weeklyCount += postureData.sum()
-                    }
-                }
-
-                dailyPostureCount.text = "Daily Posture Count: $dailyCount"
-                weeklyPostureCount.text = "Weekly Posture Count: $weeklyCount"
-            } else {
-                Toast.makeText(requireContext(), "No data found", Toast.LENGTH_SHORT).show()
-            }
-        }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Error fetching data", Toast.LENGTH_SHORT).show()
+        // Check if phone number is valid
+        if (phoneNumber.isEmpty()) {
+            Toast.makeText(
+                requireContext(),
+                "Phone number not found. Please log in again.",
+                Toast.LENGTH_LONG
+            ).show()
+            // Redirect to login screen
+            startActivity(Intent(requireContext(), FragmentLoginActivity::class.java))
+            requireActivity().finish()
+            return
         }
+
+        // Query Firebase for posture data
+        database.child("users").child(phoneNumber).child("data").get()
+            .addOnSuccessListener { snapshot ->
+                Log.d("Dashboard", "Snapshot exists: ${snapshot.exists()}, Value: ${snapshot.value}")
+                if (snapshot.exists()) {
+                    var dailyCount = 0
+                    var weeklyCount = 0
+                    val currentDate = LocalDate.now()
+
+                    // Iterate through date entries
+                    snapshot.children.forEach { dateSnapshot ->
+                        try {
+                            val date = LocalDate.parse(
+                                dateSnapshot.key,
+                                DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                            )
+                            // Get posture data as a list of integers
+                            val postureData = dateSnapshot.child("posture").children
+                                .mapNotNull { it.value as? Long }
+                                .map { it.toInt() }
+
+                            // Sum posture data for daily count (today only)
+                            if (date.isEqual(currentDate)) {
+                                dailyCount += postureData.sum()
+                            }
+
+                            // Sum posture data for weekly count (last 7 days)
+                            if (date.isEqual(currentDate) || date.isAfter(currentDate.minusDays(7))) {
+                                weeklyCount += postureData.sum()
+                            }
+                        } catch (e: Exception) {
+                            Log.e("Dashboard", "Error parsing date or posture data: ${e.message}")
+                        }
+                    }
+
+                    // Update UI
+                    dailyPostureCount.text = "$dailyCount"
+                    weeklyPostureCount.text = "$weeklyCount"
+                } else {
+                    // Handle case where no posture data exists
+                    dailyPostureCount.text = "Daily Posture Count: 0"
+                    weeklyPostureCount.text = "Weekly Posture Count: 0"
+                    Log.d("Dashboard", "No posture data found for phone: $phoneNumber")
+                }
+            }.addOnFailureListener { error ->
+                // Handle Firebase query errors
+                Toast.makeText(
+                    requireContext(),
+                    "Error fetching data: ${error.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+                Log.e("Dashboard", "Firebase error: ${error.message}")
+            }
     }
 
     override fun onDestroyView() {

@@ -22,7 +22,7 @@
 
     <string name="today_percentage" translatable="false">5</string>
 
-    <string name="Week_Count">Count of poor posture (weekly)</string>
+    <string name="Week_Count">poor posture (weekly)</string>
     <string name="Week_Percentage" translatable="false">10</string>
 
     <!-- Login -->
@@ -107,7 +107,7 @@
     <string name="wrongPassword">Error: Password Incorrect. Please try again.</string>
     <string name="userNotExist">Error: This phone number has not register yet.</string>
     <string name="close">Close</string>
-    <string name="today_count">Counts of poor posture (daily)</string>
+    <string name="today_count">poor posture (daily)</string>
     <string name="today_usage">Today\'s phone usage(24hrs)</string>
     <string name="week_usage">Week\'s phone usage(days)</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.i_postureguard.ui.ranking
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,30 +14,26 @@ import com.example.i_postureguard.DailyData
 import com.example.i_postureguard.R
 import com.example.i_postureguard.User
 import com.example.i_postureguard.Utils
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class RankingFragment : Fragment() {
     private var rankingContainer: LinearLayout? = null
     private var currentRankingType = "Time"
     private var currentUserName: String? = null
     private var currentUserData: Map<String, DailyData>? = null
-    private var databaseReference: DatabaseReference? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 初始化 Firebase Realtime Database
-        databaseReference = FirebaseDatabase.getInstance().getReference("users")
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_ranking, container, false)
+        val root: View = inflater.inflate(R.layout.fragment_ranking, container, false)
 
         rankingContainer = root.findViewById(R.id.rankingContainer)
 
@@ -69,6 +66,18 @@ class RankingFragment : Fragment() {
             override fun onSuccess(data: Map<String, DailyData>) {
                 // Handle the User object here
                 currentUserData = data
+                Utils.getUserProfileFromDB(context, object : Utils.UserCallback {
+                    override fun onSuccess(user: User) {
+                        // Handle the User object here
+                        currentUserName = user.name
+                        updateRankingDisplay()
+                    }
+
+                    override fun onFailure(error: String?) {
+                        // Handle the error here
+                        System.err.println("Error: $error");
+                    }
+                })
             }
 
             override fun onFailure(errorMessage: String) {
@@ -76,43 +85,37 @@ class RankingFragment : Fragment() {
                 System.err.println("Error: $errorMessage")
             }
         })
-
-        Utils.getUserProfileFromDB(context, object : Utils.UserCallback {
-            override fun onSuccess(user: User) {
-                // Handle the User object here
-                currentUserName = user.name
-            }
-
-            override fun onFailure(error: String?) {
-                // Handle the error here
-                System.err.println("Error: $error");
-            }
-        })
     }
 
     private fun updateRankingDisplay() {
         rankingContainer!!.removeAllViews()
-        if (currentUserData == null) {
+        if (currentUserData == null || currentUserData!!.isEmpty()) {
             addRankingItem("No Data", "No data available", R.drawable.top1)
             return
         }
 
-        val latestDate = latestDate
+        val latestDate = getLatestDate
         if (latestDate != null && currentUserData!!.containsKey(latestDate)) {
             val dailyData = currentUserData!![latestDate]
             when (currentRankingType) {
-                "Time" ->
+                "Time" -> {
+                    val timeValue =
+                        if (dailyData!!.time != 0) dailyData.time else dailyData.duration
                     addRankingItem(
-                        currentUserName!!,
+                        currentUserName!!+ " (" + dailyData.date + ")",
                         dailyData!!.time.toString() + "s",
                         R.drawable.top1
                     )
+                }
 
                 "Posture" -> {
                     val postureCount = if (dailyData!!.posture != null) dailyData.posture.stream()
                         .mapToInt { obj: Int -> obj.toInt() }
                         .sum() else 0
-                    addRankingItem(currentUserName!!, "$postureCount times", R.drawable.top1)
+                    addRankingItem(currentUserName!! + " (" + dailyData.date + ")",
+                        "$postureCount times",
+                        R.drawable.top1
+                    )
                 }
 
                 "Sports" -> {
@@ -121,7 +124,7 @@ class RankingFragment : Fragment() {
                             .mapToInt { obj: Int -> obj.toInt() }
                             .sum() else 0
                     addRankingItem(
-                        currentUserName!!,
+                        currentUserName!!+ " (" + dailyData.date + ")",
                         dailyData.sports.toString() + "s (Exercise: " + exerciseTotal + "s)",
                         R.drawable.top1
                     )
@@ -132,16 +135,21 @@ class RankingFragment : Fragment() {
         }
     }
 
-    private val latestDate: String?
+    private val getLatestDate: String?
         get() {
-            if (currentUserData!! == null || currentUserData!!.isEmpty()) {
+            if (currentUserData == null || currentUserData!!.isEmpty()) {
                 return null
             }
+
+            val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
             return currentUserData!!.keys.stream()
-                .max { obj: String, anotherString: String? ->
-                    obj.compareTo(
-                        anotherString!!
-                    )
+                .max { date1: String?, date2: String? ->
+                    try {
+                        return@max sdf.parse(date1).compareTo(sdf.parse(date2))
+                    } catch (e: ParseException) {
+                        e.printStackTrace()
+                        return@max 0
+                    }
                 }
                 .orElse(null)
         }

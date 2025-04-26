@@ -180,6 +180,7 @@ public class Utils {
                     for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                         DailyData dailyData = childSnapshot.getValue(DailyData.class);
                         if (dailyData != null) {
+                            dailyData.date = childSnapshot.getKey();
                             output.put(childSnapshot.getKey(), dailyData);
                         }
                     }
