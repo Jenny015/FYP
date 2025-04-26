@@ -9,8 +9,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.i_postureguard.DailyData
 import com.example.i_postureguard.R
 import com.example.i_postureguard.User
+import com.example.i_postureguard.Utils
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -20,7 +22,8 @@ import com.google.firebase.database.ValueEventListener
 class RankingFragment : Fragment() {
     private var rankingContainer: LinearLayout? = null
     private var currentRankingType = "Time"
-    private var currentUserData: User? = null
+    private var currentUserName: String? = null
+    private var currentUserData: Map<String, DailyData>? = null
     private var databaseReference: DatabaseReference? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,44 +65,45 @@ class RankingFragment : Fragment() {
     }
 
     private fun fetchCurrentUserData() {
-        val settings = requireActivity().getSharedPreferences("iPostureGuard", 0)
-        val phone = settings.getString("phone", null)
+        Utils.getDailyDataFromDB(context, object : Utils.DataCallback {
+            override fun onSuccess(data: Map<String, DailyData>) {
+                // Handle the User object here
+                currentUserData = data
+            }
 
-        if (phone != null) {
-            databaseReference!!.child(phone)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        currentUserData = snapshot.getValue(User::class.java)
-                        if (currentUserData != null) {
-                            updateRankingDisplay()
-                        } else {
-                            addRankingItem("No Data", "Please add some data", R.drawable.top1)
-                        }
-                    }
+            override fun onFailure(errorMessage: String) {
+                // Handle the error here
+                System.err.println("Error: $errorMessage")
+            }
+        })
 
-                    override fun onCancelled(error: DatabaseError) {
-                        addRankingItem("Error", "Failed to load data", R.drawable.top1)
-                    }
-                })
-        } else {
-            addRankingItem("Not Logged In", "Please log in", R.drawable.top1)
-        }
+        Utils.getUserProfileFromDB(context, object : Utils.UserCallback {
+            override fun onSuccess(user: User) {
+                // Handle the User object here
+                currentUserName = user.name
+            }
+
+            override fun onFailure(error: String?) {
+                // Handle the error here
+                System.err.println("Error: $error");
+            }
+        })
     }
 
     private fun updateRankingDisplay() {
         rankingContainer!!.removeAllViews()
-        if (currentUserData == null || currentUserData!!.data == null) {
+        if (currentUserData == null) {
             addRankingItem("No Data", "No data available", R.drawable.top1)
             return
         }
 
         val latestDate = latestDate
-        if (latestDate != null && currentUserData!!.data.containsKey(latestDate)) {
-            val dailyData = currentUserData!!.data[latestDate]
+        if (latestDate != null && currentUserData!!.containsKey(latestDate)) {
+            val dailyData = currentUserData!![latestDate]
             when (currentRankingType) {
                 "Time" ->
                     addRankingItem(
-                        currentUserData!!.name,
+                        currentUserName!!,
                         dailyData!!.time.toString() + "s",
                         R.drawable.top1
                     )
@@ -108,7 +112,7 @@ class RankingFragment : Fragment() {
                     val postureCount = if (dailyData!!.posture != null) dailyData.posture.stream()
                         .mapToInt { obj: Int -> obj.toInt() }
                         .sum() else 0
-                    addRankingItem(currentUserData!!.name, "$postureCount times", R.drawable.top1)
+                    addRankingItem(currentUserName!!, "$postureCount times", R.drawable.top1)
                 }
 
                 "Sports" -> {
@@ -117,7 +121,7 @@ class RankingFragment : Fragment() {
                             .mapToInt { obj: Int -> obj.toInt() }
                             .sum() else 0
                     addRankingItem(
-                        currentUserData!!.name,
+                        currentUserName!!,
                         dailyData.sports.toString() + "s (Exercise: " + exerciseTotal + "s)",
                         R.drawable.top1
                     )
@@ -130,10 +134,10 @@ class RankingFragment : Fragment() {
 
     private val latestDate: String?
         get() {
-            if (currentUserData!!.data == null || currentUserData!!.data.isEmpty()) {
+            if (currentUserData!! == null || currentUserData!!.isEmpty()) {
                 return null
             }
-            return currentUserData!!.data.keys.stream()
+            return currentUserData!!.keys.stream()
                 .max { obj: String, anotherString: String? ->
                     obj.compareTo(
                         anotherString!!

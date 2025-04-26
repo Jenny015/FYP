@@ -46,7 +46,7 @@ public class FragmentLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (view.getId() == R.id.btn_skip || view.getId() == R.id.tv_skip){
-                    Utils.createLocalUser(getApplicationContext(), new User(""));
+                    Utils.createLocalDailyData(getApplicationContext());
                     intent(MainActivity.class);
                 } else if(view.getId() == R.id.btn_login){
                     Login();
@@ -86,11 +86,9 @@ public class FragmentLoginActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     String storedPassword = dataSnapshot.child("password").getValue(String.class);
                     if (storedPassword.equals(pwd)) {
-                        // Upload Daily data to firebase from local, if any
-
+                        Utils.syncLocalDataToFirebase(getApplicationContext(), phone);
+                        //Stores the phone in local, and removed the local dailyData
                         writePrefsFile(phone);
-                        // Pull firebase data to local
-                        Utils.createLocalUser(getApplicationContext(), dataSnapshot.getValue(User.class));
                         intent(MainActivity.class);
                     } else {
                         showPopUp(R.string.wrongPassword);
@@ -140,6 +138,7 @@ public class FragmentLoginActivity extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences(Utils.PREF_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("phone", phone);
+        editor.remove("dailyData");
         editor.putBoolean("login", true);
         editor.apply();
         Utils.changeAppLanguage(this, settings.getString("lang", "en"));

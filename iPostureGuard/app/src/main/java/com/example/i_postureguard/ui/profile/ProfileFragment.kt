@@ -19,6 +19,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.i_postureguard.R
+import com.example.i_postureguard.User
 import com.example.i_postureguard.Utils
 import com.example.i_postureguard.databinding.FragmentProfileBinding
 import com.example.i_postureguard.ui.login.FragmentLoginActivity
@@ -148,12 +149,21 @@ class ProfileFragment : Fragment() {
     }
 
     private fun fillUserInfo(name: TextView, gender: TextView, dob: TextView, age: TextView){
-        val user = Utils.getUserFromFirebase(requireContext(), Utils.getString(requireContext(), "phone", ""))
+        Utils.getUserProfileFromDB(context, object : Utils.UserCallback {
+            override fun onSuccess(user: User) {
+                // Handle the User object here
+                name.text = user.name;
+                gender.text = user.gender;
+                dob.text = user.dob;
+                age.text = calculateAge(user.dob).toString()
+            }
+
+            override fun onFailure(error: String?) {
+                // Handle the error here
+                System.err.println("Error: $error");
+            }
+        })
         refresh()
-        name.text = user.name;
-        gender.text = user.gender;
-        dob.text = user.dob;
-        age.text = calculateAge(user.dob).toString()
     }
 
     private fun calculateAge(birthDateString: String): Int {
@@ -180,9 +190,9 @@ class ProfileFragment : Fragment() {
         addButton.setOnClickListener {
             val email = emailEditText.text.toString().trim()
             if (email.isNotEmpty() && isValidEmail(email)) {
-                val updates: MutableMap<String, Any> = HashMap()
+                val updates = mutableMapOf<String, Any>()
                 updates["carer"] = email
-                Utils.updateToFirebase(requireContext(), updates)
+                Utils.updateValueToFirebase(requireContext(), updates)
                 refresh()
                 dialog.dismiss()
             } else {
@@ -204,33 +214,42 @@ class ProfileFragment : Fragment() {
     }
 
     private fun refresh() {
-        val user = Utils.getLocalUser(requireContext())
-        Toast.makeText(requireContext(), user.carer, Toast.LENGTH_SHORT).show()
-        if(user.carer == null || user.carer == ""){
-            tr_add_carer.visibility = View.VISIBLE
-            tr_carer.visibility = View.GONE
-            tr_edit_carer.visibility = View.GONE
-            btn_add_carer.setOnClickListener {
-                showAddCarerDialog()
+        Utils.getUserProfileFromDB(context, object : Utils.UserCallback {
+            override fun onSuccess(user: User) {
+                // Handle the User object here
+                Toast.makeText(requireContext(), user.carer, Toast.LENGTH_SHORT).show()
+                if(user.carer == null || user.carer == ""){
+                    tr_add_carer.visibility = View.VISIBLE
+                    tr_carer.visibility = View.GONE
+                    tr_edit_carer.visibility = View.GONE
+                    btn_add_carer.setOnClickListener {
+                        showAddCarerDialog()
+                    }
+                } else {
+                    tr_carer.visibility = View.VISIBLE
+                    tr_edit_carer.visibility = View.VISIBLE
+                    tr_add_carer.visibility = View.GONE
+                    tv_carer.text = user.carer
+                    btn_edit_carer.setOnClickListener {
+                        showAddCarerDialog()
+                    }
+                    btn_remove_carer.setOnClickListener {
+                        removeCarer()
+                    }
+                }
             }
-        } else {
-            tr_carer.visibility = View.VISIBLE
-            tr_edit_carer.visibility = View.VISIBLE
-            tr_add_carer.visibility = View.GONE
-            tv_carer.text = user.carer
-            btn_edit_carer.setOnClickListener {
-                showAddCarerDialog()
+
+            override fun onFailure(error: String?) {
+                // Handle the error here
+                System.err.println("Error: $error");
             }
-            btn_remove_carer.setOnClickListener {
-                removeCarer()
-            }
-        }
+        })
     }
 
     private fun removeCarer(){
-        val updates: MutableMap<String, Any> = HashMap()
+        val updates = mutableMapOf<String, Any>()
         updates["carer"] = ""
-        Utils.updateToFirebase(requireContext(), updates)
+        Utils.updateValueToFirebase(requireContext(), updates)
         refresh()
     }
 }

@@ -1,6 +1,8 @@
 package com.example.i_postureguard;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DailyData {
     public String date; // "dd-mm-yyyy" format
@@ -20,6 +22,17 @@ public class DailyData {
         this.sports = sports;
         this.exercise = exercise;
         this.posture = posture;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("date", date);
+        result.put("duration", duration);
+        result.put("time", time);
+        result.put("sports", sports);
+        result.put("exercise", exercise);
+        result.put("posture", posture);
+        return result;
     }
 
     @Override
