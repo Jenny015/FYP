@@ -87,13 +87,13 @@ public class Utils {
 
         int original = 0;
         if(category.equals("e")){
-            original = data.exercise[type];
-            data.exercise[type] += 1;
-            Log.d("Adding data", "local, "+type+", "+data.exercise[type]);
+            original = data.exercise.get(type);
+            data.exercise.set(type, original+1);
+            Log.d("Adding data", "local, "+type+", "+data.exercise.get(type));
         } else if(category.equals("p")){
-            original = data.posture[type];
-            data.posture[type] += 1;
-            Log.d("Adding data", "local, "+type+", "+data.posture[type]);
+            original = data.posture.get(type);
+            data.posture.set(type, original+1);
+            Log.d("Adding data", "local, "+type+", "+data.posture.get(type));
         }
         data.time += detectionDelay/1000;
         dailyData.put(todayToString(), data);
@@ -112,12 +112,18 @@ public class Utils {
                 DailyData dailyData = mutableData.getValue(DailyData.class);
                 if (dailyData == null) {
                     dailyData = new DailyData();
+                    dailyData.date = todayToString();
                 }
                 // Increment the value of category_long(index)
-                if (category.equals("e")) {
-                    dailyData.exercise[type] += 1;
-                } else if (category.equals("p")) {
-                    dailyData.posture[type] += 1;
+                int original = 0;
+                if(category.equals("e")){
+                    original = dailyData.exercise.get(type);
+                    dailyData.exercise.set(type, original+1);
+                    Log.d("Adding data", "local, "+type+", "+dailyData.exercise.get(type));
+                } else if(category.equals("p")){
+                    original = dailyData.posture.get(type);
+                    dailyData.posture.set(type, original+1);
+                    Log.d("Adding data", "local, "+type+", "+dailyData.posture.get(type));
                 }
                 mutableData.setValue(dailyData);
                 return Transaction.success(mutableData);

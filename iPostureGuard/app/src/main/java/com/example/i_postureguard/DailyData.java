@@ -1,6 +1,8 @@
 package com.example.i_postureguard;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DailyData {
@@ -8,13 +10,13 @@ public class DailyData {
     public int duration = 0;
     public int time = 0;
     public int sports = 0;
-    public int[] exercise = new int[5];
-    public int[] posture = new int[3];
+    public List<Integer> exercise = Arrays.asList(0, 0, 0, 0, 0);
+    public List<Integer> posture = Arrays.asList(0, 0, 0);
 
 
     public DailyData() {}
 
-    public DailyData(String date, int duration, int time, int sports, int[] exercise, int[] posture) {
+    public DailyData(String date, int duration, int time, int sports, List<Integer> exercise, List<Integer> posture) {
         this.date = date;
         this.duration = duration;
         this.time = time;
