@@ -18,7 +18,8 @@
     <string name="today_posture">Today\'s bad posture</string>
     <string name="eye">Eyes too close</string>
     <string name="hunchback">Hunchback</string>
-    hunchback
+
+    <string name="today_posture_image">today posture image</string>
 
     <string name="today_percentage" translatable="false">5</string>
 

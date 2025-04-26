@@ -32,8 +32,11 @@ import com.example.i_postureguard.R
 import com.example.i_postureguard.Utils
 import com.example.i_postureguard.databinding.FragmentDashboardBinding
 import com.google.common.util.concurrent.ListenableFuture
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceLandmark
 import java.time.LocalDate
@@ -46,6 +49,7 @@ class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
     private var accelerometer: GetAccelerometer? = null//initialize GetAccelerometer activity
+    private val detectionDelay = 10000 // For adjust the frequency of detection
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var dailyPostureCount: TextView
     private lateinit var weeklyPostureCount: TextView
@@ -54,6 +58,15 @@ class DashboardFragment : Fragment() {
     //for testing
     private lateinit var textViewCameraData: TextView
     private var lastUpdateTime = 0L
+
+    private val postureImages = listOf(
+        R.drawable.p0, // Index 0
+        R.drawable.p1, // Index 1
+        R.drawable.p2, // Index 2
+        R.drawable.p3, // Index 3
+        R.drawable.p4, // Index 4
+        R.drawable.p5  // Index 5
+    )
 
     override fun onCreateView(
 
@@ -100,68 +113,105 @@ class DashboardFragment : Fragment() {
     }
 
     private fun loadPostureData() {
-        // Retrieve phone number from SharedPreferences
         val phoneNumber = Utils.getString(requireContext(), "phone", "")
         Log.d("Dashboard", "Phone number: $phoneNumber")
 
-        // Check if phone number is valid
         if (phoneNumber.isEmpty()) {
             return
         }
 
-        // Query Firebase for posture data
-        database.child("users").child(phoneNumber).child("data").get()
-            .addOnSuccessListener { snapshot ->
-                Log.d("Dashboard", "Snapshot exists: ${snapshot.exists()}, Value: ${snapshot.value}")
-                if (snapshot.exists()) {
-                    var dailyCount = 0
-                    var weeklyCount = 0
-                    val currentDate = LocalDate.now()
+        // Formatter for Firebase date format (e.g., 27-04-2025)
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        database.child("users").child(phoneNumber).child("data")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.d("Dashboard", "Snapshot exists: ${snapshot.exists()}, Value: ${snapshot.value}")
+                    if (snapshot.exists()) {
+                        var dailyCount = 0
+                        var weeklyCount = 0
+                        val currentDate = LocalDate.now() // Mocked to 27-04-2025
+                        var todayPostureData: List<Int>? = null
 
-                    // Iterate through date entries
-                    snapshot.children.forEach { dateSnapshot ->
-                        try {
-                            val date = LocalDate.parse(
-                                dateSnapshot.key,
-                                DateTimeFormatter.ofPattern("dd-MM-yyyy")
-                            )
-                            // Get posture data as a list of integers
-                            val postureData = dateSnapshot.child("posture").children
-                                .mapNotNull { it.value as? Long }
-                                .map { it.toInt() }
+                        snapshot.children.forEach { dateSnapshot ->
+                            try {
+                                val date = LocalDate.parse(dateSnapshot.key, formatter)
+                                val postureData = dateSnapshot.child("posture").children
+                                    .mapNotNull { it.value as? Long }
+                                    .map { it.toInt() }
+                                Log.d("Dashboard", "Date: ${dateSnapshot.key}, Posture: $postureData")
 
-                            // Sum posture data for daily count (today only)
-                            if (date.isEqual(currentDate)) {
-                                dailyCount += postureData.sum()
+                                if (date.isEqual(currentDate)) {
+                                    dailyCount += postureData.sum()
+                                    todayPostureData = postureData
+                                }
+                                if (date.isEqual(currentDate) || date.isAfter(currentDate.minusDays(7))) {
+                                    weeklyCount += postureData.sum()
+                                }
+                            } catch (e: Exception) {
+                                Log.e("Dashboard", "Error parsing date '${dateSnapshot.key}': ${e.message}")
                             }
-
-                            // Sum posture data for weekly count (last 7 days)
-                            if (date.isEqual(currentDate) || date.isAfter(currentDate.minusDays(7))) {
-                                weeklyCount += postureData.sum()
-                            }
-                        } catch (e: Exception) {
-                            Log.e("Dashboard", "Error parsing date or posture data: ${e.message}")
                         }
-                    }
 
-                    // Update UI
-                    dailyPostureCount.text = "$dailyCount"
-                    weeklyPostureCount.text = "$weeklyCount"
-                } else {
-                    // Handle case where no posture data exists
-                    dailyPostureCount.text = "Daily Posture Count: 0"
-                    weeklyPostureCount.text = "Weekly Posture Count: 0"
-                    Log.d("Dashboard", "No posture data found for phone: $phoneNumber")
+                        dailyPostureCount.text = "$dailyCount"
+                        weeklyPostureCount.text = "$weeklyCount"
+                        Log.d("Dashboard", "Daily count: $dailyCount, Weekly count: $weeklyCount, Today posture: $todayPostureData")
+
+                        updatePostureImages(todayPostureData)
+                    } else {
+                        dailyPostureCount.text = "0"
+                        weeklyPostureCount.text = "0"
+                        hideAllPostureImages()
+                        Log.d("Dashboard", "No posture data found for phone: $phoneNumber")
+                    }
                 }
-            }.addOnFailureListener { error ->
-                // Handle Firebase query errors
-                Toast.makeText(
-                    requireContext(),
-                    "Error fetching data: ${error.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.e("Dashboard", "Firebase error: ${error.message}")
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Error fetching data: ${error.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("Dashboard", "Firebase error: ${error.message}")
+                }
+            })
+    }
+
+    private fun updatePostureImages(postureData: List<Int>?) {
+        hideAllPostureImages()
+
+        if (postureData.isNullOrEmpty() || postureData.all { it == 0 }) {
+            Log.d("Dashboard", "No posture data or all zeros, hiding images")
+            return
+        }
+
+        val imageViews = listOf(
+            binding.postureImage1,
+            binding.postureImage2,
+            binding.postureImage3,
+            binding.postureImage4,
+            binding.postureImage5,
+            binding.postureImage6
+        )
+
+        var imageCount = 0
+        postureData.forEachIndexed { index, value ->
+            if (value != 0 && index < postureImages.size && imageCount < 6) {
+                imageViews[imageCount].setImageResource(postureImages[index])
+                imageViews[imageCount].visibility = View.VISIBLE
+                imageCount++
             }
+        }
+
+        Log.d("Dashboard", "Displayed $imageCount posture images for data: $postureData")
+    }
+
+    private fun hideAllPostureImages() {
+        binding.postureImage1.visibility = View.GONE
+        binding.postureImage2.visibility = View.GONE
+        binding.postureImage3.visibility = View.GONE
+        binding.postureImage4.visibility = View.GONE
+        binding.postureImage5.visibility = View.GONE
+        binding.postureImage6.visibility = View.GONE
     }
 
     override fun onDestroyView() {
@@ -306,53 +356,37 @@ class DashboardFragment : Fragment() {
         //Phone position: Phone horizontal & Head horizontal (Sleep on side with phone), Phone face down with face detected (Sleep on back with phone)
         // TODO: Set threshold for different kinds of bad posture
         var msg = ""
-        var type = -1
         if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT&&
             head[2] > -20 && head[2] < 20 && (accelData[0] > 7 || accelData[0] < -7)) {
-            playAudio(R.raw.side_sleep)
-            type = 4
+            playAudio(R.raw.sleep)
             msg += "Sleep on side while using mobile phone\n"
 
         } else if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE&&
             head[2] > -20 && head[2] < 20 && (accelData[1] > 7 || accelData[1] < -7)){
-            type = 4
-            playAudio(R.raw.side_sleep)
+
+            playAudio(R.raw.sleep)
             msg += "Sleep on side while using mobile phone\n"
         } else if (accelData[2] < -7) {
-            type = 3
             playAudio(R.raw.sleep)
             msg += "Sleep on back while using mobile phone\n"
         } else {
             if (accelData[2] < 5 && head[0] < (0 - buffer) || (accelData[2] > 5 && head[0] < (12 - buffer))) {
                 playAudio(R.raw.text_neck)
-                type = 0
                 msg += "Text-neck posture\n"
             }
             if (head[2] < (-10 - buffer)) {
                 playAudio(R.raw.tilt_left)
-                type = 1
                 msg += "Head tilting left (Scoliosis)\n"
             }
             if (head[2] > (10 + buffer)) {
                 playAudio(R.raw.tilt_right)
-                type = 2
                 msg += "Head tilting right (Scoliosis)\n"
             }
             if(head[3]<30){
                 playAudio(R.raw.close)
-                type = 5
                 msg ="Unsafety distance\nToo close, please keep the distance\n"
             }
         }
-
-        if(Utils.isLogin(requireContext())){
-            Log.d("Adding data", "firebase, "+type)
-            Utils.firebaseAddData(requireContext(), "p", type)
-        } else {
-            Log.d("Adding data", "local, "+type)
-            Utils.localAddData(requireContext(), "p", type)
-        }
-
         if(msg.isNotEmpty()){
             showDialog(msg)
         }
