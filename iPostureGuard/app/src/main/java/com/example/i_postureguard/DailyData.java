@@ -22,15 +22,4 @@ public class DailyData {
         this.posture = posture;
     }
 
-    @Override
-    public String toString() {
-        return "DailyData{" +
-                "date='" + date + '\'' +
-                ", duration=" + duration +
-                ", time=" + time +
-                ", sports=" + sports +
-                ", exercise=" + exercise +
-                ", posture=" + posture +
-                '}';
-    }
 }
