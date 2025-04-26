@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.i_postureguard.R
 import com.example.i_postureguard.databinding.FragmentExerciseEyesBinding // Make sure this import matches your actual binding class
+import com.example.i_postureguard.ui.dashboard.EyeExerciseForegroundService
 import com.example.i_postureguard.ui.dashboard.MyForegroundService
 
 class FragmentExerciseEyesActivity : AppCompatActivity() {
@@ -49,11 +50,11 @@ class FragmentExerciseEyesActivity : AppCompatActivity() {
         }
     }
     fun cameraOn(){
-        val serviceIntent = Intent(this, MyForegroundService::class.java)
+        val serviceIntent = Intent(this, EyeExerciseForegroundService::class.java)
         ContextCompat.startForegroundService(this, serviceIntent)
     }
     fun cameraOff(){
-        val serviceIntent = Intent(this, MyForegroundService::class.java)
+        val serviceIntent = Intent(this,EyeExerciseForegroundService::class.java)
         stopService(serviceIntent)
     }
 }
