@@ -16,13 +16,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 public class Utils {
     public static final String PREF_NAME = "prefsFile";
+    public static final DatabaseReference db = FirebaseDatabase.getInstance().getReference("users");
+    public static final Gson gson = new Gson();
 
     public static boolean isLogin(Context c) {
         SharedPreferences prefs = c.getSharedPreferences(PREF_NAME, 0);
@@ -66,83 +70,159 @@ public class Utils {
         editor.apply();
     }
 
-    // Get User from Firebase to Local preference
-    public static void setLocalUserFromFirebase(Context c, String phone){
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users");
-        db.child(phone).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    Map<String, DailyData> dailyDataMap = new HashMap<>();
-                    for (DataSnapshot snapshot1 : snapshot.child("data").getChildren()){
-                        dailyDataMap.put(snapshot1.getKey(), snapshot1.getValue(DailyData.class));
-                    }
-
-                    // Check if local has daily data
-                    User local = getLocalUser(c);
-                    if(!local.data.isEmpty()){
-                        //Update local daily record to firebase
-                        dailyDataMap.putAll(local.data);
-                        Map<String, Object> updates = new HashMap<>();
-                        updates.put("data", dailyDataMap);
-                        updateToFirebase(c, updates);
-                    }
-                    // Pull firebase data to local
-                    createLocalUser(c, new User(
-                            snapshot.child("name").getValue(String.class),
-                            snapshot.child("dob").getValue(String.class),
-                            snapshot.child("gender").getValue(String.class),
-                            snapshot.child("carer").getValue(String.class),
-                            dailyDataMap
-                    ));
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-    public static User getUserFromFirebase(Context c, String phone){
-        setLocalUserFromFirebase(c, phone);
-        return getLocalUser(c);
-    }
-
-    public static void updateToFirebase(Context c, Map<String, Object> update){
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users");
-        db.child(getLocalUser(c).phone).updateChildren(update).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    // Update successful
-                    Log.d("Firebase", "User data updated successfully.");
-                } else {
-                    // Update failed
-                    Log.d("Firebase", "Failed to update user data.");
-                }
-            }
-        });
-    }
-
-    // Get local user
-    public static User getLocalUser(Context c){
-        SharedPreferences prefs = c.getSharedPreferences(PREF_NAME, 0);
-        Gson gson = new Gson();
-        String userJson = prefs.getString("user", "");
-        if (userJson == null || userJson.isEmpty()) {
-            return new User("");
-        }
-        return gson.fromJson(userJson, User.class);
-    }
-
-    //Create local user entity
-    public static void createLocalUser(Context c, User user){
+    // Create SharedPreferences only stores DailyData if user not to login
+    public static void createLocalDailyData(Context c){
         SharedPreferences prefs = c.getSharedPreferences(PREF_NAME, 0);
         SharedPreferences.Editor editor = prefs.edit();
-        Gson gson = new Gson();
-        String userJson = gson.toJson(user);
-        editor.putString("user", userJson);
+        editor.putString("dailyData", gson.toJson(new HashMap<String, DailyData>()));
         editor.apply();
+    }
+
+    //Sync local DailyData to firebase
+    public static void syncLocalDataToFirebase(Context c, String phone){
+        // Get the local DailyData
+        Map<String, DailyData> localData = new HashMap<String, DailyData>();
+        SharedPreferences sharedPreferences = c.getSharedPreferences(PREF_NAME, 0);
+        String jsonData = sharedPreferences.getString("dailyData", null);
+        if (jsonData != null) {
+            Type type = new TypeToken<Map<String, DailyData>>() {}.getType();
+            localData = gson.fromJson(jsonData, type);
+        }
+        // Get the reference to the user's data in Firebase
+        DatabaseReference userDataRef = db.child(phone).child("data");
+
+        // Use updateChildren() to merge the local data with the existing data
+        Map<String, Object> updates = new HashMap<>();
+
+        // Prepare the data for update (convert each DailyData to a Map)
+        for (Map.Entry<String, DailyData> entry : localData.entrySet()) {
+            updates.put(entry.getKey(), entry.getValue().toMap());
+        }
+
+        // Push updates to Firebase without overwriting
+        userDataRef.updateChildren(updates)
+                .addOnSuccessListener(unused -> {
+                    System.out.println("Data synced successfully!");
+                })
+                .addOnFailureListener(e -> {
+                    System.err.println("Error syncing data: " + e.getMessage());
+                });
+    }
+
+    /*
+    * Way to use getUserProfileFromDB:
+      getUserProfileFromDB(context, new UserCallback() {
+        @Override
+        public void onSuccess(User user) {
+            // Handle the User object here
+            System.out.println("User: " + user);
+        }
+
+        @Override
+        public void onFailure(String errorMessage) {
+            // Handle the error here
+            System.err.println("Error: " + errorMessage);
+        }
+    });
+     */
+    public static void getUserProfileFromDB(Context c, UserCallback callback) {
+        String phone = getString(c, "phone", "");
+        db.child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Create User object from the data
+                    User user = new User(
+                            dataSnapshot.child("name").getValue(String.class),
+                            dataSnapshot.child("dob").getValue(String.class),
+                            dataSnapshot.child("gender").getValue(String.class),
+                            dataSnapshot.child("carer").getValue(String.class)
+                    );
+                    // Pass the User object to the callback
+                    callback.onSuccess(user);
+                } else {
+                    callback.onFailure("User not found in the database.");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle errors
+                callback.onFailure(databaseError.getMessage());
+            }
+        });
+    }
+
+    /*
+    * Way to use getDailyDataFromDB:
+      getDailyDataFromDB(c, new DataCallback() {
+            @Override
+            public void onSuccess(Map<String, DailyData> data) {
+                // use the data in this block
+                System.out.println("Data retrieved: " + data);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                System.err.println("Error: " + error);
+            }
+        });
+     */
+    public static void getDailyDataFromDB(Context c, DataCallback callback) {
+        DatabaseReference userDataRef = db.child(getString(c, "phone", ""))
+                .child("data");
+
+        userDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Map<String, DailyData> output = new HashMap<>();
+                if (snapshot.exists()) {
+                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                        DailyData dailyData = childSnapshot.getValue(DailyData.class);
+                        if (dailyData != null) {
+                            dailyData.date = childSnapshot.getKey();
+                            output.put(childSnapshot.getKey(), dailyData);
+                        }
+                    }
+                    callback.onSuccess(output); // Callback when data is ready
+                } else {
+                    callback.onFailure("User record does not exist.");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                callback.onFailure("Error fetching data: " + error.getMessage());
+            }
+        });
+    }
+
+    /*
+    * How to use updateValueToFirebase:
+    *  Map<String, Object> updates = new HashMap<>();
+    *  updates.put("key", value);
+    *   updateValueToFirebase(requireContext() / getApplicationContext(), updates);
+    * */
+    public static void updateValueToFirebase(Context c, Map<String, Object> updates){
+        DatabaseReference userDataRef = db.child(getString(c, "phone", ""));
+        userDataRef.updateChildren(updates).addOnSuccessListener(aVoid -> {
+                    // Handle success
+                    System.out.println("User fields updated successfully.");
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure
+                    System.err.println("Failed to update user fields: " + e.getMessage());
+                });
+    }
+
+    // Define the callback interface
+    public interface DataCallback {
+        void onSuccess(Map<String, DailyData> data);
+        void onFailure(String error);
+    }
+
+    public interface UserCallback {
+        void onSuccess(User user);
+        void onFailure(String error);
     }
 }
