@@ -47,6 +47,7 @@
     <string name="award_6" translatable="false">No wrong posture on 8 hours</string>
     <string name="award_7" translatable="false">Correct posture 10 times</string>
     <string name="award_8" translatable="false">Correct posture 50 times</string>
+    <string name="award" translatable="false">Achievement</string>
 
     <!-- register -->
     <string name="register_lname">Last Name</string>

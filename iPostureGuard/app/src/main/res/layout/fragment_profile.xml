@@ -13,8 +13,6 @@
         android:paddingLeft="24dp">
 
 
-
-
         <ImageView
             android:id="@+id/logo_image"
             android:layout_width="wrap_content"
@@ -24,8 +22,6 @@
             android:paddingBottom="10dp"
             android:paddingTop="25dp"
             android:src="@drawable/logo" />
-
-
 
 
         <TableRow

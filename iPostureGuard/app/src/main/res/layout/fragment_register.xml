@@ -88,7 +88,7 @@
                 android:fontFamily="@font/font"
                 android:background="@drawable/male"
                 android:layout_margin="10dp"
-                android:padding="16dp"
+                android:padding="10dp"
                 android:textSize="30sp" />
             <RadioButton
                 android:id="@+id/female"
@@ -98,7 +98,7 @@
                 android:fontFamily="@font/font"
                 android:background="@drawable/button_red"
                 android:layout_margin="10dp"
-                android:padding="16dp"
+                android:padding="10dp"
                 android:textSize="30sp" />
         </RadioGroup>
 

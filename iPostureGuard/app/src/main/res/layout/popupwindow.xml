@@ -14,7 +14,6 @@
         android:layout_weight="1"
         android:text="@string/duplicateRegister"
         android:textSize="35sp"
-        android:textColor="@color/white"
         android:fontFamily="@font/font"
         android:layout_gravity="center"
         android:gravity="center"
