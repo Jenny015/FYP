@@ -43,24 +43,61 @@
         android:fontFamily="@font/font" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/posture_images_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10pt"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center">
 
         <ImageView
-            android:id="@+id/image_Eye"
-            android:layout_width="164dp"
-            android:layout_height="80dp"
-            android:contentDescription="@string/eye"
-            android:src="@drawable/eye" />
+            android:id="@+id/posture_image_1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:contentDescription="@string/today_posture_image"
+            android:visibility="gone" />
 
         <ImageView
-            android:id="@+id/image_Hunchback"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:contentDescription="@string/hunchback"
-            android:src="@drawable/hunchback" />
+            android:id="@+id/posture_image_2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:contentDescription="@string/today_posture_image"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/posture_image_3"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:contentDescription="@string/today_posture_image"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/posture_image_4"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:contentDescription="@string/today_posture_image"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/posture_image_5"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:contentDescription="@string/today_posture_image"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/posture_image_6"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:contentDescription="@string/today_posture_image"
+            android:visibility="gone" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -85,7 +122,7 @@
             android:layout_margin="10dp"
             android:textSize="20sp"
             android:fontFamily="@font/font"
-            android:text="Daily Posture Count" /> <!--get system-date daily bad posture by access firebase-->
+            android:text="Daily Posture Count" />
     </LinearLayout>
 
     <LinearLayout
@@ -110,7 +147,7 @@
             android:layout_margin="10dp"
             android:textSize="20sp"
             android:fontFamily="@font/font"
-            android:text="Weekly Posture Count" /><!--get system-date daily bad posture by access firebase-->
+            android:text="Weekly Posture Count" />
     </LinearLayout>
 
     <ImageView
@@ -119,7 +156,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/today_usage"
-        android:src="@drawable/ic_today_usage" /> <!--generate system-date daily bad posture bar chart-->
+        android:src="@drawable/ic_today_usage" /> <!--generate system-date daily bad posture bar chart to show bad posture no. by type-->
 
     <ImageView
         android:id="@+id/image_view_week_usage"

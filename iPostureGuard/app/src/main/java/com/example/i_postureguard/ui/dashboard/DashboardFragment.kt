@@ -48,6 +48,9 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import com.example.i_postureguard.Utils // Ensure this import is correct for your Utils class
 import com.example.i_postureguard.ui.login.FragmentLoginActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 
 const val REQUEST_CAMERA_PERMISSION = 1001
@@ -65,6 +68,15 @@ class DashboardFragment : Fragment() {
     //for testing
     private lateinit var textViewCameraData: TextView
     private var lastUpdateTime = 0L
+
+    private val postureImages = listOf(
+        R.drawable.p0, // Index 0
+        R.drawable.p1, // Index 1
+        R.drawable.p2, // Index 2
+        R.drawable.p3, // Index 3
+        R.drawable.p4, // Index 4
+        R.drawable.p5  // Index 5
+    )
 
     override fun onCreateView(
 
@@ -111,76 +123,112 @@ class DashboardFragment : Fragment() {
     }
 
     private fun loadPostureData() {
-        // Retrieve phone number from SharedPreferences
         val phoneNumber = Utils.getString(requireContext(), "phone", "")
         Log.d("Dashboard", "Phone number: $phoneNumber")
 
-        // Check if phone number is valid
         if (phoneNumber.isEmpty()) {
             Toast.makeText(
                 requireContext(),
                 "Phone number not found. Please log in again.",
                 Toast.LENGTH_LONG
             ).show()
-            // Redirect to login screen
             startActivity(Intent(requireContext(), FragmentLoginActivity::class.java))
             requireActivity().finish()
             return
         }
 
-        // Query Firebase for posture data
-        database.child("users").child(phoneNumber).child("data").get()
-            .addOnSuccessListener { snapshot ->
-                Log.d("Dashboard", "Snapshot exists: ${snapshot.exists()}, Value: ${snapshot.value}")
-                if (snapshot.exists()) {
-                    var dailyCount = 0
-                    var weeklyCount = 0
-                    val currentDate = LocalDate.now()
+        // Formatter for Firebase date format (e.g., 27-04-2025)
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        database.child("users").child(phoneNumber).child("data")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.d("Dashboard", "Snapshot exists: ${snapshot.exists()}, Value: ${snapshot.value}")
+                    if (snapshot.exists()) {
+                        var dailyCount = 0
+                        var weeklyCount = 0
+                        val currentDate = LocalDate.now() // Mocked to 27-04-2025
+                        var todayPostureData: List<Int>? = null
 
-                    // Iterate through date entries
-                    snapshot.children.forEach { dateSnapshot ->
-                        try {
-                            val date = LocalDate.parse(
-                                dateSnapshot.key,
-                                DateTimeFormatter.ofPattern("dd-MM-yyyy")
-                            )
-                            // Get posture data as a list of integers
-                            val postureData = dateSnapshot.child("posture").children
-                                .mapNotNull { it.value as? Long }
-                                .map { it.toInt() }
+                        snapshot.children.forEach { dateSnapshot ->
+                            try {
+                                val date = LocalDate.parse(dateSnapshot.key, formatter)
+                                val postureData = dateSnapshot.child("posture").children
+                                    .mapNotNull { it.value as? Long }
+                                    .map { it.toInt() }
+                                Log.d("Dashboard", "Date: ${dateSnapshot.key}, Posture: $postureData")
 
-                            // Sum posture data for daily count (today only)
-                            if (date.isEqual(currentDate)) {
-                                dailyCount += postureData.sum()
+                                if (date.isEqual(currentDate)) {
+                                    dailyCount += postureData.sum()
+                                    todayPostureData = postureData
+                                }
+                                if (date.isEqual(currentDate) || date.isAfter(currentDate.minusDays(7))) {
+                                    weeklyCount += postureData.sum()
+                                }
+                            } catch (e: Exception) {
+                                Log.e("Dashboard", "Error parsing date '${dateSnapshot.key}': ${e.message}")
                             }
-
-                            // Sum posture data for weekly count (last 7 days)
-                            if (date.isEqual(currentDate) || date.isAfter(currentDate.minusDays(7))) {
-                                weeklyCount += postureData.sum()
-                            }
-                        } catch (e: Exception) {
-                            Log.e("Dashboard", "Error parsing date or posture data: ${e.message}")
                         }
-                    }
 
-                    // Update UI
-                    dailyPostureCount.text = "$dailyCount"
-                    weeklyPostureCount.text = "$weeklyCount"
-                } else {
-                    // Handle case where no posture data exists
-                    dailyPostureCount.text = "Daily Posture Count: 0"
-                    weeklyPostureCount.text = "Weekly Posture Count: 0"
-                    Log.d("Dashboard", "No posture data found for phone: $phoneNumber")
+                        dailyPostureCount.text = "$dailyCount"
+                        weeklyPostureCount.text = "$weeklyCount"
+                        Log.d("Dashboard", "Daily count: $dailyCount, Weekly count: $weeklyCount, Today posture: $todayPostureData")
+
+                        updatePostureImages(todayPostureData)
+                    } else {
+                        dailyPostureCount.text = "0"
+                        weeklyPostureCount.text = "0"
+                        hideAllPostureImages()
+                        Log.d("Dashboard", "No posture data found for phone: $phoneNumber")
+                    }
                 }
-            }.addOnFailureListener { error ->
-                // Handle Firebase query errors
-                Toast.makeText(
-                    requireContext(),
-                    "Error fetching data: ${error.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.e("Dashboard", "Firebase error: ${error.message}")
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Error fetching data: ${error.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("Dashboard", "Firebase error: ${error.message}")
+                }
+            })
+    }
+
+    private fun updatePostureImages(postureData: List<Int>?) {
+        hideAllPostureImages()
+
+        if (postureData.isNullOrEmpty() || postureData.all { it == 0 }) {
+            Log.d("Dashboard", "No posture data or all zeros, hiding images")
+            return
+        }
+
+        val imageViews = listOf(
+            binding.postureImage1,
+            binding.postureImage2,
+            binding.postureImage3,
+            binding.postureImage4,
+            binding.postureImage5,
+            binding.postureImage6
+        )
+
+        var imageCount = 0
+        postureData.forEachIndexed { index, value ->
+            if (value != 0 && index < postureImages.size && imageCount < 6) {
+                imageViews[imageCount].setImageResource(postureImages[index])
+                imageViews[imageCount].visibility = View.VISIBLE
+                imageCount++
             }
+        }
+
+        Log.d("Dashboard", "Displayed $imageCount posture images for data: $postureData")
+    }
+
+    private fun hideAllPostureImages() {
+        binding.postureImage1.visibility = View.GONE
+        binding.postureImage2.visibility = View.GONE
+        binding.postureImage3.visibility = View.GONE
+        binding.postureImage4.visibility = View.GONE
+        binding.postureImage5.visibility = View.GONE
+        binding.postureImage6.visibility = View.GONE
     }
 
     override fun onDestroyView() {
