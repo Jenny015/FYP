@@ -19,14 +19,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import com.example.i_postureguard.R
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class EyeExerciseForegroundService : LifecycleService() {
-    private val CHANNEL_ID = "EyeExerciseForegroundServiceChannel"
+class NeckExerciseForegroundService : LifecycleService() {
+    private val CHANNEL_ID = "NeckExerciseForegroundServiceChannel"
     private lateinit var cameraExecutor: ExecutorService
     private var lastUpdateTime = 0L
     private val detectionDelay = 1000 // For adjust the frequency of detection
@@ -34,11 +33,11 @@ class EyeExerciseForegroundService : LifecycleService() {
 
     // Exercise state variables
     private enum class ExerciseState {
-        LEFT_EYE_EXERCISE,
-        RIGHT_EYE_EXERCISE,
+        LEFT_NECK_EXERCISE,
+        RIGHT_NECK_EXERCISE,
         COMPLETED
     }
-    private var currentState = ExerciseState.LEFT_EYE_EXERCISE
+    private var currentState = ExerciseState.LEFT_NECK_EXERCISE
     private var exerciseTimer: CountDownTimer? = null
     private var exerciseTime = 10 // seconds for each eye
     private var exerciseSuccessful = false
@@ -49,7 +48,7 @@ class EyeExerciseForegroundService : LifecycleService() {
         createNotificationChannel()
 
         // Play the initial audio and start camera analysis only after it completes
-        playMp3(R.raw.left_eye_exercise) {
+        playMp3(R.raw.tilt_neck_left_exercise) {
             startCameraAnalysis()
             startExerciseTimer()
         }
@@ -96,15 +95,15 @@ class EyeExerciseForegroundService : LifecycleService() {
                 val secondsRemaining = millisUntilFinished / 1000
                 updateNotification("${getExerciseInstruction()} - $secondsRemaining seconds remaining")
 
-                // Check if we have face data and if exercise is being performed correctly
+                // Check if we have . data and if exercise is being performed correctly
                 if (faceDetected) {
                     when (currentState) {
-                        ExerciseState.LEFT_EYE_EXERCISE -> {
+                        ExerciseState.LEFT_NECK_EXERCISE -> {
                             if (!exerciseSuccessful) {
                                 playMp3(R.raw.incorrect) // Play sound if not performing correctly
                             }
                         }
-                        ExerciseState.RIGHT_EYE_EXERCISE -> {
+                        ExerciseState.RIGHT_NECK_EXERCISE -> {
                             if (!exerciseSuccessful) {
                                 playMp3(R.raw.incorrect) // Play sound if not performing correctly
                             }
@@ -119,13 +118,12 @@ class EyeExerciseForegroundService : LifecycleService() {
 
             override fun onFinish() {
                 when (currentState) {
-                    ExerciseState.LEFT_EYE_EXERCISE -> {
-                        currentState = ExerciseState.RIGHT_EYE_EXERCISE
-
-                        playMp3(R.raw.right_eye_exercise){
-                        startExerciseTimer() }// Start timer for right eye
+                    ExerciseState.LEFT_NECK_EXERCISE -> {
+                        currentState = ExerciseState.RIGHT_NECK_EXERCISE
+                        playMp3(R.raw.tilt_neck_right_exercise) {
+                        startExerciseTimer()} // Start timer for right eye
                     }
-                    ExerciseState.RIGHT_EYE_EXERCISE -> {
+                    ExerciseState.RIGHT_NECK_EXERCISE -> {
                         currentState = ExerciseState.COMPLETED
                         playMp3(R.raw.exercise_complete)
                         updateNotification("Exercise completed! Closing in 5 seconds...")
@@ -179,17 +177,16 @@ class EyeExerciseForegroundService : LifecycleService() {
                                         val face = faces[0] // Get the first face
 
                                         when (currentState) {
-                                            ExerciseState.LEFT_EYE_EXERCISE -> {
+                                            ExerciseState.LEFT_NECK_EXERCISE -> {
                                                 // Check if left eye is closed
-                                                if (face.rightEyeOpenProbability != null &&
-                                                    face.rightEyeOpenProbability!! < 0.5f) {
+
+                                                if (face.headEulerAngleZ < -10) {
                                                     exerciseSuccessful = true
                                                 }
                                             }
-                                            ExerciseState.RIGHT_EYE_EXERCISE -> {
+                                            ExerciseState.RIGHT_NECK_EXERCISE -> {
                                                 // Check if right eye is closed
-                                                if (face.leftEyeOpenProbability != null &&
-                                                    face.leftEyeOpenProbability!! < 0.5f) {
+                                                if (face.headEulerAngleZ >10) {
                                                     exerciseSuccessful = true
                                                 }
                                             }
@@ -227,7 +224,6 @@ class EyeExerciseForegroundService : LifecycleService() {
             }
         }, ContextCompat.getMainExecutor(this))
     }
-
     private fun playMp3(resourceId: Int, onComplete: (() -> Unit)? = null) {
         mediaPlayer?.release()
         mediaPlayer = MediaPlayer.create(this, resourceId).apply {
@@ -241,8 +237,8 @@ class EyeExerciseForegroundService : LifecycleService() {
 
     private fun getExerciseInstruction(): String {
         return when (currentState) {
-            ExerciseState.LEFT_EYE_EXERCISE -> "Close your LEFT eye for $exerciseTime seconds"
-            ExerciseState.RIGHT_EYE_EXERCISE -> "Close your RIGHT eye for $exerciseTime seconds"
+            ExerciseState.LEFT_NECK_EXERCISE -> "Close your LEFT eye for $exerciseTime seconds"
+            ExerciseState.RIGHT_NECK_EXERCISE -> "Close your RIGHT eye for $exerciseTime seconds"
             ExerciseState.COMPLETED -> "Exercise completed!"
         }
     }
