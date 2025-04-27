@@ -55,7 +55,7 @@
         </TableRow>
 
         <TableRow
-            android:padding="16dp"
+            android:padding="10dp"
             android:id="@+id/tr_edit_carer"
             android:visibility="gone">
             <Button
@@ -79,7 +79,7 @@
         </TableRow>
 
         <TableRow
-            android:padding="16dp">
+            android:padding="10dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -100,7 +100,7 @@
         </TableRow>
 
         <TableRow
-            android:padding="16dp">
+            android:padding="10dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -121,7 +121,7 @@
         </TableRow>
 
         <TableRow
-            android:padding="16dp">
+            android:padding="10dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -142,7 +142,7 @@
         </TableRow>
 
         <TableRow
-            android:padding="16dp">
+            android:padding="10dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -184,7 +184,7 @@
         </TableRow>
 
         <TableRow
-            android:padding="16dp"
+            android:padding="10dp"
             android:gravity="center">
             <Button
                 android:id="@+id/btn_view_achievements"
@@ -199,7 +199,7 @@
         </TableRow>
 
         <TableRow
-            android:padding="16dp"
+            android:padding="10dp"
             android:gravity="center">
             <Button
                 android:id="@+id/btn_login_out"

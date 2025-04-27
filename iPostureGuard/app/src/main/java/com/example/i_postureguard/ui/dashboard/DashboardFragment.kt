@@ -2,6 +2,7 @@ package com.example.i_postureguard.ui.dashboard
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -28,9 +29,13 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.i_postureguard.PostureChatbot
+import com.example.i_postureguard.PostureClassifier
 import com.example.i_postureguard.R
 import com.example.i_postureguard.Utils
 import com.example.i_postureguard.databinding.FragmentDashboardBinding
+import com.example.i_postureguard.databinding.DialogAiBinding
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -39,23 +44,27 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceLandmark
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-
 const val REQUEST_CAMERA_PERMISSION = 1001
+
 class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
-    private var accelerometer: GetAccelerometer? = null//initialize GetAccelerometer activity
-    private val detectionDelay = 10000 // For adjust the frequency of detection
+    private var accelerometer: GetAccelerometer? = null // Initialize GetAccelerometer activity
+    private val detectionDelay = 10000 // For adjusting the frequency of detection
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var dailyPostureCount: TextView
     private lateinit var weeklyPostureCount: TextView
     private lateinit var database: DatabaseReference
+    private lateinit var postureClassifier: PostureClassifier
+    private lateinit var postureChatbot: PostureChatbot
+    private var todayPostureData: List<Int>? = null // Store today's posture data for AI analysis
 
-    //for testing
+    // For testing
     private lateinit var textViewCameraData: TextView
     private var lastUpdateTime = 0L
 
@@ -69,7 +78,6 @@ class DashboardFragment : Fragment() {
     )
 
     override fun onCreateView(
-
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -112,6 +120,48 @@ class DashboardFragment : Fragment() {
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Initialize PostureClassifier and PostureChatbot
+        postureClassifier = PostureClassifier(requireContext())
+        postureChatbot = PostureChatbot(requireContext())
+
+        // Set up AI Analyse button click listener
+        binding.btnAiAnalyse.setOnClickListener {
+            if (todayPostureData == null || todayPostureData!!.all { it == 0 }) {
+                Toast.makeText(requireContext(), "No posture data available for analysis", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Convert posture data to float array for TFLite model
+            val inputData = todayPostureData!!.map { it.toFloat() }.toFloatArray()
+
+            // Run TFLite inference
+            val (posture, score) = postureClassifier.classify(inputData)
+
+            // Call the suspend function inside a coroutine scope
+            lifecycleScope.launch {
+                try {
+                    val advice = postureChatbot.getPostureAdvice(posture, score)
+                    showAiDialog(advice)
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), "Error getting advice: ${e.message}", Toast.LENGTH_LONG).show()
+                    Log.e("DashboardFragment", "Error calling OpenAI API: ${e.message}", e)
+                }
+            }
+        }
+    }
+
+    private fun showAiDialog(message: String) {
+        val dialog = Dialog(requireContext())
+        val dialogBinding = DialogAiBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+        dialogBinding.tvAiResponse.text = message
+        dialogBinding.btnClose.setOnClickListener { dialog.dismiss() }
+        dialog.show()
+    }
+
     private fun loadPostureData() {
         val phoneNumber = Utils.getString(requireContext(), "phone", "")
         Log.d("Dashboard", "Phone number: $phoneNumber")
@@ -130,7 +180,6 @@ class DashboardFragment : Fragment() {
                         var dailyCount = 0
                         var weeklyCount = 0
                         val currentDate = LocalDate.now() // Mocked to 27-04-2025
-                        var todayPostureData: List<Int>? = null
 
                         snapshot.children.forEach { dateSnapshot ->
                             try {
@@ -142,7 +191,7 @@ class DashboardFragment : Fragment() {
 
                                 if (date.isEqual(currentDate)) {
                                     dailyCount += postureData.sum()
-                                    todayPostureData = postureData
+                                    todayPostureData = postureData // Store for AI analysis
                                 }
                                 if (date.isEqual(currentDate) || date.isAfter(currentDate.minusDays(7))) {
                                     weeklyCount += postureData.sum()
@@ -160,6 +209,7 @@ class DashboardFragment : Fragment() {
                     } else {
                         dailyPostureCount.text = "0"
                         weeklyPostureCount.text = "0"
+                        todayPostureData = null
                         hideAllPostureImages()
                         Log.d("Dashboard", "No posture data found for phone: $phoneNumber")
                     }
@@ -217,23 +267,27 @@ class DashboardFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         cameraOff()
+        postureClassifier.close() // Close PostureClassifier
         _binding = null
         accelerometer?.stopListening()
+        if (::mediaPlayer.isInitialized) {
+            mediaPlayer.release()
+        }
     }
 
     @OptIn(ExperimentalGetImage::class)
     private fun cameraOn() {
         textViewCameraData.text = "Camera On"
-        var serviceIntent= Intent(
+        val serviceIntent = Intent(
             requireContext(),
             MyForegroundService::class.java
         )
-        ContextCompat.startForegroundService(requireContext(),serviceIntent)
+        ContextCompat.startForegroundService(requireContext(), serviceIntent)
     }
 
     private fun cameraOff() {
         textViewCameraData.text = "Camera Off"
-        var serviceIntent= Intent(
+        val serviceIntent = Intent(
             requireContext(),
             MyForegroundService::class.java
         )
@@ -258,7 +312,6 @@ class DashboardFragment : Fragment() {
         val leftEye = face.getLandmark(FaceLandmark.LEFT_EYE)?.position
         val rightEye = face.getLandmark(FaceLandmark.RIGHT_EYE)?.position
 
-
         if (leftEye != null && rightEye != null) {
             val eyeDistance = distanceBetweenPoints(leftEye, rightEye)
 
@@ -272,7 +325,7 @@ class DashboardFragment : Fragment() {
                     val knownEyeDistance = 6.2f
 
                     // Calculate the distance using the formula
-                    val distance = (focalLength * knownEyeDistance) / (eyeDistance * sensorWidth)/2*1000
+                    val distance = (focalLength * knownEyeDistance) / (eyeDistance * sensorWidth) / 2 * 1000
 
                     // Return the calculated distance
                     onDistanceCalculated(distance)
@@ -342,28 +395,28 @@ class DashboardFragment : Fragment() {
     }
 
     private fun checkPosture(head: List<Float>, eyeopen: List<Float?>, accelerometer: String) {
-        Toast.makeText(this.requireContext(), "For dev: Detect", Toast.LENGTH_SHORT).show() //For Testing
-        val buffer = 0 //TODO: Access from user profile
-        // Phrase accelerometer data from String into List
+        Toast.makeText(this.requireContext(), "For dev: Detect", Toast.LENGTH_SHORT).show() // For Testing
+        val buffer = 0 // TODO: Access from user profile
+        // Parse accelerometer data from String into List
         val regex = """[-\d]+\.\d+""".toRegex()
         val accelData =
             regex.findAll(accelerometer).map { it.value.trim() }.mapNotNull { it.toFloatOrNull() }
                 .toMutableList()
         // TODO: Calculate actual head angle with accelerometer data
-//            collectData(head, accelData);
+        // collectData(head, accelData);
         // TODO: Set kinds of bad posture will be detected
-        //Head position: Tilt Front (Text-neck), Tilt left(scoliosis), Tile Right(scoliosis)
-        //Phone position: Phone horizontal & Head horizontal (Sleep on side with phone), Phone face down with face detected (Sleep on back with phone)
+        // Head position: Tilt Front (Text-neck), Tilt left(scoliosis), Tilt Right(scoliosis)
+        // Phone position: Phone horizontal & Head horizontal (Sleep on side with phone), Phone face down with face detected (Sleep on back with phone)
         // TODO: Set threshold for different kinds of bad posture
         var msg = ""
-        if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT&&
-            head[2] > -20 && head[2] < 20 && (accelData[0] > 7 || accelData[0] < -7)) {
+        if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT &&
+            head[2] > -20 && head[2] < 20 && (accelData[0] > 7 || accelData[0] < -7)
+        ) {
             playAudio(R.raw.sleep)
             msg += "Sleep on side while using mobile phone\n"
-
-        } else if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE&&
-            head[2] > -20 && head[2] < 20 && (accelData[1] > 7 || accelData[1] < -7)){
-
+        } else if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+            head[2] > -20 && head[2] < 20 && (accelData[1] > 7 || accelData[1] < -7)
+        ) {
             playAudio(R.raw.sleep)
             msg += "Sleep on side while using mobile phone\n"
         } else if (accelData[2] < -7) {
@@ -382,12 +435,12 @@ class DashboardFragment : Fragment() {
                 playAudio(R.raw.tilt_right)
                 msg += "Head tilting right (Scoliosis)\n"
             }
-            if(head[3]<30){
+            if (head[3] < 30) {
                 playAudio(R.raw.close)
-                msg ="Unsafety distance\nToo close, please keep the distance\n"
+                msg += "Unsafety distance\nToo close, please keep the distance\n"
             }
         }
-        if(msg.isNotEmpty()){
+        if (msg.isNotEmpty()) {
             showDialog(msg)
         }
     }
@@ -400,7 +453,8 @@ class DashboardFragment : Fragment() {
         mediaPlayer = MediaPlayer.create(this.requireContext(), resId)
         mediaPlayer.start()
     }
-    private fun showDialog(msg: String){
+
+    private fun showDialog(msg: String) {
         val builder = AlertDialog.Builder(this.requireContext())
         builder.setTitle("Posture Reminder")
         builder.setMessage(msg)

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "posture-trainer-123",
+  "private_key_id": "e8598aa4dbedbbd94c5161fcc6a61db46f149da5",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC+NpWMrACSbbuj\nLAJKxB/3+Jev7ihhyouRPcyq/roFMJ3QRnRfUWNrnWQQ7Ww2SnXkzT5Jlyr+GSbj\nETD7KnD13iUtCdH9aJmeJ+L+G1pkXbqOxQfQ2HOOpWiEWxplmN2oeUpCmvwPojfO\ntF5HleOExCO04RjiBXRlJaKAL0Q3XdWok9LofWVga3dbiDb+iAlkrB1iGZv6Wy2b\nZlL6hZTNs5Nx/8PMdAdDQkK8mm4BA+sqiyGXrZW1Rt67WGR8kqUOWht5loQ3MApy\nwlJJGw1C+ElPjQlYaEflvV12255anu8hOmOvLmMvguKxL7xsWK3psI4je0sinvxo\nWIWyHOqHAgMBAAECggEAFc0cy/BE6oOQP44CPz6GaX4BKMVztG2qHH4IUMr8WC7v\nz5jbqrch3Yo/F1+XCQv0wkIx8u5UG6aXWew1AHynUM7i1OwsuM492S46KqTI8fr6\nMHXtxOaiLAXSWmU0u9NPCInKVKL94+7UVak/qxXHa4atjwRDvVghtJwhKW8BcxTn\nlItGdkfe9Z5icbAiavvxQNWYZ6oh/heIqi9xosU82Sok1/Iaw1N/veI5dIJCWBpd\ntOlZeL7J+IhH81fAJNo8DVN4LdIm6PaYBrOQsSiSK/jcK+olFLNAuAlCMZcrcOPr\n4qHx1MB/EkXiA7xxjHhBWDOhokYOihtDPaYPHkliXQKBgQD+/atVNCT2J3WMfwY6\neTpH7rPpQyDG2PKtDjAMfz2pl54G6qNxXXA8VmpzMX36PnTBSAUm91twgRKFPA/R\nM0QE1YzMKjjQ9lcRfQgHLLeM4rKWDV1ydJ+vZRn87+DDDUBm6+CppFPcVNpNrzg1\nQNHoYaF5dZSxFZcw5FPyMB8VVQKBgQC+90ntuiC84GgAbqUNXqkaGKTIMcQ0vL+0\n9fk5pIpWuS1jbIYHtpfbCFBCPD1/sW0j4Itz9/xOBah/nNeLwDy4MiNuuQ6kKyNF\nBM4zTDIJ3+v+cvZQ+ky/coMpoLc9HOTEnYIQG4ITSwZ/7KrrzB+HgWE9IwOPXGUd\nOmR9AKMAawKBgQDveHQrtKjxs+UlaTYEPE2LuJWl/7EMjjp6Y9SkJ+tVFlsGy91r\nXgFF6TJXtKdHGNi1nFmaWru5UL5/+gQwyCCdGaD9LLnnJTJn7jBX7JsE6PInEa4t\nC3HcWuqpLO68v/k3r1Zyey12wwmx41i6SoHX57iqRM678DbpZ8Wesaq/cQKBgQCJ\nzu7czVrespqa5T3a3hruKCaSCcfrvuIhdvg5btIeL1ffzesTGeOQPvmcMti2k5WN\nNHeuYqECtPaZ0NeDlGC9FAGZ35X/RtoW7pbXUf8yPROS9ednHJnR9pNMsRxKz9UP\nRhMcCJ3fyl6QZnwZ2Z5PLUC8282v4R9e7kqiIpl+rQKBgBXlVFGefoBEjVsAlW2i\nN1LizP7apJULQnUkqxOUc7kyH89kdrELBEs18jc8HWJoyo3TuP4CoGxYHsyWg6b9\nPWisSixcLjdA5rQ1PXaaSuK7sE/H4JVJR/DaQyhjAysSvPqdW9Ry3hmiLu0pxh7p\nONDyGKcVDMppIzcbtsDzSfdk\n-----END PRIVATE KEY-----\n",
+  "client_email": "ipostureguard@posture-trainer-123.iam.gserviceaccount.com",
+  "client_id": "111555121922999869815",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ipostureguard%40posture-trainer-123.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

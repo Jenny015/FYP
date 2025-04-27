@@ -37,6 +37,19 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    packaging {
+        resources{
+            excludes +=
+
+                listOf(
+                    "META-INF/DEPENDENCIES",
+             "META-INF/INDEX.LIST",
+             "META-INF/LICENSE",
+            "META-INF/NOTICE"
+            )
+        }
+    }
+
 }
 
 dependencies {
@@ -70,4 +83,21 @@ dependencies {
     implementation(libs.firebase.analytics)
     //for Serialize User object
     implementation(libs.gson)
+    //ai
+    // TensorFlow Lite dependencies for posture model
+    implementation("org.tensorflow:tensorflow-lite:2.16.1")
+    implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
+
+    // Dialogflow dependencies for chatbot
+    implementation("com.google.cloud:google-cloud-dialogflow:2.1.0")
+    implementation("io.grpc:grpc-okhttp:1.32.2")
+
+    // Retrofit and Gson for OpenAI API
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    // Kotlin Coroutines for suspend functions
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
 }
