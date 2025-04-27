@@ -30,7 +30,7 @@ class ExerciseFragment : Fragment() {
 
         val eyesExerciseButton: ImageButton = binding.eyesExerciseButton
         val shoulderExerciseButton: ImageButton = binding.shoulderExerciseButton
-        val neckExerciseButton: ImageButton = binding.neckExerciseButton
+
 
         eyesExerciseButton.setOnClickListener {
             // Handle Eyes Exercise button click
@@ -44,11 +44,7 @@ class ExerciseFragment : Fragment() {
             startActivity(intent)
         }
 
-        neckExerciseButton.setOnClickListener {
-            // Handle Neck Exercise button click
-            val intent = Intent(activity, fragment_exercise_neck::class.java)
-            startActivity(intent)
-        }
+
 
         return root
     }
