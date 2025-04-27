@@ -27,6 +27,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -100,4 +101,7 @@ dependencies {
     // Kotlin Coroutines for suspend functions
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
+
+
 }
+

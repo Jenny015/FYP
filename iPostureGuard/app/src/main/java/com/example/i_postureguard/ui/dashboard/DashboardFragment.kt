@@ -12,6 +12,7 @@ import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -47,10 +48,11 @@ import com.google.mlkit.vision.face.FaceLandmark
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 const val REQUEST_CAMERA_PERMISSION = 1001
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : Fragment(), TextToSpeech.OnInitListener {
 
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
@@ -63,6 +65,7 @@ class DashboardFragment : Fragment() {
     private lateinit var postureClassifier: PostureClassifier
     private lateinit var postureChatbot: PostureChatbot
     private var todayPostureData: List<Int>? = null // Store today's posture data for AI analysis
+    private lateinit var textToSpeech: TextToSpeech // Text-to-Speech instance
 
     // For testing
     private lateinit var textViewCameraData: TextView
@@ -86,6 +89,9 @@ class DashboardFragment : Fragment() {
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        // Initialize TextToSpeech
+        textToSpeech = TextToSpeech(requireContext(), this)
 
         textViewCameraData = binding.cameraData
         val toggleButton: ToggleButton = binding.toggleButton
@@ -145,12 +151,39 @@ class DashboardFragment : Fragment() {
                 try {
                     val advice = postureChatbot.getPostureAdvice(posture, score)
                     showAiDialog(advice)
+                    // Read the advice aloud
+                    speakOut(advice)
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), "Error getting advice: ${e.message}", Toast.LENGTH_LONG).show()
                     Log.e("DashboardFragment", "Error calling OpenAI API: ${e.message}", e)
                 }
             }
         }
+    }
+
+    // Implement TextToSpeech.OnInitListener
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            // Set language to US English
+            val result = textToSpeech.setLanguage(Locale.US)
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("DashboardFragment", "TTS language not supported")
+                Toast.makeText(requireContext(), "Text-to-Speech language not supported", Toast.LENGTH_SHORT).show()
+            } else {
+                Log.d("DashboardFragment", "TTS initialized successfully")
+            }
+        } else {
+            Log.e("DashboardFragment", "TTS initialization failed")
+            Toast.makeText(requireContext(), "Text-to-Speech initialization failed", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Function to read the text aloud
+    private fun speakOut(text: String) {
+        if (textToSpeech.isSpeaking) {
+            textToSpeech.stop()
+        }
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "TTS_UTTERANCE_ID")
     }
 
     private fun showAiDialog(message: String) {
@@ -268,6 +301,9 @@ class DashboardFragment : Fragment() {
         super.onDestroyView()
         cameraOff()
         postureClassifier.close() // Close PostureClassifier
+        // Shutdown TextToSpeech
+        textToSpeech.stop()
+        textToSpeech.shutdown()
         _binding = null
         accelerometer?.stopListening()
         if (::mediaPlayer.isInitialized) {
