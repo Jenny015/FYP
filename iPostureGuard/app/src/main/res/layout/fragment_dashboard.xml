@@ -150,22 +150,17 @@
             android:text="Weekly Posture Count" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/image_view_today_usage"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btn_ai_analyse"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:contentDescription="@string/today_usage"
-        android:src="@drawable/ic_today_usage" /> <!--generate system-date daily bad posture bar chart to show bad posture no. by type-->
-
-    <ImageView
-        android:id="@+id/image_view_week_usage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:contentDescription="@string/week_usage"
-        android:src="@drawable/ic_week_usage" /> <!--generate weekly bad posture bar chart-->
-
+        android:text="@string/ai_analyse"
+        android:padding="16dp"
+        android:fontFamily="@font/font"
+        android:textSize="24sp"
+        android:layout_gravity="center"
+        android:background="@drawable/button_blue"
+        android:textColor="@color/white" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="75dp"/>

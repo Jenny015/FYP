@@ -13,6 +13,7 @@
     <string name="off">關閉</string>
     <string name="today_posture">今日姿勢</string>
     <string name="today_posture_image">今日姿勢圖</string>
+    <string name="ai_analyse">智慧分析</string>
     <string name="eye">距離屏幕太近</string>
     <string name="hunchback">低頭</string>
     <string name="today_count">今日姿勢不良次數</string>
