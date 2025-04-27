@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.i_postureguard.R
 import com.example.i_postureguard.ui.dashboard.GetAccelerometer
 import com.example.i_postureguard.ui.dashboard.MyForegroundService
+import com.example.i_postureguard.ui.dashboard.NeckExerciseForegroundService
 
 class fragment_exercise_neck : AppCompatActivity() {
     private var accelerometer: GetAccelerometer? = null//initialize GetAccelerometer activity
@@ -41,11 +42,11 @@ class fragment_exercise_neck : AppCompatActivity() {
         }
     }
     fun cameraOn(){
-        val serviceIntent = Intent(this, MyForegroundService::class.java)
+        val serviceIntent = Intent(this, NeckExerciseForegroundService::class.java)
         ContextCompat.startForegroundService(this, serviceIntent)
     }
     fun cameraOff(){
-        val serviceIntent = Intent(this, MyForegroundService::class.java)
+        val serviceIntent = Intent(this, NeckExerciseForegroundService::class.java)
         stopService(serviceIntent)
     }
 }
