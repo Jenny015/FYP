@@ -6,7 +6,6 @@ import android.app.NotificationManager
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Build
-import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -19,7 +18,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import com.example.i_postureguard.R
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import java.util.concurrent.ExecutorService
@@ -29,7 +27,7 @@ class EyeExerciseForegroundService : LifecycleService() {
     private val CHANNEL_ID = "EyeExerciseForegroundServiceChannel"
     private lateinit var cameraExecutor: ExecutorService
     private var lastUpdateTime = 0L
-    private val detectionDelay = 1000 // For adjust the frequency of detection
+    private val detectionDelay = 1000 // For adjusting the frequency of detection
     private var mediaPlayer: MediaPlayer? = null
 
     // Exercise state variables
@@ -39,10 +37,61 @@ class EyeExerciseForegroundService : LifecycleService() {
         COMPLETED
     }
     private var currentState = ExerciseState.LEFT_EYE_EXERCISE
-    private var exerciseTimer: CountDownTimer? = null
     private var exerciseTime = 10 // seconds for each eye
+    private var remainingTime = exerciseTime // Tracks remaining time in seconds
     private var exerciseSuccessful = false
     private var faceDetected = false
+    private var isTimerRunning = false
+    private val handler = Handler(Looper.getMainLooper())
+
+    // Custom timer runnable
+    private val timerRunnable = object : Runnable {
+        override fun run() {
+            Log.d("EyeExerciseService", "Timer tick: state=$currentState, remainingTime=$remainingTime, faceDetected=$faceDetected")
+            if (faceDetected && remainingTime > 0) {
+                remainingTime--
+                updateNotification("${getExerciseInstruction()} - $remainingTime seconds remaining")
+
+                // Check if exercise is being performed correctly
+                if (!exerciseSuccessful) {
+                    playMp3(R.raw.incorrect)
+                }
+
+                faceDetected = false // Reset for next detection
+                exerciseSuccessful = false // Reset for next detection
+            }
+
+            if (remainingTime <= 0) {
+                Log.d("EyeExerciseService", "Timer finished for state: $currentState")
+                when (currentState) {
+                    ExerciseState.LEFT_EYE_EXERCISE -> {
+                        currentState = ExerciseState.RIGHT_EYE_EXERCISE
+                        remainingTime = exerciseTime // Reset for right eye
+                        Log.d("EyeExerciseService", "Transitioning to RIGHT_EYE_EXERCISE")
+                        isTimerRunning = false // Stop current timer
+                        playMp3(R.raw.right_eye_exercise) {
+                            Log.d("EyeExerciseService", "Right eye audio completed, starting timer")
+                            startTimer() // Start timer for right eye
+                        }
+                    }
+                    ExerciseState.RIGHT_EYE_EXERCISE -> {
+                        currentState = ExerciseState.COMPLETED
+                        Log.d("EyeExerciseService", "Transitioning to COMPLETED")
+                        playMp3(R.raw.exercise_complete)
+                        updateNotification("Exercise completed! Closing in 5 seconds...")
+                        handler.postDelayed({ stopSelf() }, 5000) // 5 seconds delay
+                    }
+                    else -> {
+                        Log.d("EyeExerciseService", "Stopping service in COMPLETED state")
+                        stopSelf()
+                    }
+                }
+            } else {
+                // Schedule the next tick
+                handler.postDelayed(this, 1000)
+            }
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -50,8 +99,9 @@ class EyeExerciseForegroundService : LifecycleService() {
 
         // Play the initial audio and start camera analysis only after it completes
         playMp3(R.raw.left_eye_exercise) {
+            Log.d("EyeExerciseService", "Left eye audio completed, starting camera and timer")
             startCameraAnalysis()
-            startExerciseTimer()
+            startTimer()
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -72,7 +122,7 @@ class EyeExerciseForegroundService : LifecycleService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        exerciseTimer?.cancel()
+        handler.removeCallbacks(timerRunnable)
         cameraExecutor.shutdown()
         mediaPlayer?.release()
         Log.i("ForegroundService", "Eye Exercise Service Shutdown")
@@ -90,55 +140,14 @@ class EyeExerciseForegroundService : LifecycleService() {
         }
     }
 
-    private fun startExerciseTimer() {
-        exerciseTimer = object : CountDownTimer((exerciseTime * 1000).toLong(), 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                val secondsRemaining = millisUntilFinished / 1000
-                updateNotification("${getExerciseInstruction()} - $secondsRemaining seconds remaining")
-
-                // Check if we have face data and if exercise is being performed correctly
-                if (faceDetected) {
-                    when (currentState) {
-                        ExerciseState.LEFT_EYE_EXERCISE -> {
-                            if (!exerciseSuccessful) {
-                                playMp3(R.raw.incorrect) // Play sound if not performing correctly
-                            }
-                        }
-                        ExerciseState.RIGHT_EYE_EXERCISE -> {
-                            if (!exerciseSuccessful) {
-                                playMp3(R.raw.incorrect) // Play sound if not performing correctly
-                            }
-                        }
-                        else -> {}
-                    }
-                }
-
-                faceDetected = false // Reset for next detection
-                exerciseSuccessful = false // Reset for next detection
-            }
-
-            override fun onFinish() {
-                when (currentState) {
-                    ExerciseState.LEFT_EYE_EXERCISE -> {
-                        currentState = ExerciseState.RIGHT_EYE_EXERCISE
-
-                        playMp3(R.raw.right_eye_exercise){
-                        startExerciseTimer() }// Start timer for right eye
-                    }
-                    ExerciseState.RIGHT_EYE_EXERCISE -> {
-                        currentState = ExerciseState.COMPLETED
-                        playMp3(R.raw.exercise_complete)
-                        updateNotification("Exercise completed! Closing in 5 seconds...")
-
-                        // Use a postDelayed handler to stop the service after delay
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            stopSelf()
-                        }, 5000) // 5 seconds delay
-                    }
-                    else -> stopSelf()
-                }
-            }
-        }.start()
+    private fun startTimer() {
+        if (!isTimerRunning) {
+            isTimerRunning = true
+            Log.d("EyeExerciseService", "Starting timer for state: $currentState, remainingTime: $remainingTime")
+            handler.post(timerRunnable)
+        } else {
+            Log.d("EyeExerciseService", "Timer already running, skipping start")
+        }
     }
 
     @OptIn(ExperimentalGetImage::class)
@@ -174,8 +183,9 @@ class EyeExerciseForegroundService : LifecycleService() {
 
                             faceDetector.process(image)
                                 .addOnSuccessListener { faces ->
-                                    if (faces.isNotEmpty()) {
-                                        faceDetected = true
+                                    faceDetected = faces.isNotEmpty()
+                                    Log.d("EyeExerciseService", "Face detection: faceDetected=$faceDetected")
+                                    if (faceDetected) {
                                         val face = faces[0] // Get the first face
 
                                         when (currentState) {
@@ -184,6 +194,7 @@ class EyeExerciseForegroundService : LifecycleService() {
                                                 if (face.rightEyeOpenProbability != null &&
                                                     face.rightEyeOpenProbability!! < 0.5f) {
                                                     exerciseSuccessful = true
+                                                    Log.d("EyeExerciseService", "Left eye exercise successful")
                                                 }
                                             }
                                             ExerciseState.RIGHT_EYE_EXERCISE -> {
@@ -191,6 +202,7 @@ class EyeExerciseForegroundService : LifecycleService() {
                                                 if (face.leftEyeOpenProbability != null &&
                                                     face.leftEyeOpenProbability!! < 0.5f) {
                                                     exerciseSuccessful = true
+                                                    Log.d("EyeExerciseService", "Right eye exercise successful")
                                                 }
                                             }
                                             else -> {}
@@ -221,7 +233,6 @@ class EyeExerciseForegroundService : LifecycleService() {
                     cameraSelector,
                     imageAnalysis
                 )
-
             } catch (exc: Exception) {
                 Log.e("EyeExerciseService", "Camera binding failed: $exc")
             }
@@ -230,12 +241,30 @@ class EyeExerciseForegroundService : LifecycleService() {
 
     private fun playMp3(resourceId: Int, onComplete: (() -> Unit)? = null) {
         mediaPlayer?.release()
-        mediaPlayer = MediaPlayer.create(this, resourceId).apply {
+        mediaPlayer = MediaPlayer.create(this, resourceId)?.apply {
             setOnCompletionListener {
-                onComplete?.invoke() // Call the onComplete callback when audio finishes
-                release() // Release the MediaPlayer after completion
+                Log.d("EyeExerciseService", "Audio playback completed for resource: $resourceId")
+                onComplete?.invoke() // Call the onComplete callback
+                release() // Release the MediaPlayer
             }
-            start()
+            setOnErrorListener { _, what, extra ->
+                Log.e("EyeExerciseService", "MediaPlayer error: what=$what, extra=$extra")
+                onComplete?.invoke() // Ensure callback is called even on error
+                release()
+                true
+            }
+            try {
+                start()
+                Log.d("EyeExerciseService", "Audio playback started for resource: $resourceId")
+            } catch (e: Exception) {
+                Log.e("EyeExerciseService", "Failed to start audio: $e")
+                onComplete?.invoke() // Call callback on failure
+                release()
+            }
+        } ?: run {
+            Log.e("EyeExerciseService", "Failed to create MediaPlayer for resource: $resourceId")
+            onComplete?.invoke() // Call callback if MediaPlayer creation fails
+            null // Explicitly return null to match MediaPlayer? type
         }
     }
 

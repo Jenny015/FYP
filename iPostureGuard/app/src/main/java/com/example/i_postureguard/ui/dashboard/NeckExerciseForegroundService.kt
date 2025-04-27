@@ -6,7 +6,6 @@ import android.app.NotificationManager
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Build
-import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -28,7 +27,7 @@ class NeckExerciseForegroundService : LifecycleService() {
     private val CHANNEL_ID = "NeckExerciseForegroundServiceChannel"
     private lateinit var cameraExecutor: ExecutorService
     private var lastUpdateTime = 0L
-    private val detectionDelay = 1000 // For adjust the frequency of detection
+    private val detectionDelay = 1000 // For adjusting the frequency of detection
     private var mediaPlayer: MediaPlayer? = null
 
     // Exercise state variables
@@ -38,10 +37,61 @@ class NeckExerciseForegroundService : LifecycleService() {
         COMPLETED
     }
     private var currentState = ExerciseState.LEFT_NECK_EXERCISE
-    private var exerciseTimer: CountDownTimer? = null
-    private var exerciseTime = 10 // seconds for each eye
+    private var exerciseTime = 10 // seconds for each neck exercise
+    private var remainingTime = exerciseTime // Tracks remaining time in seconds
     private var exerciseSuccessful = false
     private var faceDetected = false
+    private var isTimerRunning = false
+    private val handler = Handler(Looper.getMainLooper())
+
+    // Custom timer runnable
+    private val timerRunnable = object : Runnable {
+        override fun run() {
+            Log.d("NeckExerciseService", "Timer tick: state=$currentState, remainingTime=$remainingTime, faceDetected=$faceDetected")
+            if (faceDetected && remainingTime > 0) {
+                remainingTime--
+                updateNotification("${getExerciseInstruction()} - $remainingTime seconds remaining")
+
+                // Check if exercise is being performed correctly
+                if (!exerciseSuccessful) {
+                    playMp3(R.raw.incorrect)
+                }
+
+                faceDetected = false // Reset for next detection
+                exerciseSuccessful = false // Reset for next detection
+            }
+
+            if (remainingTime <= 0) {
+                Log.d("NeckExerciseService", "Timer finished for state: $currentState")
+                when (currentState) {
+                    ExerciseState.LEFT_NECK_EXERCISE -> {
+                        currentState = ExerciseState.RIGHT_NECK_EXERCISE
+                        remainingTime = exerciseTime // Reset for right neck
+                        Log.d("NeckExerciseService", "Transitioning to RIGHT_NECK_EXERCISE")
+                        isTimerRunning = false // Stop current timer
+                        playMp3(R.raw.tilt_neck_right_exercise) {
+                            Log.d("NeckExerciseService", "Right neck audio completed, starting timer")
+                            startTimer() // Start timer for right neck
+                        }
+                    }
+                    ExerciseState.RIGHT_NECK_EXERCISE -> {
+                        currentState = ExerciseState.COMPLETED
+                        Log.d("NeckExerciseService", "Transitioning to COMPLETED")
+                        playMp3(R.raw.exercise_complete)
+                        updateNotification("Exercise completed! Closing in 5 seconds...")
+                        handler.postDelayed({ stopSelf() }, 5000) // 5 seconds delay
+                    }
+                    else -> {
+                        Log.d("NeckExerciseService", "Stopping service in COMPLETED state")
+                        stopSelf()
+                    }
+                }
+            } else {
+                // Schedule the next tick
+                handler.postDelayed(this, 1000)
+            }
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -49,8 +99,9 @@ class NeckExerciseForegroundService : LifecycleService() {
 
         // Play the initial audio and start camera analysis only after it completes
         playMp3(R.raw.tilt_neck_left_exercise) {
+            Log.d("NeckExerciseService", "Left neck audio completed, starting camera and timer")
             startCameraAnalysis()
-            startExerciseTimer()
+            startTimer()
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -59,29 +110,29 @@ class NeckExerciseForegroundService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         val notification: Notification = Notification.Builder(this, CHANNEL_ID)
-            .setContentTitle("Eye Exercise Service")
+            .setContentTitle("Neck Exercise Service") // Fixed title to reflect neck exercise
             .setContentText(getExerciseInstruction())
             .setSmallIcon(R.drawable.logo)
             .build()
 
         startForeground(1, notification)
-        Log.i("ForegroundService", "Eye Exercise Service Activated")
+        Log.i("ForegroundService", "Neck Exercise Service Activated")
         return START_STICKY
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        exerciseTimer?.cancel()
+        handler.removeCallbacks(timerRunnable)
         cameraExecutor.shutdown()
         mediaPlayer?.release()
-        Log.i("ForegroundService", "Eye Exercise Service Shutdown")
+        Log.i("ForegroundService", "Neck Exercise Service Shutdown")
     }
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
                 CHANNEL_ID,
-                "Eye Exercise Service Channel",
+                "Neck Exercise Service Channel",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
             val manager = getSystemService(NotificationManager::class.java)
@@ -89,54 +140,14 @@ class NeckExerciseForegroundService : LifecycleService() {
         }
     }
 
-    private fun startExerciseTimer() {
-        exerciseTimer = object : CountDownTimer((exerciseTime * 1000).toLong(), 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                val secondsRemaining = millisUntilFinished / 1000
-                updateNotification("${getExerciseInstruction()} - $secondsRemaining seconds remaining")
-
-                // Check if we have . data and if exercise is being performed correctly
-                if (faceDetected) {
-                    when (currentState) {
-                        ExerciseState.LEFT_NECK_EXERCISE -> {
-                            if (!exerciseSuccessful) {
-                                playMp3(R.raw.incorrect) // Play sound if not performing correctly
-                            }
-                        }
-                        ExerciseState.RIGHT_NECK_EXERCISE -> {
-                            if (!exerciseSuccessful) {
-                                playMp3(R.raw.incorrect) // Play sound if not performing correctly
-                            }
-                        }
-                        else -> {}
-                    }
-                }
-
-                faceDetected = false // Reset for next detection
-                exerciseSuccessful = false // Reset for next detection
-            }
-
-            override fun onFinish() {
-                when (currentState) {
-                    ExerciseState.LEFT_NECK_EXERCISE -> {
-                        currentState = ExerciseState.RIGHT_NECK_EXERCISE
-                        playMp3(R.raw.tilt_neck_right_exercise) {
-                        startExerciseTimer()} // Start timer for right eye
-                    }
-                    ExerciseState.RIGHT_NECK_EXERCISE -> {
-                        currentState = ExerciseState.COMPLETED
-                        playMp3(R.raw.exercise_complete)
-                        updateNotification("Exercise completed! Closing in 5 seconds...")
-
-                        // Use a postDelayed handler to stop the service after delay
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            stopSelf()
-                        }, 5000) // 5 seconds delay
-                    }
-                    else -> stopSelf()
-                }
-            }
-        }.start()
+    private fun startTimer() {
+        if (!isTimerRunning) {
+            isTimerRunning = true
+            Log.d("NeckExerciseService", "Starting timer for state: $currentState, remainingTime: $remainingTime")
+            handler.post(timerRunnable)
+        } else {
+            Log.d("NeckExerciseService", "Timer already running, skipping start")
+        }
     }
 
     @OptIn(ExperimentalGetImage::class)
@@ -172,22 +183,24 @@ class NeckExerciseForegroundService : LifecycleService() {
 
                             faceDetector.process(image)
                                 .addOnSuccessListener { faces ->
-                                    if (faces.isNotEmpty()) {
-                                        faceDetected = true
+                                    faceDetected = faces.isNotEmpty()
+                                    Log.d("NeckExerciseService", "Face detection: faceDetected=$faceDetected")
+                                    if (faceDetected) {
                                         val face = faces[0] // Get the first face
 
                                         when (currentState) {
                                             ExerciseState.LEFT_NECK_EXERCISE -> {
-                                                // Check if left eye is closed
-
+                                                // Check if head is tilted left (negative Z angle)
                                                 if (face.headEulerAngleZ < -10) {
                                                     exerciseSuccessful = true
+                                                    Log.d("NeckExerciseService", "Left neck exercise successful")
                                                 }
                                             }
                                             ExerciseState.RIGHT_NECK_EXERCISE -> {
-                                                // Check if right eye is closed
-                                                if (face.headEulerAngleZ >10) {
+                                                // Check if head is tilted right (positive Z angle)
+                                                if (face.headEulerAngleZ > 10) {
                                                     exerciseSuccessful = true
+                                                    Log.d("NeckExerciseService", "Right neck exercise successful")
                                                 }
                                             }
                                             else -> {}
@@ -195,7 +208,7 @@ class NeckExerciseForegroundService : LifecycleService() {
                                     }
                                 }
                                 .addOnFailureListener { e ->
-                                    Log.e("EyeExerciseService", "Face detection failed: $e")
+                                    Log.e("NeckExerciseService", "Face detection failed: $e")
                                 }
                                 .addOnCompleteListener {
                                     imageProxy.close()
@@ -218,34 +231,52 @@ class NeckExerciseForegroundService : LifecycleService() {
                     cameraSelector,
                     imageAnalysis
                 )
-
             } catch (exc: Exception) {
-                Log.e("EyeExerciseService", "Camera binding failed: $exc")
+                Log.e("NeckExerciseService", "Camera binding failed: $exc")
             }
         }, ContextCompat.getMainExecutor(this))
     }
+
     private fun playMp3(resourceId: Int, onComplete: (() -> Unit)? = null) {
         mediaPlayer?.release()
-        mediaPlayer = MediaPlayer.create(this, resourceId).apply {
+        mediaPlayer = MediaPlayer.create(this, resourceId)?.apply {
             setOnCompletionListener {
-                onComplete?.invoke() // Call the onComplete callback when audio finishes
-                release() // Release the MediaPlayer after completion
+                Log.d("NeckExerciseService", "Audio playback completed for resource: $resourceId")
+                onComplete?.invoke() // Call the onComplete callback
+                release() // Release the MediaPlayer
             }
-            start()
+            setOnErrorListener { _, what, extra ->
+                Log.e("NeckExerciseService", "MediaPlayer error: what=$what, extra=$extra")
+                onComplete?.invoke() // Ensure callback is called even on error
+                release()
+                true
+            }
+            try {
+                start()
+                Log.d("NeckExerciseService", "Audio playback started for resource: $resourceId")
+            } catch (e: Exception) {
+                Log.e("NeckExerciseService", "Failed to start audio: $e")
+                onComplete?.invoke() // Call callback on failure
+                release()
+            }
+        } ?: run {
+            Log.e("NeckExerciseService", "Failed to create MediaPlayer for resource: $resourceId")
+            onComplete?.invoke() // Call callback if MediaPlayer creation fails
+            null // Explicitly return null to match MediaPlayer? type
         }
     }
 
     private fun getExerciseInstruction(): String {
         return when (currentState) {
-            ExerciseState.LEFT_NECK_EXERCISE -> "Close your LEFT eye for $exerciseTime seconds"
-            ExerciseState.RIGHT_NECK_EXERCISE -> "Close your RIGHT eye for $exerciseTime seconds"
+            ExerciseState.LEFT_NECK_EXERCISE -> "Tilt your head LEFT for $exerciseTime seconds"
+            ExerciseState.RIGHT_NECK_EXERCISE -> "Tilt your head RIGHT for $exerciseTime seconds"
             ExerciseState.COMPLETED -> "Exercise completed!"
         }
     }
 
     private fun updateNotification(text: String) {
         val notification: Notification = Notification.Builder(this, CHANNEL_ID)
-            .setContentTitle("Eye Exercise Service")
+            .setContentTitle("Neck Exercise Service")
             .setContentText(text)
             .setSmallIcon(R.drawable.logo)
             .build()
