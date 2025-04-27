@@ -3,166 +3,189 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/backgroud">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
-
-    <ToggleButton
-        android:id="@+id/toggle_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textOn="@string/on"
-        android:textOff="@string/off"
-        android:checked="false"
-        android:layout_gravity="center"
-        android:background="@drawable/button_blue"
-        android:fontFamily="@font/font"
-        android:textColor="@color/white"/>
-
-    <androidx.camera.view.PreviewView
-        android:id="@+id/cameraPreview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/cameraData"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp" />
-
-    <TextView
-        android:id="@+id/text_view_today_posture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:layout_margin="10dp"
-        android:textSize="30sp"
-        android:text="@string/today_posture"
-        android:fontFamily="@font/font" />
-
     <LinearLayout
-        android:id="@+id/posture_images_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center">
+        android:orientation="vertical"
+        android:padding="8dp">
 
-        <ImageView
-            android:id="@+id/posture_image_1"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:contentDescription="@string/today_posture_image"
-            android:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/posture_image_2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:contentDescription="@string/today_posture_image"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/posture_image_3"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:contentDescription="@string/today_posture_image"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/posture_image_4"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:contentDescription="@string/today_posture_image"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/posture_image_5"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:contentDescription="@string/today_posture_image"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/posture_image_6"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:contentDescription="@string/today_posture_image"
-            android:visibility="gone" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/text_view_today_count"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textSize="20sp"
-            android:text="@string/today_count"
-            android:fontFamily="@font/font"/>
-
-        <TextView
-            android:id="@+id/text_view_daily_posture_count"
+        <ToggleButton
+            android:id="@+id/toggle_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textOn="@string/on"
+            android:textOff="@string/off"
+            android:checked="false"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+            android:background="@drawable/button_border"
             android:layout_margin="10dp"
-            android:textSize="20sp"
             android:fontFamily="@font/font"
-            android:text="Daily Posture Count" />
-    </LinearLayout>
+            android:textColor="@color/white"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:orientation="horizontal">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/cameraPreview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
 
         <TextView
-            android:id="@+id/text_View_Week_Count"
-            android:layout_width="100dp"
+            android:id="@+id/cameraData"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textSize="20sp"
-            android:text="@string/Week_Count"
-            android:fontFamily="@font/font"/>
+            android:layout_margin="0dp" />
+
 
         <TextView
-            android:id="@+id/text_view_weekly_posture_count"
+            android:id="@+id/text_view_today_posture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             android:layout_margin="10dp"
-            android:textSize="20sp"
-            android:fontFamily="@font/font"
-            android:text="Weekly Posture Count" />
-    </LinearLayout>
+            android:textSize="30sp"
+            android:text="@string/today_posture"
+            android:fontFamily="@font/font" />
 
-    <Button
-        android:id="@+id/btn_ai_analyse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ai_analyse"
-        android:padding="16dp"
-        android:fontFamily="@font/font"
-        android:textSize="24sp"
-        android:layout_gravity="center"
-        android:background="@drawable/button_blue"
-        android:textColor="@color/white" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="75dp"/>
-</LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/posture_images_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center">
+
+
+            <ImageView
+                android:id="@+id/posture_image_1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/today_posture_image"
+                android:visibility="gone" />
+
+
+            <ImageView
+                android:id="@+id/posture_image_2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/today_posture_image"
+                android:visibility="gone" />
+
+
+            <ImageView
+                android:id="@+id/posture_image_3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/today_posture_image"
+                android:visibility="gone" />
+
+
+            <ImageView
+                android:id="@+id/posture_image_4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/today_posture_image"
+                android:visibility="gone" />
+
+
+            <ImageView
+                android:id="@+id/posture_image_5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/today_posture_image"
+                android:visibility="gone" />
+
+
+            <ImageView
+                android:id="@+id/posture_image_6"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/today_posture_image"
+                android:visibility="gone" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/text_view_today_count"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textSize="30sp"
+                android:text="@string/today_count"
+                android:fontFamily="@font/font"/>
+
+
+            <TextView
+                android:id="@+id/text_view_daily_posture_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:textSize="40sp"
+                android:fontFamily="@font/font"
+                android:layout_gravity="center"
+                android:text="Daily Posture Count" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/text_View_Week_Count"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textSize="30sp"
+                android:text="@string/Week_Count"
+                android:fontFamily="@font/font"/>
+
+
+            <TextView
+                android:id="@+id/text_view_weekly_posture_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:textSize="40sp"
+                android:fontFamily="@font/font"
+                android:layout_gravity="center"
+                android:text="Weekly Posture Count" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_ai_analyse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ai_analyse"
+            android:padding="16dp"
+            android:fontFamily="@font/font"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:background="@drawable/button_green"
+            android:textColor="@color/white" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="75dp"/>
+    </LinearLayout>
 </ScrollView>

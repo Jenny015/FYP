@@ -13,12 +13,12 @@
 
         <ImageView
             android:id="@+id/logo_image"
-            android:layout_width="wrap_content"
-            android:layout_height="220dp"
+            android:layout_width="181dp"
+            android:layout_height="136dp"
             android:layout_gravity="center"
             android:contentDescription="@string/logo_description"
-            android:paddingBottom="10dp"
             android:paddingTop="25dp"
+            android:paddingBottom="10dp"
             android:src="@drawable/logo" />
 
         <TableRow
@@ -30,7 +30,7 @@
                 android:text="@string/label_addCarer"
                 android:textSize="25sp"
                 android:fontFamily="@font/font"
-                android:background="@drawable/button_blue"
+                android:background="@drawable/button_green"
                 android:textColor="@color/white"
                 android:padding="16dp" />
         </TableRow>
@@ -50,6 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
+                android:layout_weight="1"
                 android:fontFamily="@font/font3" />
         </TableRow>
 
@@ -62,16 +63,18 @@
                 android:text="@string/label_editCarer"
                 android:textSize="25sp"
                 android:fontFamily="@font/font"
-                android:background="@drawable/button_blue"
+                android:background="@drawable/button_green"
                 android:textColor="@color/white"
+                android:layout_weight="1"
                 android:padding="8dp" />
             <Button
                 android:id="@+id/btn_remove_carer"
                 android:text="@string/label_removeCarer"
                 android:textSize="25sp"
                 android:fontFamily="@font/font"
-                android:background="@drawable/button_blue"
+                android:background="@drawable/button_red"
                 android:textColor="@color/white"
+                android:layout_weight="1"
                 android:padding="8dp" />
         </TableRow>
 

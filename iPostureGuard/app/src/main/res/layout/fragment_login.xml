@@ -84,7 +84,7 @@
                 android:paddingLeft="62dp"
                 android:textSize="28sp"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/button_blue"
+                android:background="@drawable/button_green"
                 android:fontFamily="@font/font"
                 android:textColor="@color/white"/>
         </LinearLayout>
@@ -108,7 +108,7 @@
                 android:textSize="24sp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/font"
-                android:background="@drawable/button_blue"
+                android:background="@drawable/button_border"
                 android:layout_marginEnd="8dp"/>
 
             <Button
