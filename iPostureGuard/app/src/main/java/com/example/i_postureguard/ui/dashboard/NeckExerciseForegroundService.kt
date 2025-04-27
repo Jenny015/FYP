@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
@@ -47,7 +48,8 @@ class NeckExerciseForegroundService : LifecycleService() {
     // Custom timer runnable
     private val timerRunnable = object : Runnable {
         override fun run() {
-            Log.d("NeckExerciseService", "Timer tick: state=$currentState, remainingTime=$remainingTime, faceDetected=$faceDetected")
+
+
             if (faceDetected && remainingTime > 0) {
                 remainingTime--
                 updateNotification("${getExerciseInstruction()} - $remainingTime seconds remaining")
@@ -100,6 +102,7 @@ class NeckExerciseForegroundService : LifecycleService() {
         // Play the initial audio and start camera analysis only after it completes
         playMp3(R.raw.tilt_neck_left_exercise) {
             Log.d("NeckExerciseService", "Left neck audio completed, starting camera and timer")
+
             startCameraAnalysis()
             startTimer()
         }
@@ -184,6 +187,16 @@ class NeckExerciseForegroundService : LifecycleService() {
                             faceDetector.process(image)
                                 .addOnSuccessListener { faces ->
                                     faceDetected = faces.isNotEmpty()
+                                    Log.d("NeckExerciseService", "Timer tick: state=$currentState, remainingTime=$remainingTime, faceDetected=$faceDetected")
+                                    val toast = Toast.makeText(
+                                        this@NeckExerciseForegroundService,
+                                        "remainingTime=$remainingTime",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    toast.show()// Cancel the Toast after 1000ms
+                                    Handler(Looper.getMainLooper()).postDelayed({
+                                        toast.cancel()
+                                    }, 1000)
                                     Log.d("NeckExerciseService", "Face detection: faceDetected=$faceDetected")
                                     if (faceDetected) {
                                         val face = faces[0] // Get the first face

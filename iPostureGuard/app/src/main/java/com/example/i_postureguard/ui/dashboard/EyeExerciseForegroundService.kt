@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
@@ -47,7 +48,7 @@ class EyeExerciseForegroundService : LifecycleService() {
     // Custom timer runnable
     private val timerRunnable = object : Runnable {
         override fun run() {
-            Log.d("EyeExerciseService", "Timer tick: state=$currentState, remainingTime=$remainingTime, faceDetected=$faceDetected")
+
             if (faceDetected && remainingTime > 0) {
                 remainingTime--
                 updateNotification("${getExerciseInstruction()} - $remainingTime seconds remaining")
@@ -184,6 +185,16 @@ class EyeExerciseForegroundService : LifecycleService() {
                             faceDetector.process(image)
                                 .addOnSuccessListener { faces ->
                                     faceDetected = faces.isNotEmpty()
+                                    Log.d("NeckExerciseService", "Timer tick: state=$currentState, remainingTime=$remainingTime, faceDetected=$faceDetected")
+                                    val toast = Toast.makeText(
+                                        this@EyeExerciseForegroundService,
+                                        "remainingTime=$remainingTime",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    toast.show()// Cancel the Toast after 1000ms
+                                    Handler(Looper.getMainLooper()).postDelayed({
+                                        toast.cancel()
+                                    }, 1000)
                                     Log.d("EyeExerciseService", "Face detection: faceDetected=$faceDetected")
                                     if (faceDetected) {
                                         val face = faces[0] // Get the first face
