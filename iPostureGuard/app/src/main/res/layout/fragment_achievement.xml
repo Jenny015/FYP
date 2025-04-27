@@ -25,14 +25,32 @@
             android:paddingRight="24dp"
             android:paddingLeft="24dp">
 
-
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- 將 TextView 包裝在 LinearLayout 中，並添加 Back 按鈕 -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/award"
-                android:textSize="35sp"
-                android:fontFamily="@font/font"
-                android:layout_margin="20dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_margin="20dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/award"
+                    android:textSize="35sp"
+                    android:fontFamily="@font/font" />
+
+                <Button
+                    android:id="@+id/btn_back_to_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Back"
+                    android:padding="8dp"
+                    android:fontFamily="@font/font"
+                    android:textSize="20sp"
+                    android:textColor="@color/black" />
+            </LinearLayout>
 
             <Spinner
                 android:id="@+id/spinner_achievement_filter"
@@ -43,7 +61,6 @@
                 android:background="@drawable/button_white"
                 android:spinnerMode="dropdown" />
 
-
             <LinearLayout
                 android:id="@+id/achievement_1_container"
                 android:layout_width="match_parent"
@@ -51,16 +68,15 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/button_yellow">
+                android:layout_marginBottom="16dp">
 
                 <ImageView
                     android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:src="@drawable/award_image_1"
-                    android:background="@drawable/button_red"
+                    android:layout_height="145dp"
+                    android:layout_margin="12dp"
+                    android:background="@drawable/button_yellow"
                     android:contentDescription="@string/award_1"
-                    android:layout_margin="12dp" />
+                    android:src="@drawable/award_image_1" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -68,7 +84,6 @@
                     android:text="@string/award_1"
                     android:gravity="center"
                     android:layout_margin="10dp"
-
                     android:textSize="35sp"
                     android:fontFamily="@font/font" />
             </LinearLayout>
@@ -80,16 +95,13 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/button_yellow">
+                android:layout_marginBottom="16dp">
 
                 <ImageView
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:src="@drawable/award_image_2"
                     android:contentDescription="@string/award_2"
-                    android:background="@drawable/button_red"
-
+                    android:background="@drawable/button_yellow"
                     android:padding="16dp"
                     android:layout_margin="12dp" />
 
@@ -110,16 +122,15 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/button_yellow">
+                android:layout_marginBottom="16dp">
 
                 <ImageView
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:src="@drawable/award_image_3"
+
                     android:contentDescription="@string/award_3"
                     android:padding="16dp"
-                    android:background="@drawable/button_red"
+                    android:background="@drawable/button_yellow"
                     android:layout_margin="12dp" />
 
                 <TextView
@@ -139,16 +150,14 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/button_yellow">
+                android:layout_marginBottom="16dp">
 
                 <ImageView
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:src="@drawable/award_image_4"
                     android:contentDescription="@string/award_4"
                     android:padding="16dp"
-                    android:background="@drawable/button_red"
+                    android:background="@drawable/button_yellow"
                     android:layout_margin="12dp" />
 
                 <TextView
@@ -168,8 +177,7 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/button_yellow">
+                android:layout_marginBottom="16dp">
 
                 <ImageView
                     android:layout_width="150dp"
@@ -177,7 +185,7 @@
                     android:src="@drawable/award_image_5"
                     android:contentDescription="@string/award_5"
                     android:padding="16dp"
-                    android:background="@drawable/button_red"
+                    android:background="@drawable/button_yellow"
                     android:layout_margin="12dp" />
 
                 <TextView
@@ -197,16 +205,14 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/button_yellow">
+                android:layout_marginBottom="16dp">
 
                 <ImageView
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:src="@drawable/award_image_6"
                     android:contentDescription="@string/award_6"
                     android:padding="16dp"
-                    android:background="@drawable/button_red"
+                    android:background="@drawable/button_yellow"
                     android:layout_margin="12dp" />
 
                 <TextView
@@ -226,17 +232,16 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/button_yellow">
+                android:layout_marginBottom="16dp">
 
                 <ImageView
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:src="@drawable/award_image_7"
+                    android:layout_margin="12dp"
+                    android:background="@drawable/button_yellow"
                     android:contentDescription="@string/award_7"
                     android:padding="16dp"
-                    android:background="@drawable/button_red"
-                    android:layout_margin="12dp" />
+                    android:src="@drawable/award_image_7" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -255,16 +260,14 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/button_yellow">
+                android:layout_marginBottom="16dp">
 
                 <ImageView
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:src="@drawable/award_image_8"
                     android:contentDescription="@string/award_8"
                     android:padding="16dp"
-                    android:background="@drawable/button_red"
+                    android:background="@drawable/button_yellow"
                     android:layout_margin="12dp" />
 
                 <TextView
@@ -275,6 +278,18 @@
                     android:layout_margin="10dp"
                     android:textSize="35sp"
                     android:fontFamily="@font/font" />
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/nav_view"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:background="?android:attr/windowBackground"
+                    app:labelVisibilityMode="labeled"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
             </LinearLayout>
 
             <TextView
@@ -284,15 +299,4 @@
         </LinearLayout>
     </ScrollView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:labelVisibilityMode="labeled" />
 </LinearLayout>

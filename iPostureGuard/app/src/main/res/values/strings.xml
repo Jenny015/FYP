@@ -70,6 +70,7 @@
 
     <!-- portfolio -->
     <string name="label_carer">Carer:</string>
+    <string name="ach">View Achievements</string>
     <string name="label_addCarer">Add Carer</string>
     <string name="label_editCarer">Edit Carer</string>
     <string name="label_removeCarer">Remove Carer</string>

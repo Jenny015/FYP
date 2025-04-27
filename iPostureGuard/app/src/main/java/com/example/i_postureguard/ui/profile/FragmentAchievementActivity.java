@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
@@ -50,10 +51,18 @@ public class FragmentAchievementActivity extends AppCompatActivity {
                 updateAchievementVisibility("All");
             }
         });
+
+
+        Button btnBackToProfile = findViewById(R.id.btn_back_to_profile);
+        btnBackToProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void updateAchievementVisibility(String filter) {
-
         achievement1Container.setVisibility(View.GONE);
         achievement2Container.setVisibility(View.GONE);
         achievement3Container.setVisibility(View.GONE);

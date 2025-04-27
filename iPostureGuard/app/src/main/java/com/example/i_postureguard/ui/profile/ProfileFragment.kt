@@ -41,8 +41,6 @@ class ProfileFragment : Fragment() {
     private lateinit var btn_remove_carer : Button
     private lateinit var tv_carer : TextView
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,6 +59,13 @@ class ProfileFragment : Fragment() {
 
         val btnLoginLogout: Button = view.findViewById(R.id.btn_login_out)
         settingOfLoginLogoutButton(btnLoginLogout)
+
+        // 添加 View Achievements 按鈕的點擊事件
+        val btnViewAchievements: Button = view.findViewById(R.id.btn_view_achievements)
+        btnViewAchievements.setOnClickListener {
+            val intent = Intent(requireContext(), FragmentAchievementActivity::class.java)
+            startActivity(intent)
+        }
 
         if(Utils.isLogin(requireContext())){
             tr_carer = view.findViewById(R.id.tr_carer)
