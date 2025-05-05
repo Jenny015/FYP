@@ -44,18 +44,19 @@
                 android:layout_height="wrap_content"
                 android:text="@string/label_carer"
                 android:textSize="24sp"
+                android:layout_weight="1"
                 android:fontFamily="@font/font" />
             <TextView
                 android:id="@+id/tv_carer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
-                android:layout_weight="1"
+                android:layout_weight="0"
                 android:fontFamily="@font/font3" />
         </TableRow>
 
         <TableRow
-            android:padding="10dp"
+            android:padding="5dp"
             android:id="@+id/tr_edit_carer"
             android:visibility="gone">
             <Button
@@ -65,6 +66,7 @@
                 android:fontFamily="@font/font"
                 android:background="@drawable/button_green"
                 android:textColor="@color/white"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="8dp" />
             <Button
@@ -74,7 +76,7 @@
                 android:fontFamily="@font/font"
                 android:background="@drawable/button_red"
                 android:textColor="@color/white"
-                android:layout_weight="1"
+
                 android:padding="8dp" />
         </TableRow>
 
@@ -166,7 +168,7 @@
             android:padding="10dp">
 
             <TextView
-                android:layout_width="1dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/font"
@@ -175,7 +177,7 @@
             <Spinner
                 android:id="@+id/language_spinner"
                 android:layout_width="wrap_content"
-                android:layout_weight="3"
+
                 android:layout_height="70dp"
                 android:padding="8dp"
                 android:layout_margin="8dp"

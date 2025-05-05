@@ -36,7 +36,7 @@ data class Choice(
 )
 
 class PostureChatbot(private val context: Context) {
-    private val apiKey = "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"
+    private val apiKey = ""
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://api.openai.com/")
         .addConverterFactory(GsonConverterFactory.create())
@@ -45,10 +45,10 @@ class PostureChatbot(private val context: Context) {
 
     suspend fun getPostureAdvice(posture: String, score: Float): String {
         val prompt = """
-            You are a posture trainer. Based on the detected posture ($posture) and health score ($score/100), provide concise, actionable advice to improve posture. Use a friendly tone and focus on health benefits. If the score is low (<50), highlight urgency. If high (>75), praise the user.
+            You are a posture trainer. Based on the detected posture ($posture) and health score ($score), provide concise, actionable advice to improve posture. Use a friendly tone and focus on health benefits. If the score is high (>100), highlight urgency. If low (<75), praise the user.
             Examples:
-            - Text Neck, score < 50: "Oh no, Text Neck with a score of $score/100! Try keeping your phone at eye level and take breaks every 20 minutes to stretch your neck."
-            - Sleep on Back, score > 75: "Sleeping on your back, score $score/100. Great choice! Use a thin pillow to keep your spine neutral."
+            - Text Neck, score > 100: "Oh no, Text Neck with a risk score of $score! Try keeping your phone at eye level and take breaks every 20 minutes to stretch your neck."
+            - Sleep on Back, score < 75: "Using phone when Sleep on back, score $score. Great choice! Prevent using phone when Sleep on back to keep your spine neutral."
         """.trimIndent()
         val request = ChatRequest(
             model = "gpt-4o-mini",
